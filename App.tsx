@@ -2,32 +2,42 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { TabNavigation } from './navigations/Tab';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import { NativeBaseProvider, extendTheme } from 'native-base';
 
+
+type StackParamList = {
+  Tab: undefined,
+  // ConfirmRegister: {
+  //     email: string
+  // },
+  // UpdatePassword: {
+  //     email: string
+  // }
+}
+
+export type MainStackScreenProps<T extends keyof StackParamList> = StackScreenProps<StackParamList, T, T>;
+const Stack = createNativeStackNavigator<StackParamList>();
 
 export default function App() {
 
-  type StackParamList = {
-    Tab: undefined,
-    // ConfirmRegister: {
-    //     email: string
-    // },
-    // UpdatePassword: {
-    //     email: string
-    // }
-}
-
-type MainStackScreenProps<T extends keyof StackParamList> = StackScreenProps<StackParamList, T, T>;
-const Stack = createNativeStackNavigator<StackParamList>();
-
+  const theme = extendTheme(DefaultTheme)
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NativeBaseProvider theme={theme}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </NativeBaseProvider>
+
+    </Provider>
+    
   );
 }
 

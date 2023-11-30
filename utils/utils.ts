@@ -1,4 +1,6 @@
-export const MAIN_COLOR = "#fcfcfc";
-export const TAB_ACTIVE_COLOR = "#F78700";
-export const TAB_INACTIVE_COLOR = "#f5f5f5";
+export const MAIN_COLOR = "#f0c654";
+export const TAB_INACTIVE_COLOR = "black";
+export const TAB_ACTIVE_COLOR = "black";
 export const BLACK_COLOR = "#111";
+export const WHITE = "white";
+export const PINK = "#F24822";
