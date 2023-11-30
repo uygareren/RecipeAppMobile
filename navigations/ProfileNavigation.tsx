@@ -3,12 +3,13 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { useSelector } from "react-redux";
 import { RootStateType } from "../store/store";
 import LoginScreen from "../screens/Account/LoginScreen";
+import RegisterScreen from "../screens/Account/RegisterScreen";
 
 
 
 type TabStackParamList = {
     Login: undefined,
-    // Register: undefined,
+    Register: undefined,
     // ForgetPassword: undefined,
     // ConfirmRegister: {
     //     email: string
@@ -34,6 +35,7 @@ export default function ProfileNavigation() {
             return (
                 <>
                     <Stack.Screen component={LoginScreen} name="Login" options={{ headerShown: false }} />
+                    <Stack.Screen component={RegisterScreen} name="Register" options={{ headerShown: false }} />
                 </>
             )
         }

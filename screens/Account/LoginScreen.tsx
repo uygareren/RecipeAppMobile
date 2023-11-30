@@ -38,7 +38,7 @@ export default function LoginScreen({ navigation, route }: TabAccountScreenProps
                 <View style={{marginTop: 30, flexDirection: "row", 
                 justifyContent: "flex-end", alignItems: "center", paddingRight: 40}}>
                     <Text style={{fontWeight:"500", color:WHITE,marginRight: 5}}>Hesabım Yok!</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("Register")}>
                         <Text style={{fontWeight:"600", fontSize:16, color:PINK,marginRight: 10}}>Kayıt Ol</Text>
                     </TouchableOpacity>
                 </View>
