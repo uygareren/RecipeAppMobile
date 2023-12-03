@@ -4,3 +4,4 @@ export const TAB_ACTIVE_COLOR = "black";
 export const BLACK_COLOR = "#111";
 export const WHITE = "white";
 export const PINK = "#F24822";
+export const LIGHT_GRAY = "#e1e3e1";
