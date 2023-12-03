@@ -4,17 +4,18 @@ import { useSelector } from "react-redux";
 import { RootStateType } from "../store/store";
 import LoginScreen from "../screens/Account/LoginScreen";
 import RegisterScreen from "../screens/Account/RegisterScreen";
+import ProfileScreen from "../screens/Account/ProfileScreen";
 
 
 
 type TabStackParamList = {
     Login: undefined,
     Register: undefined,
+    Profile: undefined,
     // ForgetPassword: undefined,
     // ConfirmRegister: {
     //     email: string
     // },
-    // Profile: undefined,
     // UpdateProfile: undefined
 }
 
@@ -28,7 +29,7 @@ export default function ProfileNavigation() {
         if(userInfo.id){
             return (
                 <>
-                
+                    <Stack.Screen component={ProfileScreen} name="Profile" options={{headerShown: false}}/>
                 </>
             )
         }else{

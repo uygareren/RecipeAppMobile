@@ -7,10 +7,12 @@ import { TabNavigation } from './navigations/Tab';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { NativeBaseProvider, extendTheme } from 'native-base';
+import SettingsScreen from './screens/SettingsScreen';
 
 
 type StackParamList = {
   Tab: undefined,
+  Settings: undefined;
   // ConfirmRegister: {
   //     email: string
   // },
@@ -32,6 +34,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
+            <Stack.Screen component={SettingsScreen} name='Settings' options={{headerShown: false}}/>
           </Stack.Navigator>
         </NavigationContainer>
       </NativeBaseProvider>

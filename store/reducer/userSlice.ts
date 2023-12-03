@@ -4,7 +4,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 const initialState = {
     userInfo:{
         token: null,
-        id: null
+        id: 1
     } as any,
     lang: "tr"
 }

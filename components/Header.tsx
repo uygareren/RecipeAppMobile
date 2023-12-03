@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 import { MAIN_COLOR, WHITE } from "../utils/utils"
 import { TextInput } from "react-native"
 import { EvilIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
 
 type TopHeaderParams={
     title: string
@@ -12,6 +14,7 @@ type SearchHeaderParams={
     onChangeValue: (text: string) => void,
     placeholder: string
 }
+
 
 export const TopHeader = () => {
     return(
@@ -44,8 +47,23 @@ export const SearchHeader = ({ value, onChangeValue, placeholder }: SearchHeader
         </View>
       </View>
     );
-  };
-  
+};
+
+
+export const SettingsHeader = () => {
+
+  const navigation = useNavigation();
+
+  return(
+      <View style={styles.topHeaderContainer}>
+        <Text style={{fontStyle: "italic", fontSize: 28, color: "#7224a3"}}>Foody</Text>
+        <TouchableOpacity style={{position: "absolute", top: 20, right: 20}} onPress={() => navigation.navigate("Settings")}>
+          <Ionicons name="settings-outline" size={28} color="black" />
+        </TouchableOpacity>
+      </View>
+  )
+}
+
   const styles = StyleSheet.create({
     topHeaderContainer: {
       width: "100%",
