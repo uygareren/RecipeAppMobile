@@ -13,11 +13,7 @@ const Stack = createNativeStackNavigator<TabStackParamList>();
 
 export default function SearchNavigation(){
 
-    return(
-        <Stack.Navigator>
-            
-        </Stack.Navigator>
-    )
+    
 
        
 
