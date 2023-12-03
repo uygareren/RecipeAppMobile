@@ -19,6 +19,19 @@ const userSlice = createSlice({
         updateUser: (state, action: PayloadAction<any>) => {
             state.userInfo = {...state.userInfo, ...action.payload};
         },
+        logout: (state, action: PayloadAction<any>) => {
+
+            const isLogout = action.payload;
+            
+            if(isLogout){
+                state.userInfo = {
+                    token:null,
+                    id:null
+                };
+            }
+
+           
+        },
         clear: (state) => {
             state.userInfo = {
                 token : null,
