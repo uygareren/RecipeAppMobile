@@ -13,6 +13,12 @@ const Stack = createNativeStackNavigator<TabStackParamList>();
 
 export default function AddFoodNavigation(){
 
+    return(
+        <Stack.Navigator>
+            
+        </Stack.Navigator>
+    )
+
        
 
 }

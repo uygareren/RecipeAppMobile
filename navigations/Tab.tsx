@@ -52,7 +52,7 @@ export const TabNavigation = () => {
                 />
 
                 <Tab.Screen
-                    name="AddFood"
+                    name="AddFoodNavigation"
                     component={AddFoodNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
@@ -64,7 +64,7 @@ export const TabNavigation = () => {
                     }}
                 />
                 <Tab.Screen
-                    name="DetailSearch"
+                    name="DetailSearchNavigation"
                     component={SearchNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
