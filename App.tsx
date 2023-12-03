@@ -29,12 +29,17 @@ export default function App() {
   return (
     <Provider store={store}>
       <I18nextProvider i18n={i18n} defaultNS={"translation"}>
-        <NativeBaseProvider>
+        <NativeBaseProvider theme={theme}>
           <ProtectProvider>
             <NavigationContainer>
                 <Stack.Navigator>
+
                   <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
-                  <Stack.Screen component={SettingsScreen} name='Settings' options={{headerShown: false}}/>
+
+                  <Stack.Group screenOptions={{headerShown: false}}>
+                    <Stack.Screen component={SettingsScreen} name='Settings' options={{headerShown: false}}/>
+                  </Stack.Group>
+                  
                 </Stack.Navigator>
             </NavigationContainer>
           </ProtectProvider>
