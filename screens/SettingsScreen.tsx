@@ -6,6 +6,7 @@ import { Actionsheet } from "native-base";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { userSliceActions } from "../store/reducer/userSlice";
+import { ChangeLanguage } from "../components/Modals/ChangeLanguageModal";
 
 
 export default function SettingsScreen(){
@@ -14,6 +15,7 @@ export default function SettingsScreen(){
     const dispatch = useDispatch();
 
     const [isLogoutVisible, setIsLogoutVisible] = useState(false);
+    const [isLanguageVisible, setIsLanguageVisible] = useState(false)
 
 
     const handleLogout = () => {
@@ -45,7 +47,7 @@ export default function SettingsScreen(){
                     <Text style={styles.cardText}>Profile Update</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.cardStyle}>
+                <TouchableOpacity style={styles.cardStyle} onPress={() => setIsLanguageVisible(true)}>
                 <Text style={styles.cardText}>Change Language</Text>
                 </TouchableOpacity>
 
@@ -83,6 +85,8 @@ export default function SettingsScreen(){
                     </Actionsheet.Item>
                 </Actionsheet.Content>
             </Actionsheet>
+
+            <ChangeLanguage isModalVisible={isLanguageVisible} setIsModalVisible={setIsLanguageVisible}/>
 
 
 

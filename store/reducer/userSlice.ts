@@ -32,6 +32,9 @@ const userSlice = createSlice({
 
            
         },
+        setLang: (state, action: PayloadAction<any>) => {
+            state.lang = action.payload;
+        },
         clear: (state) => {
             state.userInfo = {
                 token : null,

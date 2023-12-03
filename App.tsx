@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
+import i18n from "./utils/i18n"
 import { StyleSheet, Text, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,17 +9,14 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { NativeBaseProvider, extendTheme } from 'native-base';
 import SettingsScreen from './screens/SettingsScreen';
+import ProtectProvider from './provider/ProtectProvider';
+import { I18nextProvider } from 'react-i18next';
 
 
 type StackParamList = {
   Tab: undefined,
   Settings: undefined;
-  // ConfirmRegister: {
-  //     email: string
-  // },
-  // UpdatePassword: {
-  //     email: string
-  // }
+  
 }
 
 export type MainStackScreenProps<T extends keyof StackParamList> = StackScreenProps<StackParamList, T, T>;
@@ -30,15 +28,18 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <NativeBaseProvider theme={theme}>
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
-            <Stack.Screen component={SettingsScreen} name='Settings' options={{headerShown: false}}/>
-          </Stack.Navigator>
-        </NavigationContainer>
-      </NativeBaseProvider>
-
+      <I18nextProvider i18n={i18n} defaultNS={"translation"}>
+        <NativeBaseProvider>
+          <ProtectProvider>
+            <NavigationContainer>
+                <Stack.Navigator>
+                  <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
+                  <Stack.Screen component={SettingsScreen} name='Settings' options={{headerShown: false}}/>
+                </Stack.Navigator>
+            </NavigationContainer>
+          </ProtectProvider>
+        </NativeBaseProvider>
+      </I18nextProvider>
     </Provider>
     
   );

@@ -2,8 +2,9 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 
-import tr from "./locales/tr.json"
-import en from "./locales/en.json"
+import translationTr from "./locales/tr.json";
+import translationEn from "./locales/en.json";
+
 
 i18n
 .use(initReactI18next)
@@ -14,10 +15,12 @@ i18n
     debug: false,
     resources:{
         tr: {
-            translation: tr
+            translation: translationTr
         },
         en: {
-            translation: en
+            translation: translationEn
         }
     }
-})
+});
+
+export default i18n;
