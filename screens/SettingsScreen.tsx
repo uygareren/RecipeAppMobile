@@ -4,16 +4,22 @@ import { SafeAreaView } from "react-native";
 import { useState } from "react";
 import { Actionsheet } from "native-base";
 import { CommonActions, useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { userSliceActions } from "../store/reducer/userSlice";
 
 
 export default function SettingsScreen(){
 
     const navigation = useNavigation<any>();
+    const dispatch = useDispatch();
 
     const [isLogoutVisible, setIsLogoutVisible] = useState(false);
 
 
     const handleLogout = () => {
+
+        dispatch(userSliceActions.logout(true))
+
         navigation.dispatch(
             CommonActions.reset({
                 index: 1,
