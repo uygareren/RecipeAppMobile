@@ -11,11 +11,13 @@ import { NativeBaseProvider, extendTheme } from 'native-base';
 import SettingsScreen from './screens/SettingsScreen';
 import ProtectProvider from './provider/ProtectProvider';
 import { I18nextProvider } from 'react-i18next';
+import UpdatePasswordScreen from './screens/UpdatePasswordScreen';
 
 
 type StackParamList = {
   Tab: undefined,
-  Settings: undefined;
+  Settings: undefined,
+  UpdatePassword:undefined
   
 }
 
@@ -38,6 +40,7 @@ export default function App() {
 
                   <Stack.Group screenOptions={{headerShown: false}}>
                     <Stack.Screen component={SettingsScreen} name='Settings' options={{headerShown: false}}/>
+                    <Stack.Screen component={UpdatePasswordScreen} name='UpdatePassword' options={{headerShown:false}}/>
                   </Stack.Group>
                   
                 </Stack.Navigator>
