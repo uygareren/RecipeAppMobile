@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
-import { MAIN_COLOR, WHITE } from "../utils/utils"
+import { LIGHT_GRAY, MAIN_COLOR, WHITE } from "../utils/utils"
 import { TextInput } from "react-native"
 import { EvilIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +13,10 @@ type SearchHeaderParams={
     value: string,
     onChangeValue: (text: string) => void,
     placeholder: string
+}
+
+type RegularHeaderParams={
+  title:string
 }
 
 
@@ -64,6 +68,16 @@ export const SettingsHeader = () => {
   )
 }
 
+export const RegularHeader = ({title}:RegularHeaderParams) => {
+    return(
+        <View style={{marginTop: 50, alignItems: "center"}}>
+            <Text style={styles.titleText}>{title}</Text>
+            <View style={{height:1, backgroundColor:LIGHT_GRAY, width:"90%", alignSelf: "center", marginTop:10}}/>
+        </View>
+    )
+    
+}
+
   const styles = StyleSheet.create({
     topHeaderContainer: {
       width: "100%",
@@ -92,4 +106,8 @@ export const SettingsHeader = () => {
       position: "absolute",
       right: 10,
     },
-  });
+    titleText:{
+      fontSize:24,
+      fontWeight:"500"
+  },
+});
