@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { useState } from "react";
 import { LIGHT_GRAY, MAIN_COLOR, WHITE } from "../utils/utils";
 import { TextInputPassword } from "../components/Inputs";
+import { RegularHeader } from "../components/Header";
 
 
 export default function UpdatePasswordScreen({}){
@@ -15,11 +16,8 @@ export default function UpdatePasswordScreen({}){
     return(
         <View style={styles.container}>
 
-            <View style={{backgroundColor:MAIN_COLOR, paddingBottom: 60, borderBottomLeftRadius:25, borderBottomRightRadius:25}}>
-                <View style={{marginTop: 50, alignItems: "center"}}>
-                    <Text style={styles.titleText}>Update Password</Text>
-                    <View style={{height:1, backgroundColor:LIGHT_GRAY, width:"90%", alignSelf: "center", marginTop:10}}/>
-                </View>
+            <View style={{backgroundColor:MAIN_COLOR, paddingBottom: 60, borderBottomLeftRadius:25, borderBottomRightRadius:25  }}>
+                <RegularHeader title="Update Password"/>
 
                 <View>
                     <TextInputPassword value={currentPassword} onchangeValue={setCurrentPassword} placeholder="Mevcut Şifrenizi Girin" 
@@ -42,10 +40,6 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:WHITE
-    },
-    titleText:{
-        fontSize:24,
-        fontWeight:"500"
     },
     InputContainer:{
         flexDirection: "row",

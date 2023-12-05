@@ -51,7 +51,7 @@ export default function SettingsScreen(){
                 <Text style={styles.cardText}>Change Language</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.cardStyle}>
+                <TouchableOpacity style={styles.cardStyle} onPress={() => navigation.navigate("Favorites")}>
                 <Text style={styles.cardText}>Favorites</Text>
                 </TouchableOpacity>
 
