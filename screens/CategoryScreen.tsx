@@ -3,43 +3,45 @@ import { FlatList, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, 
 import { WHITE } from "../utils/utils";
 import { TopHeader } from "../components/Header";
 import category_data from "../assets/datas/category_data.json";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CategoryScreen({}) {
-  useEffect(() => {
-    console.log("category_data", category_data);
-  }, []);
 
-  const renderItem = ({ item }:any) => {
+    const navigation = useNavigation<any>();
+
+    const renderItem = ({ item }:any) => {
+        
+        return (
+        <Pressable style={styles.categoryItem} onPress={() => navigation.navigate("CategoryDetail", {id:item.id})} >
+            <Image
+            source={{ uri: item.image_url }}
+            style={{ width: "100%", height: 150, resizeMode: "cover", borderRadius: 10 }}
+            />
+            <Text style={styles.categoryName}>{item.category_name}</Text>
+            <Text style={styles.categoryName}>{item.id}</Text>
+        </Pressable>
+        );
+    };
+
     return (
-      <Pressable style={styles.categoryItem}>
-        <Image
-          source={{ uri: item.image_url }}
-          style={{ width: "100%", height: 150, resizeMode: "cover", borderRadius: 10 }}
-        />
-        <Text style={styles.categoryName}>{item.category_name}</Text>
-      </Pressable>
-    );
-  };
-
-  return (
-    <View style={styles.container}>
-      <View style={{ marginTop: 40 }}>
-        <TopHeader />
-      </View>
-
-      <ScrollView>
-        <Text style={{ alignSelf: "center", fontSize: 28, fontWeight: "600", marginVertical: 20 }}>Category</Text>
-
-        <View style={{marginBottom:50}}>
-          <FlatList
-            data={category_data}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderItem}
-            numColumns={2}
-          />
+        <View style={styles.container}>
+        <View style={{ marginTop: 40 }}>
+            <TopHeader />
         </View>
-      </ScrollView>
-    </View>
+
+        <ScrollView>
+            <Text style={{ alignSelf: "center", fontSize: 28, fontWeight: "600", marginVertical: 20 }}>Category</Text>
+
+            <View style={{marginBottom:50}}>
+            <FlatList
+                data={category_data}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderItem}
+                numColumns={2}
+            />
+            </View>
+        </ScrollView>
+        </View>
   );
 }
 
