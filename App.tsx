@@ -15,6 +15,7 @@ import UpdatePasswordScreen from './screens/UpdatePasswordScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 import RecipeDetailScreen from './screens/RecipeDetailScreen';
 import CategoryScreen from './screens/CategoryScreen';
+import CategoryDetail from './screens/CategoryDetail';
 
 
 type StackParamList = {
@@ -23,7 +24,10 @@ type StackParamList = {
   UpdatePassword:undefined,
   Favorites:undefined,
   RecipeDetail:undefined,
-  Categories:undefined
+  Categories:undefined,
+  CategoryDetail:{
+    id:string
+  }
   
 }
 
@@ -42,7 +46,6 @@ export default function App() {
             <NavigationContainer>
                 <Stack.Navigator>
                   <Stack.Screen component={CategoryScreen} name='Categories' options={{headerShown:false}}/>
-
                   <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
 
                   <Stack.Group screenOptions={{headerShown: false}}>
@@ -50,6 +53,7 @@ export default function App() {
                     <Stack.Screen component={UpdatePasswordScreen} name='UpdatePassword' options={{headerShown:false}}/>
                     <Stack.Screen component={FavoritesScreen} name='Favorites'/>
                     <Stack.Screen component={RecipeDetailScreen} name="RecipeDetail" options={{headerShown:false}}/>
+                    <Stack.Screen component={CategoryDetail} name='CategoryDetail' options={{headerShown:false}}/>
                   </Stack.Group>
                   
                 </Stack.Navigator>
