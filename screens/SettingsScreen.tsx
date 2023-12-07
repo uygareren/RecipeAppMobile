@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BLACK_COLOR, LIGHT_GRAY, WHITE } from "../utils/utils";
+import { BLACK_COLOR, LIGHT_GRAY, PINK, WHITE } from "../utils/utils";
 import { SafeAreaView } from "react-native";
 import { useState } from "react";
 import { Actionsheet } from "native-base";
@@ -62,7 +62,7 @@ export default function SettingsScreen(){
             </View>
 
             <TouchableOpacity style={styles.logoutView} onPress={() => setIsLogoutVisible(true)}>
-                <Text style={{fontSize: 16, fontWeight:"600"}}>Log Out</Text>
+                <Text style={{fontSize: 16, fontWeight:"600", color:WHITE}}>Log Out</Text>
             </TouchableOpacity>
 
             <Actionsheet isOpen={isLogoutVisible} onClose={() => setIsLogoutVisible(false)}>
@@ -72,7 +72,7 @@ export default function SettingsScreen(){
 
                             <TouchableOpacity style={{marginVertical: 18, backgroundColor: LIGHT_GRAY, 
                             paddingVertical:5, paddingHorizontal:18, borderRadius: 25}} onPress={handleLogout}>
-                                <Text style={{...styles.logoutText, color:"red", fontWeight:"400"}}>Çıkış Yap</Text>
+                                <Text style={{...styles.logoutText, color:PINK, fontWeight:"400"}}>Çıkış Yap</Text>
                             </TouchableOpacity>
 
                             <View style={{height:1, width:"90%", backgroundColor: LIGHT_GRAY}}/>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal:45,
         borderRadius: 25,
-        backgroundColor: "#f76c4d"
+        backgroundColor: PINK
     },
     logoutConfirmArea:{
         alignItems: 'center',   
