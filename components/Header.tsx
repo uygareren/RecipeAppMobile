@@ -2,8 +2,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 import { LIGHT_GRAY, MAIN_COLOR, WHITE } from "../utils/utils"
 import { TextInput } from "react-native"
 import { EvilIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 
 type TopHeaderParams={
     title: string
@@ -17,6 +20,10 @@ type SearchHeaderParams={
 
 type RegularHeaderParams={
   title:string
+}
+type RecipeDetailHeaderParams={
+  isLike:boolean,
+  setIsLike(isLike:boolean) : void,
 }
 
 
@@ -56,7 +63,7 @@ export const SearchHeader = ({ value, onChangeValue, placeholder }: SearchHeader
 
 export const SettingsHeader = () => {
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   return(
       <View style={styles.topHeaderContainer}>
@@ -76,6 +83,24 @@ export const RegularHeader = ({title}:RegularHeaderParams) => {
         </View>
     )
     
+}
+
+export const RecipeDetailHeader = ({isLıke}: any) => {
+
+  const [isLike, setIsLike] = useState(isLıke)
+
+ 
+  return(
+      <View style={styles.topHeaderContainer}>
+        <TouchableOpacity style={{position: "absolute", left:20, top:20}}>
+          <AntDesign name="arrowleft" size={32} color="black" />
+        </TouchableOpacity>
+        <Text style={{fontStyle: "italic", fontSize: 28, color: "#7224a3"}}>Foody</Text>
+        <TouchableOpacity style={{position: "absolute", top: 20, right: 20}} onPress={() => setIsLike(!isLike)}>
+          {isLike ? (<MaterialIcons name="favorite" size={32} color="black" />) : (<MaterialIcons name="favorite-border" size={32} color="black" />)}
+        </TouchableOpacity>
+      </View>
+  )
 }
 
   const styles = StyleSheet.create({
