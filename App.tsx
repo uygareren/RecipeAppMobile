@@ -13,13 +13,15 @@ import ProtectProvider from './provider/ProtectProvider';
 import { I18nextProvider } from 'react-i18next';
 import UpdatePasswordScreen from './screens/UpdatePasswordScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
+import RecipeDetailScreen from './screens/RecipeDetailScreen';
 
 
 type StackParamList = {
   Tab: undefined,
   Settings: undefined,
   UpdatePassword:undefined,
-  Favorites:undefined
+  Favorites:undefined,
+  RecipeDetail:undefined
   
 }
 
@@ -37,6 +39,7 @@ export default function App() {
           <ProtectProvider>
             <NavigationContainer>
                 <Stack.Navigator>
+                  <Stack.Screen component={RecipeDetailScreen} name="RecipeDetail" options={{headerShown:false}}/>
 
                   <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
 
