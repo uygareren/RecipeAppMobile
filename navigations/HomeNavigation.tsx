@@ -3,7 +3,7 @@ import HomeScreen from "../screens/Home/HomeScreen";
 
 
 type TabStackParamList = {
-   Home: undefined
+   Home: any
 }
 export type TabAccountScreenProps<T extends keyof TabStackParamList> = StackScreenProps<TabStackParamList, T, T>;
 const Stack = createStackNavigator<TabStackParamList>();
@@ -15,6 +15,6 @@ export default function HomeNavigation(){
             <Stack.Screen component={HomeScreen} name="Home" options={{headerShown:false}}/>
         </Stack.Navigator>
     )
-    
 
 }
+

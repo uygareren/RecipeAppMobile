@@ -35,7 +35,7 @@ export const TabNavigation = () => {
                 }}
             >
                 <Tab.Screen
-                    name="Home"
+                    name="HomeNavigation"
                     component={HomeNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (

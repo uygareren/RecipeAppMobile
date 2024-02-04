@@ -45,8 +45,10 @@ export default function App() {
           <ProtectProvider>
             <NavigationContainer>
                 <Stack.Navigator>
+                <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
+
                   <Stack.Screen component={CategoryScreen} name='Categories' options={{headerShown:false}}/>
-                  <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
+
 
                   <Stack.Group screenOptions={{headerShown: false}}>
                     <Stack.Screen component={SettingsScreen} name='Settings' options={{headerShown: false}}/>

@@ -1,11 +1,19 @@
 import { Text, View } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import category_data from "../assets/datas/category_data.json";
 
 export default function CategoryDetail({ route }: any) {
     const { id } = route.params;
 
+    const [detailData, setdetailData] = useState<any[]>([])
+
     useEffect(() => {
-        console.log("id:", id);
+        
+        const data = category_data.filter((item) => item.id === id);
+        setdetailData(data);
+
+        console.log("data", data)
+
     }, [id]);
 
     return(

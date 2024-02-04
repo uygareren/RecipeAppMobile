@@ -5,14 +5,16 @@ import { Feather } from '@expo/vector-icons';
 
 type TextInputParams = {
     value: string,
-    onchangeValue: (e:string) => void,
+    onchangeValue: (e: string) => void,
     requiredError?: boolean,
     label: string,
     placeholder: string,
     styleContainer?: ViewStyle,
     styleInputContainer?: ViewStyle,
-    styleInput?: TextStyle
+    styleInput?: TextStyle,
+    isTextArea?: boolean, // New prop
 }
+
 type TextInputPasswordParams = {
     value: string,
     onchangeValue: (e:string) => void,
@@ -24,24 +26,38 @@ type TextInputPasswordParams = {
     styleInput?: TextStyle,
 }
 
-export const TextInputComp = ({value,onchangeValue, requiredError=false, label="", placeholder="", styleContainer, styleInputContainer, styleInput}: TextInputParams) => {
+
+export const TextInputComp = ({ value, onchangeValue, requiredError = false, label = "", placeholder = "", styleContainer, styleInputContainer, styleInput, isTextArea }: TextInputParams) => {
     const theme = useTheme();
 
-    return(
-        <FormControl style={{...styleContainer}}>
-            <FormControl.Label style={{marginLeft: 20}}>{label}</FormControl.Label>
-            <View style={{...styleInputContainer}}>
-                <TextInput value={value} onChangeText={onchangeValue} placeholder={placeholder} style={{...styleInput, width: "100%"}}/>
+    return (
+        <FormControl style={{ ...styleContainer }}>
+            <FormControl.Label style={{ marginLeft: 20 }}>{label}</FormControl.Label>
+            <View style={{ ...styleInputContainer }}>
+                {isTextArea ? (
+                    <TextInput
+                        value={value}
+                        onChangeText={onchangeValue}
+                        placeholder={placeholder}
+                        style={{ ...styleInput, width: "100%", height: 100 }} // Adjust height as needed
+                        multiline={true}
+                    />
+                ) : (
+                    <TextInput
+                        value={value}
+                        onChangeText={onchangeValue}
+                        placeholder={placeholder}
+                        style={{ ...styleInput, width: "100%" }}
+                    />
+                )}
             </View>
 
             <FormControl.ErrorMessage leftIcon={<Feather name="info" size={24} color={theme.colors.error[500]} />}>
-
+                {/* Error message content */}
             </FormControl.ErrorMessage>
         </FormControl>
-    )
-    
-
-}  
+    );
+};
 
 export const TextInputPassword = ({
     value, 
