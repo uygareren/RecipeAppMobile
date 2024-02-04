@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StackScreenProps } from "@react-navigation/stack";
 import SearchScreen from "../screens/Search/SearchScreen";
+import AuthProvider from "../provider/AuthProvider";
 
 
 
@@ -14,9 +15,12 @@ const Stack = createNativeStackNavigator<TabStackParamList>();
 
 export default function SearchNavigation(){
     return(
-        <Stack.Navigator>
-            <Stack.Screen component={SearchScreen} name={"Search"} options={{headerShown:false}}></Stack.Screen>
-        </Stack.Navigator>
+        <AuthProvider name="search">
+            <Stack.Navigator>
+                <Stack.Screen component={SearchScreen} name={"Search"} options={{headerShown:false}}></Stack.Screen>
+            </Stack.Navigator>
+        </AuthProvider>
+
     )
 
 }
