@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
-import { LIGHT_GRAY, MAIN_COLOR, WHITE } from "../utils/utils"
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from "react-native"
+import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, WHITE } from "../utils/utils"
 import { TextInput } from "react-native"
 import { EvilIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 
@@ -24,6 +25,10 @@ type RegularHeaderParams={
 type RecipeDetailHeaderParams={
   isLike:boolean,
   setIsLike(isLike:boolean) : void,
+}
+
+type GoBackHeaderParams={
+  goBackPress: ()=>void
 }
 
 
@@ -101,6 +106,19 @@ export const RecipeDetailHeader = ({isLıke}: any) => {
         </TouchableOpacity>
       </View>
   )
+}
+
+export const GoBackHeader = ({goBackPress}:GoBackHeaderParams) => {
+    const width = Dimensions.get("screen").width;
+
+    return(
+      <View style={{height:width/6, width:"100%", marginTop:40, paddingHorizontal:20, 
+        justifyContent:"center"}}>
+          <TouchableOpacity onPress={goBackPress} style={{width:width/10, }}>
+              <Feather name="arrow-left" size={32} color={BLACK_COLOR}/>
+          </TouchableOpacity>
+      </View>
+    )
 }
 
   const styles = StyleSheet.create({
