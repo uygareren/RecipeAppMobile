@@ -26,7 +26,7 @@ export default function ProfileNavigation() {
     const userInfo = useSelector<RootStateType, any>((state) => state.user.userInfo)
 
     const RenderScreens = () => {
-        if(userInfo.id){
+        if(userInfo.userId){
             return (
                 <>
                     <Stack.Screen component={ProfileScreen} name="Profile" options={{headerShown: false}}/>

@@ -2,12 +2,13 @@ import { FormControl, useTheme } from "native-base"
 import { useState } from "react";
 import { Pressable, TextInput, TextStyle, View, ViewStyle } from "react-native"
 import { Feather } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 type TextInputParams = {
     value: string,
     onchangeValue: (e: string) => void,
     requiredError?: boolean,
-    label: string,
+    label?: string,
     placeholder: string,
     styleContainer?: ViewStyle,
     styleInputContainer?: ViewStyle,
@@ -19,27 +20,31 @@ type TextInputPasswordParams = {
     value: string,
     onchangeValue: (e:string) => void,
     requiredError?: boolean,
-    label: string,
+    label?: string,
     placeholder: string,
     styleContainer?: ViewStyle,
     styleInputContainer?: ViewStyle,
     styleInput?: TextStyle,
+    isTextArea?: string
 }
 
 
-export const TextInputComp = ({ value, onchangeValue, requiredError = false, label = "", placeholder = "", styleContainer, styleInputContainer, styleInput, isTextArea }: TextInputParams) => {
+export const TextInputComp = ({ value, onchangeValue, requiredError = false, label, placeholder = "", styleContainer, 
+    styleInputContainer, styleInput, isTextArea }: TextInputParams) => {
     const theme = useTheme();
 
     return (
         <FormControl style={{ ...styleContainer }}>
-            <FormControl.Label style={{ marginLeft: 20 }}>{label}</FormControl.Label>
+            
+            <FormControl.Label style={{marginLeft: 20}}>{label}</FormControl.Label>
+            
             <View style={{ ...styleInputContainer }}>
                 {isTextArea ? (
                     <TextInput
                         value={value}
                         onChangeText={onchangeValue}
                         placeholder={placeholder}
-                        style={{ ...styleInput, width: "100%", height: 100 }} // Adjust height as needed
+                        style={{ ...styleInput }} // Adjust height as needed
                         multiline={true}
                     />
                 ) : (
@@ -47,14 +52,12 @@ export const TextInputComp = ({ value, onchangeValue, requiredError = false, lab
                         value={value}
                         onChangeText={onchangeValue}
                         placeholder={placeholder}
-                        style={{ ...styleInput, width: "100%" }}
+                        style={{ ...styleInput}}
                     />
                 )}
             </View>
 
-            <FormControl.ErrorMessage leftIcon={<Feather name="info" size={24} color={theme.colors.error[500]} />}>
-                {/* Error message content */}
-            </FormControl.ErrorMessage>
+           
         </FormControl>
     );
 };
@@ -83,10 +86,6 @@ export const TextInputPassword = ({
                     </Pressable>
                 </View>
                 
-
-                <FormControl.ErrorMessage leftIcon={<Feather name="info" size={24} color={theme.colors.error[500]} />}>
-
-                </FormControl.ErrorMessage>
             </FormControl>
         )
     }

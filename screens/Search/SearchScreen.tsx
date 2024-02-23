@@ -3,7 +3,7 @@ import { Dimensions, FlatList, Pressable, ScrollView, StyleSheet, Text, View } f
 import { TopHeader } from "../../components/Header";
 import { TextInputComp } from "../../components/Inputs";
 import { ButtonComp } from "../../components/Button";
-import { MAIN_COLOR } from "../../utils/utils";
+import { LIGHT_GRAY, MAIN_COLOR } from "../../utils/utils";
 import components from "../../assets/datas/components.json";
 
 export default function SearchScreen({}) {
@@ -70,8 +70,9 @@ export default function SearchScreen({}) {
 
   return (
     <View style={styles.container}>
-      <View style={{ marginTop: 40 }}>
-        <TopHeader />
+      <View style={{ marginTop: 50 }}>
+        <TopHeader title="Tarif Ara"/>
+        <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
       </View>
 
       <View style={{ alignItems: "center" }}>

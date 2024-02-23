@@ -1,7 +1,7 @@
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { TopHeader } from "../../components/Header";
 import { ButtonComp } from "../../components/Button";
-import { MAIN_COLOR } from "../../utils/utils";
+import { LIGHT_GRAY, MAIN_COLOR } from "../../utils/utils";
 import { TextInputComp } from "../../components/Inputs";
 import { useState } from "react";
 import components from "../../assets/datas/components.json";
@@ -89,8 +89,9 @@ export default function AddFoodScreen(){
     return(
         <ScrollView style={styles.container}>
 
-            <View>
-                <TopHeader/>
+            <View style={{marginTop:50}}>
+                <TopHeader title="Tarif Ekle"/>
+                <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
             </View>
 
             <View style={{ marginTop:20, alignItems:"center", width:150, height:150, alignSelf:"center",}}>

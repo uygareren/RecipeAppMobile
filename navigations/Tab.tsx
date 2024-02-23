@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SafeAreaView } from "react-native";
-import { BLACK_COLOR, MAIN_COLOR, TAB_ACTIVE_COLOR, TAB_INACTIVE_COLOR, WHITE } from "../utils/utils";
+import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, TAB_INACTIVE_COLOR, WHITE } from "../utils/utils";
 import ProfileNavigation from "./ProfileNavigation";
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -17,19 +17,17 @@ export const TabNavigation = () => {
         <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
             <Tab.Navigator
                 screenOptions={{
-                    tabBarActiveBackgroundColor: MAIN_COLOR,
-                    tabBarItemStyle: {borderRadius: 180, alignSelf: "center", marginHorizontal: 5},
-                    tabBarActiveTintColor: TAB_ACTIVE_COLOR,
-                    tabBarInactiveTintColor: TAB_INACTIVE_COLOR,
+                    tabBarActiveTintColor: BLACK_COLOR,
+                    tabBarInactiveTintColor: "gray",
                     tabBarStyle: {
                         backgroundColor: WHITE,
                         paddingVertical: 0,
-                        height: 80,
+                        height: 70,
                         borderTopLeftRadius: 30,
                         borderTopRightRadius: 30,
                     },
-                    tabBarLabelStyle: { marginBottom: 10 },
-                    tabBarIconStyle: { marginTop: 25, marginBottom: 5 },
+                    tabBarLabelStyle: { marginBottom: 10, fontWeight:"600" },
+                    tabBarIconStyle: { marginTop: 10, marginBottom: 0},
                     tabBarHideOnKeyboard: true,
                     headerShown: false,
                 }}
@@ -42,11 +40,10 @@ export const TabNavigation = () => {
                             <AntDesign
                                 name="home"
                                 size={24}
-                                color={focused ? TAB_ACTIVE_COLOR : TAB_INACTIVE_COLOR}
+                                color={focused ? BLACK_COLOR : "gray"}
                             />
                         ),
                         headerShown: false,
-                        headerStyle: { backgroundColor: MAIN_COLOR },
                         tabBarLabel: "Home",
                     }}
                 />
@@ -56,10 +53,9 @@ export const TabNavigation = () => {
                     component={AddFoodNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
-                            <AntDesign name="plus" size={24} color={focused ? TAB_ACTIVE_COLOR : TAB_INACTIVE_COLOR} />
+                            <AntDesign name="plus" size={24} color={focused ? BLACK_COLOR : "gray"} />
                         ),
                         headerShown: false,
-                        headerStyle: { backgroundColor: MAIN_COLOR },
                         tabBarLabel: "Add Food",
                     }}
                 />
@@ -68,10 +64,9 @@ export const TabNavigation = () => {
                     component={SearchNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
-                            <Feather name="search" size={24} color={focused ? TAB_ACTIVE_COLOR : TAB_INACTIVE_COLOR} />
+                            <Feather name="search" size={24} color={focused ? BLACK_COLOR : "gray"} />
                         ),
                         headerShown: false,
-                        headerStyle: { backgroundColor: MAIN_COLOR },
                         tabBarLabel: "Detail Search",
                     }}
                 />
@@ -84,11 +79,10 @@ export const TabNavigation = () => {
                             <Ionicons
                                 name="person-outline"
                                 size={24}
-                                color={focused ? TAB_ACTIVE_COLOR : TAB_INACTIVE_COLOR}
+                                color={focused ? BLACK_COLOR : "gray"}
                             />
                         ),
                         headerShown: false,
-                        headerStyle: { backgroundColor: MAIN_COLOR },
                         tabBarLabel: "Profile",
                     }}
                 />

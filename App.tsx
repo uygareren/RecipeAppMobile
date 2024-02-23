@@ -16,6 +16,9 @@ import FavoritesScreen from './screens/FavoritesScreen';
 import RecipeDetailScreen from './screens/RecipeDetailScreen';
 import CategoryScreen from './screens/CategoryScreen';
 import CategoryDetail from './screens/CategoryDetail';
+import OtherProfile from './screens/Account/OtherProfile';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import InterestSelectionScreen from './screens/InterestSelectionScreen';
 
 
 type StackParamList = {
@@ -26,8 +29,11 @@ type StackParamList = {
   RecipeDetail:undefined,
   Categories:undefined,
   CategoryDetail:{
-    id:string
-  }
+    id:string,
+    name:string
+  },
+  OtherProfile: undefined,
+  InterestSelection:undefined
   
 }
 
@@ -38,7 +44,10 @@ export default function App() {
 
   const theme = extendTheme(DefaultTheme)
 
+  const queryClient = new QueryClient();
+
   return (
+    <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <I18nextProvider i18n={i18n} defaultNS={"translation"}>
         <NativeBaseProvider theme={theme}>
@@ -47,6 +56,11 @@ export default function App() {
                 <Stack.Navigator>
                 <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
 
+                <Stack.Screen component={InterestSelectionScreen} name='InterestSelection' options={{headerShown:false}}/>
+
+                <Stack.Screen component={RecipeDetailScreen} name="RecipeDetail" options={{headerShown:false}}/>
+
+
                   <Stack.Screen component={CategoryScreen} name='Categories' options={{headerShown:false}}/>
 
 
@@ -54,8 +68,9 @@ export default function App() {
                     <Stack.Screen component={SettingsScreen} name='Settings' options={{headerShown: false}}/>
                     <Stack.Screen component={UpdatePasswordScreen} name='UpdatePassword' options={{headerShown:false}}/>
                     <Stack.Screen component={FavoritesScreen} name='Favorites'/>
-                    <Stack.Screen component={RecipeDetailScreen} name="RecipeDetail" options={{headerShown:false}}/>
                     <Stack.Screen component={CategoryDetail} name='CategoryDetail' options={{headerShown:false}}/>
+                    <Stack.Screen component={OtherProfile} name='OtherProfile' options={{headerShown:false}}/>
+
                   </Stack.Group>
                   
                 </Stack.Navigator>
@@ -64,6 +79,7 @@ export default function App() {
         </NativeBaseProvider>
       </I18nextProvider>
     </Provider>
+    </QueryClientProvider>
     
   );
 }

@@ -4,19 +4,48 @@ import { TextInputComp, TextInputPassword } from "../../components/Inputs";
 import { useState } from "react";
 import { MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 import { ButtonComp } from "../../components/Button";
+import { AuthServices, login } from "../../services/AuthServices";
+import axios from "axios";
+import { Alert } from "native-base";
+import { useDispatch } from "react-redux";
+import { userSliceActions } from "../../store/reducer/userSlice";
+import { useNavigation } from "@react-navigation/native";
+import { useMutation } from "react-query";
 
 
-export default function LoginScreen({ navigation, route }: TabAccountScreenProps<"Login">) {
+export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
 
-    const [email, setEmail] = useState("uygareren@gmail.com")
-    const [password, setPassword] = useState("password")
+    const [email, setEmail] = useState("mehmetyılmazsdsdsd@gmail.com");
+    const [password, setPassword] = useState("789456123");
+
+    const [loading, setLoading] = useState(false)
+
+    const dispatch = useDispatch();
+    const navigation = useNavigation<any>()
+
+    const loginMutation = useMutation({
+        mutationKey:["login"],
+        mutationFn: login,
+        onSuccess: (data) => {
+            console.log("data", data)
+            dispatch(userSliceActions.setUser(data?.data?.data));
+            navigation.navigate("HomeNavigation");
+        }
+    })
+
+    const handleLogin = async () => {
+        setLoading(true)
+        loginMutation.mutate({email,password});
+        setLoading(false)
+
+    };
+
 
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.body_container}>
 
                 <View style={{alignItems: "center", position:"absolute", top: 0, justifyContent: "center"}}>
-                    <Text style={{fontStyle: "italic", fontSize: 28, color: "#7224a3"}}>Foody</Text>
                 </View>
 
                 <View>
@@ -31,7 +60,7 @@ export default function LoginScreen({ navigation, route }: TabAccountScreenProps
                 </View>
 
                 <View>
-                    <ButtonComp title="Login" onPress={() => console.log("Login Tıklandı")} styleContainer={styles.buttonContainer}
+                    <ButtonComp loading={loading} title="Login" onPress={() => handleLogin()} styleContainer={styles.buttonContainer}
                     styleText={styles.textButton}/>
                 </View>
 

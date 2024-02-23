@@ -4,15 +4,44 @@ import { useState } from "react";
 import { BLACK_COLOR, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 import { TextInputComp, TextInputPassword } from "../../components/Inputs";
 import { ButtonComp } from "../../components/Button";
+import { AuthServices } from "../../services/AuthServices";
 
 
 export default function RegisterScreen({navigation, route}: TabAccountScreenProps<"Register">){
 
-    const [name, setName] = useState("")
-    const [surname, setSurname] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [password_2, setPassword2] = useState("")
+    const [name, setName] = useState("uygar")
+    const [surname, setSurname] = useState("erenn")
+    const [email, setEmail] = useState("uygarerenx@gmail.com")
+    const [password_1, setPassword1] = useState("Uygareren111ue.")
+    const [password_2, setPassword2] = useState("Uygareren111ue.")
+
+    const [loading, setLoading] = useState(false)
+
+    const registerMutation = AuthServices.useRegister();
+
+    const handleRegister = async () => {
+        setLoading(true)
+        try {
+            const registerResp = await registerMutation.mutateAsync({name, surname, email, password_1, password_2});
+            console.log("registerResp", registerResp);
+
+            if(registerResp.data.success){
+                navigation.navigate("Login")
+            }else{
+                alert("Hata")
+            }
+
+        } catch (error) {
+            console.error("Login Failed:", error);
+    
+            // Log more details about the Axios error
+            if (error) {
+                console.error("Axios Error Details:", error);
+            }
+        }
+
+        setLoading(false);
+    }
 
     return(
         <ScrollView style={styles.container}>
@@ -33,14 +62,14 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
                     styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                     <TextInputComp value={email} onchangeValue={setEmail} label="Email" placeholder="Email Girin" 
                     styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                    <TextInputPassword value={password} onchangeValue={setPassword} label="Password" placeholder="Parola Girin" 
+                    <TextInputPassword value={password_1} onchangeValue={setPassword1} label="Password" placeholder="Parola Girin" 
                     styleContainer={styles.TextInputPassword} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                     <TextInputPassword value={password_2} onchangeValue={setPassword2} label="Confirm Password" placeholder="Tekrar Parolanızı Girin" 
                     styleContainer={styles.TextInputPassword} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                 </View>
 
                 <View style={{marginBottom: 70}}>
-                    <ButtonComp title="Register" onPress={() => console.log("Login Tıklandı")} styleContainer={styles.buttonContainer}
+                    <ButtonComp loading={loading} title="Register" onPress={() => handleRegister()} styleContainer={styles.buttonContainer}
                     styleText={styles.textButton}/>
 
                     <View style={{marginTop: 30, flexDirection: "row", 

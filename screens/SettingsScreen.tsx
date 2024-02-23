@@ -11,6 +11,8 @@ import { ChangeLanguage } from "../components/Modals/ChangeLanguageModal";
 
 export default function SettingsScreen(){
 
+    const width = Dimensions.get("screen").width;
+
     const navigation = useNavigation<any>();
     const dispatch = useDispatch();
 
@@ -39,6 +41,8 @@ export default function SettingsScreen(){
 
             <View style={{marginTop: 50, alignItems: "center"}}>
                 <Text style={styles.titleText}>Settings</Text>
+                <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
+
             </View>
 
             <View style={styles.cardView}>
@@ -101,8 +105,8 @@ const styles = StyleSheet.create({
         backgroundColor:WHITE
     },
     titleText:{
-        fontSize:24,
-        fontWeight:"500"
+        fontSize:18,
+        fontWeight:"300"
     },
     cardView:{
         marginTop:30

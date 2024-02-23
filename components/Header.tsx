@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from "react-native"
-import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, WHITE } from "../utils/utils"
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from "react-native"
+import { BLACK_COLOR, LIGHT_GRAY, LIGHT_GRAY_2, MAIN_COLOR, WHITE } from "../utils/utils"
 import { TextInput } from "react-native"
 import { EvilIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -14,9 +14,11 @@ type TopHeaderParams={
 }
 
 type SearchHeaderParams={
+    name: String,
     value: string,
     onChangeValue: (text: string) => void,
-    placeholder: string
+    placeholder: string,
+    onPress : () => void
 }
 
 type RegularHeaderParams={
@@ -32,30 +34,41 @@ type GoBackHeaderParams={
 }
 
 
-export const TopHeader = () => {
+export const TopHeader = ({title}:any) => {
     return(
-        <View style={styles.topHeaderContainer}>
-            <Text style={{fontStyle: "italic", fontSize: 28, color: "#7224a3"}}>Foody</Text>
+        <View style={{...styles.topHeaderContainer, alignItems:"center"}}>
+            <Text style={{fontSize:18, fontWeight:"300"}}>{title}</Text>
         </View>
     )
 }
 
-export const SearchHeader = ({ value, onChangeValue, placeholder }: SearchHeaderParams) => {
-
-
+export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress }: SearchHeaderParams) => {
 
     return (
-      <View style={{ ...styles.topHeaderContainer, height: 110 }}>
-        <Text style={{ fontStyle: "italic", fontSize: 28, color: "#7224a3", marginBottom: 10 }}>Foody</Text>
+      <View style={{ ...styles.topHeaderContainer}}>
+        <Text>{`Merhaba ${name}`}</Text>
+        <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+          <Text style={{fontSize:19, fontWeight:"700", marginTop:5}}>Bugün ne pişirmek istersiniz?</Text>
+          {
+            name.length > 0 ? (
+              <TouchableOpacity onPress={onPress} style={{width:Dimensions.get("screen").width/9, height:Dimensions.get("screen").width/9, borderRadius:180, borderWidth:1,
+              borderColor:"black", alignItems:"center", justifyContent:"center" }}>
+                  <Image style={{width:Dimensions.get("screen").width/10, height:Dimensions.get("screen").width/10, borderRadius:180,  }}
+                  source={require("../assets/images/default_profile.jpg")}/>
+              </TouchableOpacity>
+            ):null
+          }
+          
+        </View>
   
         <View style={styles.searchContainer}>
           <TextInput value={value} onChangeText={onChangeValue} placeholder={placeholder} style={styles.textInput} />
   
           <View style={styles.searchIcon}>
             {value ? (<TouchableOpacity onPress={() => onChangeValue("")}> 
-                <EvilIcons name="close-o" size={24} color="black" />
+                <EvilIcons name="close-o" size={26} color="black" />
             </TouchableOpacity>) : 
-            (<EvilIcons name="search" size={24} color="black" /> )
+            (<EvilIcons name="search" size={26} color="black" /> )
             }
             
           </View>
@@ -71,8 +84,7 @@ export const SettingsHeader = () => {
   const navigation = useNavigation<any>();
 
   return(
-      <View style={styles.topHeaderContainer}>
-        <Text style={{fontStyle: "italic", fontSize: 28, color: "#7224a3"}}>Foody</Text>
+      <View style={{...styles.topHeaderContainer, marginTop:30}}>
         <TouchableOpacity style={{position: "absolute", top: 20, right: 20}} onPress={() => navigation.navigate("Settings")}>
           <Ionicons name="settings-outline" size={28} color="black" />
         </TouchableOpacity>
@@ -123,27 +135,28 @@ export const GoBackHeader = ({goBackPress}:GoBackHeaderParams) => {
 
   const styles = StyleSheet.create({
     topHeaderContainer: {
-      width: "100%",
-      height: 110,
-      backgroundColor: MAIN_COLOR,
-      borderBottomLeftRadius: 25,
-      borderBottomRightRadius: 25,
-      alignItems: "center",
-      justifyContent: "center",
+      width:"100%", 
+      paddingHorizontal:20, 
+      justifyContent:"center",
+      // borderWidth:1,
+      // borderColor:"black"
+      
     },
     searchContainer: {
-      width: "88%",
+      marginTop:18,
+      alignSelf:"center",
+      width: "95%",
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
-      position: "relative",
     },
     textInput: {
       flex: 1,
-      paddingVertical: 8,
+      paddingVertical: 13,
       paddingHorizontal: 7,
-      backgroundColor: WHITE,
-      borderRadius: 25,
+      backgroundColor: LIGHT_GRAY_2,
+      borderRadius: 15,
+      
     },
     searchIcon: {
       position: "absolute",

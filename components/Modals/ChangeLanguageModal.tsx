@@ -19,7 +19,8 @@ type ChangeLanguageParams = {
 
 export const ChangeLanguage = ({isModalVisible, setIsModalVisible}: ChangeLanguageParams) => {
     
-    
+    const width = Dimensions.get("screen").width;
+
     const dispatch = useDispatch();
     const userLang = useSelector<RootStateType, string>((state) => state.user.lang)
 
@@ -50,10 +51,10 @@ export const ChangeLanguage = ({isModalVisible, setIsModalVisible}: ChangeLangua
                 </TouchableOpacity>
 
                 <View style={{marginTop: 20, alignItems: "center"}}>
-                    <Text style={{fontSize: 24, fontWeight: "500"}}>Change Language</Text>
+                    <Text style={{fontSize: 18, fontWeight: "300"}}>Change Language</Text>
                 </View>
 
-                <View style={{backgroundColor: LIGHT_GRAY, height:1, width: "90%", alignSelf: "center", marginTop: 5}}/>
+                <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
 
                 <View style={{marginTop:20}}>
                 {languages.map((v, i) => (

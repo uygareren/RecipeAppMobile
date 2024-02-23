@@ -1,16 +1,20 @@
-import { TextStyle, TouchableOpacity, ViewStyle, Text } from "react-native";
+import { TextStyle, TouchableOpacity, ViewStyle, Text, ActivityIndicator } from "react-native";
 
 type ButtonCompParams = {
+    loading?: boolean, 
     title: string,
     onPress: () => void,
     styleContainer?: ViewStyle,
     styleText?: TextStyle
 }
 
-export const ButtonComp = ({ title, onPress, styleContainer, styleText }: ButtonCompParams) => {
+export const ButtonComp = ({loading, title, onPress, styleContainer, styleText }: ButtonCompParams) => {
     return (
         <TouchableOpacity onPress={onPress} style={{...styleContainer}}>
-            <Text style={{...styleText}}>{title}</Text>
+            {
+                loading ? (<ActivityIndicator/>) : (<Text style={{...styleText}}>{title}</Text>)
+            }
+            
         </TouchableOpacity>
     );
 };
