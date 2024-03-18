@@ -1,14 +1,103 @@
-import { Image, SafeAreaView, StyleSheet, Text, View, Pressable, Dimensions, ScrollView, TouchableOpacity } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, View, Pressable, Dimensions, ScrollView, TouchableOpacity, FlatList } from "react-native";
 import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GoBackHeader, TopHeader } from "../../components/Header";
+import { useMutation, useQuery } from "react-query";
+import { addFollowed, getFollowing, getRecipeByUserId, getUserDetail } from "../../services/ApiService";
+import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 
-export default function OtherProfile(){
+export default function OtherProfile({route}:any){
+
+    const id = route.params.id;
+
+    const navigation = useNavigation<any>()
 
     const {width} = Dimensions.get("screen");
 
+    const userInfo = useSelector((state:any) => state.user.userInfo);
+
+    const [FollowerCount, setFollowerCount] = useState(0)
     const [isFollow, setIsFollow] = useState(false);
+
+
+    const user_detail = useQuery(
+        ['get_user_detail', id],
+        () => getUserDetail(id),
+    );
+
+    const recipeResponse = useQuery(
+        {queryKey:["get_recipe_by_userid"],
+        queryFn:() => getRecipeByUserId({user_id:id})}
+    )
+
+    const {data, isLoading, isSuccess} = useQuery({
+        queryKey:["get_following"],
+        queryFn:()=>getFollowing(id),
+        staleTime:100
+    })
+
+    const follower_data = data?.data?.follower
+    console.log(data?.data?.follower);
+    const followed_data = data?.data?.followed
+
+
+    // TAKİPÇİ EKLEME 
+    const followMutation = useMutation({
+        mutationKey:["add_followed"],
+        mutationFn:addFollowed,
+        onSuccess: () => {
+            setIsFollow(true);
+            setFollowerCount(FollowerCount+ 1);
+        }
+    });
+
+    useEffect(() => {
+        if (follower_data) {
+          setFollowerCount(data?.data?.follower?.length);
+          setIsFollow(data?.data?.follower.filter((v:any) => v?._id == userInfo.userId) ? true : false)
+          console.log("ischeckk", data?.data?.follower.filter((v:any) => v?._id == userInfo.userId) ? true : false)
+        }
+      }, [follower_data]);
+    
+
+    async function handleFollow() {
+        setIsFollow(() => (!isFollow));
+
+        if(!isFollow){
+            
+            followMutation.mutate({user_id:userInfo?.userId, followed_id:id})
+        }
+
+    }
+
+    const RenderItem = ({item}:any) => {
+        return(
+            <View style={{backgroundColor:LIGHT_GRAY,
+                 width:width*0.3,alignItems:"center",
+            marginBottom:20,marginVertical:2, marginHorizontal:2}}>
+                <Image source={{ uri: "http://dummyimage.com/118x100.png/ff4444/ffffff" }} 
+                style={{ width: width*0.3, height: width*0.3, resizeMode:"cover" }} />
+
+            </View>
+        )
+    }
+
+    useEffect(() => {
+      follower_data?.map((item:any) => item?._id == userInfo?.userId ? setIsFollow(true): setIsFollow(false))
+    }, [])
+    
+
+    if(isLoading){
+        return(
+            <View style={{flex:1, backgroundColor:WHITE, justifyContent:"center", alignItems:"center"}}>
+                <Text>Loading...</Text>
+            </View>
+        )
+    }
+    
+
 
     return(
         <ScrollView style={{flex:1, backgroundColor:WHITE}}>
@@ -29,10 +118,13 @@ export default function OtherProfile(){
                 {/* NAME, CİTY AREA  */}
                 <View style={{flexDirection:"row",alignItems:"center", justifyContent:"space-between",marginTop:15, paddingHorizontal:40}}>
                     <View style={{alignItems:"center"}}>
-                        <Text style={{fontSize:17, fontWeight:"600", marginTop:10}}>İbrahim Karatay </Text>
+                        <Text style={{fontSize:17, fontWeight:"600", marginTop:10}}>{`${user_detail?.data?.user?.name} ${user_detail?.data?.user?.surname}`}</Text>
+                        {user_detail?.data?.user?.city ? (
                         <Text style={{fontSize:14, fontWeight:"300", marginTop:2}}>Diyarbakır </Text>
+
+                        ):null}
                     </View>
-                    <TouchableOpacity onPress={() => setIsFollow(!isFollow)} style={{
+                    <TouchableOpacity onPress={() => handleFollow()} style={{
                     backgroundColor:LIGHT_GRAY,paddingHorizontal:15, paddingVertical:8, borderRadius:12}}>
                         <Text style={{fontSize:12, fontWeight:"400"}}>{isFollow ? "Takip Ediliyor" : "Takip Et"}</Text>
                     </TouchableOpacity>
@@ -43,34 +135,43 @@ export default function OtherProfile(){
             <View style={{marginTop:20, width:width*8/10, alignSelf:"center", flexDirection:"row",
             justifyContent:"space-between", alignItems:"center"}}>
                 <View style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
-                    <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>580</Text>
+                    <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>{recipeResponse?.data?.data.length ?? "0"}</Text>
                     <Text style={{fontSize:14, fontWeight:"300"}}>Recipes</Text>
                 </View>
                 <View style={{borderWidth:1, borderColor:LIGHT_GRAY, height:40}}/>
-                <View style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
-                    <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>800</Text>
+
+                <TouchableOpacity onPress={() => navigation.navigate("Follow", {user_id:id})} style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
+                    <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>{followed_data?.length ?? "0"}</Text>
                     <Text style={{fontSize:14, fontWeight:"300"}}>Following</Text>
-                </View>
+                </TouchableOpacity>
                 <View style={{borderWidth:1, borderColor:LIGHT_GRAY, height:40}}/>
-                <View style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
-                    <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>900</Text>
+
+                <TouchableOpacity onPress={() => navigation.navigate("Follow", {user_id:id})} style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
+                    <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>{follower_data?.length ?? "0"}</Text>
                     <Text style={{fontSize:14, fontWeight:"300"}}>Followers</Text>
-                </View>
+                </TouchableOpacity>
 
             </View>
 
             {/* BIOGRAPHI AREA */}
-            <View style={{ marginTop:20, width:width*8/10, alignSelf:"center", alignItems:"center", 
+            {user_detail?.data?.user?.biography ? (
+                <View style={{ marginTop:20, width:width*8/10, alignSelf:"center", alignItems:"center", 
             justifyContent:"center"}}>
                 <Text style={{textAlign:"center", fontWeight:"300"}}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-                standard dummy text ever since the 1500s, 
                 </Text>
             </View>
+            ):null}
+            
 
             {/* POST AREA */}
-            <View style={{borderWidth:1, borderColor:BLACK_COLOR, marginTop:20, paddingHorizontal:10}}>
-
+            <View style={{marginTop:20,}}>
+                <FlatList
+                    data={recipeResponse?.data?.data}
+                    keyExtractor={(item)=> item._id.toString()}
+                    renderItem={RenderItem}
+                    numColumns={3}
+                    showsVerticalScrollIndicator={false}
+                />
             </View>
 
             

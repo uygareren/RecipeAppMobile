@@ -30,7 +30,6 @@ export default function UpdatePasswordScreen({}){
                 newPassword2: password2,
             })
 
-            console.log("response", response)
 
             if(response.data.success){
                 Alert("Başarılı!")

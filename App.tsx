@@ -19,6 +19,10 @@ import CategoryDetail from './screens/CategoryDetail';
 import OtherProfile from './screens/Account/OtherProfile';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import InterestSelectionScreen from './screens/InterestSelectionScreen';
+import FollowScreen from './screens/FollowScreen';
+import UpdateProfile from './screens/UpdateProfile';
+import UpdateProfileScreen from './screens/UpdateProfile';
+import SearchResultScreen from './screens/SearchResultScreen';
 
 
 type StackParamList = {
@@ -33,7 +37,12 @@ type StackParamList = {
     name:string
   },
   OtherProfile: undefined,
-  InterestSelection:undefined
+  InterestSelection:undefined,
+  Follow:undefined,
+  UpdateProfile:undefined,
+  SearchResult:{
+    selectedComponentIds:any
+  }
   
 }
 
@@ -70,6 +79,9 @@ export default function App() {
                     <Stack.Screen component={FavoritesScreen} name='Favorites'/>
                     <Stack.Screen component={CategoryDetail} name='CategoryDetail' options={{headerShown:false}}/>
                     <Stack.Screen component={OtherProfile} name='OtherProfile' options={{headerShown:false}}/>
+                    <Stack.Screen component={FollowScreen} name='Follow' options={{headerShown:false}}/>
+                    <Stack.Screen component={UpdateProfileScreen} name='UpdateProfile' options={{headerShown:false}}/>
+                    <Stack.Screen component={SearchResultScreen} name='SearchResult' options={{headerShown:false}}/>
 
                   </Stack.Group>
                   

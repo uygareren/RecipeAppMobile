@@ -27,7 +27,6 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
         mutationKey:["login"],
         mutationFn: login,
         onSuccess: (data) => {
-            console.log("data", data)
             dispatch(userSliceActions.setUser(data?.data?.data));
             navigation.navigate("HomeNavigation");
         }

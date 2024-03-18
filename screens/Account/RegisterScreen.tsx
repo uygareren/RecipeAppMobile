@@ -23,7 +23,6 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
         setLoading(true)
         try {
             const registerResp = await registerMutation.mutateAsync({name, surname, email, password_1, password_2});
-            console.log("registerResp", registerResp);
 
             if(registerResp.data.success){
                 navigation.navigate("Login")

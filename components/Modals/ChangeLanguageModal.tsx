@@ -1,7 +1,7 @@
 import { Dimensions, Modal, Text, TouchableOpacity, View } from "react-native"
 import { useEffect } from "react";
 import { FontAwesome5 } from '@expo/vector-icons';
-import { LANG_STORE, LIGHT_GRAY } from "../../utils/utils";
+import { LANG_STORE, LIGHT_GRAY, setMomentLanguage } from "../../utils/utils";
 import { Image } from "react-native";
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from "react-redux";
@@ -38,12 +38,13 @@ export const ChangeLanguage = ({isModalVisible, setIsModalVisible}: ChangeLangua
         i18n.changeLanguage(lang);
         dispatch(userSliceActions.setLang(lang));
         AsyncStorage.setItem(LANG_STORE, lang)
+        setMomentLanguage(lang);
         
     }
     
 
     return(
-        <Modal visible={isModalVisible} animationType="slide">
+        <Modal visible={isModalVisible} animationType="slide" onRequestClose={() => setIsModalVisible(false)}>
             <View>
 
                 <TouchableOpacity style={{alignSelf: "flex-end", marginRight: 25, marginTop: 25}} onPress={() => setIsModalVisible(false)}>

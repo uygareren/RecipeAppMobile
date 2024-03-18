@@ -47,7 +47,7 @@ export default function SettingsScreen(){
 
             <View style={styles.cardView}>
 
-                <TouchableOpacity style={styles.cardStyle}>
+                <TouchableOpacity onPress={() => navigation.navigate("UpdateProfile")} style={styles.cardStyle}>
                     <Text style={styles.cardText}>Profile Update</Text>
                 </TouchableOpacity>
 

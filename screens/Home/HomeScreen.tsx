@@ -19,7 +19,6 @@ export default function HomeScreen({ route }: any) {
 
     const userInfo = useSelector((state:any) => state.user.userInfo);
     const userId = userInfo?.userId;
-    console.log(userInfo)
 
     const {data, isLoading} = useQuery({
       queryKey: ["categories"],

@@ -9,8 +9,7 @@ import { TopHeader } from "../components/Header";
 
 export default function CategoryDetail({ route }: any) {
     const { id, name } = route.params;
-    console.log(route.params);
-    console.log("Name:", name);
+    
 
 
     const {width, height} = Dimensions.get("screen");

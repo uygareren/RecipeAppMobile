@@ -32,7 +32,6 @@ export default function InterestSelectionScreen() {
       onSuccess: async() => {
         const key = keyGenerator(userInfo?.userId);
         await AsyncStorage.setItem(key,"true");
-        console.log("doneee")
         navigation.dispatch(
           CommonActions.reset({
               index: 1,
@@ -79,8 +78,6 @@ export default function InterestSelectionScreen() {
         </TouchableOpacity>
       );
   };
-
-    console.log("idd", interestedId)
 
     if(isLoading){
       return(
