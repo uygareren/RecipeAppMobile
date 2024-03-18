@@ -5,12 +5,13 @@ type ButtonCompParams = {
     title: string,
     onPress: () => void,
     styleContainer?: ViewStyle,
-    styleText?: TextStyle
+    styleText?: TextStyle,
+    isActive ?: boolean;
 }
 
-export const ButtonComp = ({loading, title, onPress, styleContainer, styleText }: ButtonCompParams) => {
+export const ButtonComp = ({loading, title, onPress, styleContainer, styleText, isActive=true }: ButtonCompParams) => {
     return (
-        <TouchableOpacity onPress={onPress} style={{...styleContainer}}>
+        <TouchableOpacity disabled={!isActive} onPress={onPress} style={{...styleContainer, opacity: isActive ? 1 : 0.7}}>
             {
                 loading ? (<ActivityIndicator/>) : (<Text style={{...styleText}}>{title}</Text>)
             }

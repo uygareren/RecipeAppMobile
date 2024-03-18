@@ -1,6 +1,6 @@
 import { FormControl, useTheme } from "native-base"
 import { useState } from "react";
-import { Pressable, TextInput, TextStyle, View, ViewStyle } from "react-native"
+import { KeyboardTypeOptions, Pressable, TextInput, TextStyle, View, ViewStyle } from "react-native"
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -13,8 +13,10 @@ type TextInputParams = {
     styleContainer?: ViewStyle,
     styleInputContainer?: ViewStyle,
     styleInput?: TextStyle,
-    isTextArea?: boolean, // New prop
+    isTextArea?: boolean,
+    type?: string; // Change the type to string
 }
+
 
 type TextInputPasswordParams = {
     value: string,
@@ -25,12 +27,12 @@ type TextInputPasswordParams = {
     styleContainer?: ViewStyle,
     styleInputContainer?: ViewStyle,
     styleInput?: TextStyle,
-    isTextArea?: string
+    isTextArea?: string,
 }
 
 
 export const TextInputComp = ({ value, onchangeValue, requiredError = false, label, placeholder = "", styleContainer, 
-    styleInputContainer, styleInput, isTextArea }: TextInputParams) => {
+    styleInputContainer, styleInput, isTextArea, type="default" }: TextInputParams) => {
     const theme = useTheme();
 
     return (
@@ -41,14 +43,16 @@ export const TextInputComp = ({ value, onchangeValue, requiredError = false, lab
             <View style={{ ...styleInputContainer }}>
                 {isTextArea ? (
                     <TextInput
+                        keyboardType={type as KeyboardTypeOptions}
                         value={value}
                         onChangeText={onchangeValue}
                         placeholder={placeholder}
-                        style={{ ...styleInput }} // Adjust height as needed
+                        style={{minHeight:100, ...styleInput }} // Adjust height as needed
                         multiline={true}
                     />
                 ) : (
                     <TextInput
+                        keyboardType={type as KeyboardTypeOptions}
                         value={value}
                         onChangeText={onchangeValue}
                         placeholder={placeholder}
