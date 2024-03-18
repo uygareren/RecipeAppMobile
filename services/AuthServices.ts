@@ -1,6 +1,6 @@
-import { useMutation } from "react-query"
-import { LoginTypes, RegisterTypes } from "../types/AuthTypes"
-import { api } from "./api"
+import { useMutation } from "react-query";
+import { RegisterTypes } from "../types/AuthTypes";
+import { api } from "./api";
 
 const API = process.env.API;
 
@@ -12,7 +12,6 @@ export const AuthServices = {
             mutationKey: ["register"],
             mutationFn: async (payload: RegisterTypes) => {
 
-                console.log("paylaod register", `${API}/register`);
 
                 try {
                     const registerResp = await api.post(`${API}/register`, payload);
@@ -28,7 +27,6 @@ export const AuthServices = {
         return useMutation({
             mutationKey: ["update-password"],
             mutationFn: async (payload: any) => {
-                // console.log(payload)
 
                 try {
                     const response = await api.post(`${API}/update-password`, payload);
@@ -42,15 +40,12 @@ export const AuthServices = {
 }
 
 export const login = async (payload: any) => {
-    console.log("Login payload", payload);
-
     try {
         const response = await api.post(`${API}/login`, payload);
+        console.log("respnıse", response);
 
-        console.log("Login response", response.data);
         return response;
     } catch (error) {
-        console.error("Login error", error);
         throw error;
     }
 };
