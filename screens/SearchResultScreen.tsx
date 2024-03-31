@@ -3,11 +3,14 @@ import { useEffect } from "react";
 import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMutation } from "react-query";
 import { TopHeader } from "../components/Header";
+import useI18n from "../hooks/useI18n";
 import { getRecipeByIngredients } from "../services/ApiService";
 import { LIGHT_GRAY, WHITE } from "../utils/utils";
 
 
 export default function SearchResultScreen({route}:any){
+
+    const {t} = useI18n("SearchResultScreen");
 
     const selectedComponentIds = route.params.selectedComponentIds;
 
@@ -27,8 +30,6 @@ export default function SearchResultScreen({route}:any){
         searchMutation.mutate({ingredients:selectedComponentIds});
     }, [selectedComponentIds])
     
-    console.log("searhcmutation", searchMutation);
-
 
     const RenderItem = ({item}:any) => {
 

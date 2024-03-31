@@ -1,15 +1,17 @@
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BLACK_COLOR, LIGHT_GRAY, PINK, WHITE } from "../utils/utils";
-import { SafeAreaView } from "react-native";
-import { useState } from "react";
-import { Actionsheet } from "native-base";
 import { CommonActions, useNavigation } from "@react-navigation/native";
+import { Actionsheet } from "native-base";
+import { useState } from "react";
+import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
-import { userSliceActions } from "../store/reducer/userSlice";
 import { ChangeLanguage } from "../components/Modals/ChangeLanguageModal";
+import useI18n from "../hooks/useI18n";
+import { userSliceActions } from "../store/reducer/userSlice";
+import { LIGHT_GRAY, PINK, WHITE } from "../utils/utils";
 
 
 export default function SettingsScreen(){
+
+    const {t} = useI18n("SettingsScreen");
 
     const width = Dimensions.get("screen").width;
 
@@ -40,7 +42,7 @@ export default function SettingsScreen(){
         <SafeAreaView style={styles.container}>
 
             <View style={{marginTop: 50, alignItems: "center"}}>
-                <Text style={styles.titleText}>Settings</Text>
+                <Text style={styles.titleText}>{t("settings")}</Text>
                 <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
 
             </View>
@@ -48,25 +50,25 @@ export default function SettingsScreen(){
             <View style={styles.cardView}>
 
                 <TouchableOpacity onPress={() => navigation.navigate("UpdateProfile")} style={styles.cardStyle}>
-                    <Text style={styles.cardText}>Profile Update</Text>
+                    <Text style={styles.cardText}>{t("profile_update_btn_txt")}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.cardStyle} onPress={() => setIsLanguageVisible(true)}>
-                <Text style={styles.cardText}>Change Language</Text>
+                <Text style={styles.cardText}>{t("change_language_btn_txt")}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.cardStyle} onPress={() => navigation.navigate("Favorites")}>
-                <Text style={styles.cardText}>Favorites</Text>
+                <Text style={styles.cardText}>{t("favorite")}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.cardStyle} onPress={() => navigation.navigate("UpdatePassword")}>
-                <Text style={styles.cardText}>Update Password</Text>
+                <Text style={styles.cardText}>{t("password_update_btn_txt")}</Text>
                 </TouchableOpacity>
 
             </View>
 
             <TouchableOpacity style={styles.logoutView} onPress={() => setIsLogoutVisible(true)}>
-                <Text style={{fontSize: 16, fontWeight:"600", color:WHITE}}>Log Out</Text>
+                <Text style={{fontSize: 16, fontWeight:"600", color:WHITE}}>{t("logout_btn_txt")}</Text>
             </TouchableOpacity>
 
             <Actionsheet isOpen={isLogoutVisible} onClose={() => setIsLogoutVisible(false)}>
@@ -76,13 +78,13 @@ export default function SettingsScreen(){
 
                             <TouchableOpacity style={{marginVertical: 18, backgroundColor: LIGHT_GRAY, 
                             paddingVertical:5, paddingHorizontal:18, borderRadius: 25}} onPress={handleLogout}>
-                                <Text style={{...styles.logoutText, color:PINK, fontWeight:"400"}}>Çıkış Yap</Text>
+                                <Text style={{...styles.logoutText, color:PINK, fontWeight:"400"}}>{t("logout_btn_txt")}</Text>
                             </TouchableOpacity>
 
                             <View style={{height:1, width:"90%", backgroundColor: LIGHT_GRAY}}/>
 
                             <TouchableOpacity style={{marginTop: 20}} onPress={() => setIsLogoutVisible(false)}>
-                            <Text style={{...styles.logoutText, color:"black", fontWeight: "600"}}>Vazgeç</Text>
+                            <Text style={{...styles.logoutText, color:"black", fontWeight: "600"}}>{t("cancel")}</Text>
                             </TouchableOpacity>
                             
                         </View>
