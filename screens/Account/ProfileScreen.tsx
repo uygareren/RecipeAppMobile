@@ -1,14 +1,17 @@
-import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
-import { BLACK_COLOR, LIGHT_GRAY, WHITE } from "../../utils/utils";
-import { GoBackHeader, SettingsHeader } from "../../components/Header";
-import { useSelector } from "react-redux";
-import { useQuery } from "react-query";
-import { getFollowing, getRecipeByUserId } from "../../services/ApiService";
 import { useNavigation } from "@react-navigation/native";
+import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
+import { SettingsHeader } from "../../components/Header";
+import useI18n from "../../hooks/useI18n";
+import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
+import { getFollowing, getRecipeByUserId } from "../../services/ApiService";
+import { BLACK_COLOR, LIGHT_GRAY, WHITE } from "../../utils/utils";
 
 
 export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">){
+
+    const {t} = useI18n("ProfileScreen");
 
     const width = Dimensions.get("screen").width
     const height = Dimensions.get("screen").height
@@ -88,17 +91,17 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
             justifyContent:"space-between", alignItems:"center"}}>
                 <View style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
                     <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>{recipe_resp?.data?.data?.length}</Text>
-                    <Text style={{fontSize:14, fontWeight:"300"}}>Recipes</Text>
+                    <Text style={{fontSize:14, fontWeight:"300"}}>{t("recipes")}</Text>
                 </View>
                 <View style={{borderWidth:1, borderColor:LIGHT_GRAY, height:40}}/>
                 <Pressable onPress={() => navigation.navigate("Follow", {id: 0})} style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
                     <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>{followed_data_length}</Text>
-                    <Text style={{fontSize:14, fontWeight:"300"}}>Following</Text>
+                    <Text style={{fontSize:14, fontWeight:"300"}}>{t("followings")}</Text>
                 </Pressable>
                 <View style={{borderWidth:1, borderColor:LIGHT_GRAY, height:40}}/>
                 <Pressable onPress={() => navigation.navigate("Follow", {id:1})} style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
                     <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>{follower_data_length}</Text>
-                    <Text style={{fontSize:14, fontWeight:"300"}}>Followers</Text>
+                    <Text style={{fontSize:14, fontWeight:"300"}}>{t("followers")}</Text>
                 </Pressable>
 
             </View>
