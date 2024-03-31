@@ -46,7 +46,32 @@
         "recipes":"Tarifler",
         "followings":"Takip Edilenler",
         "followers":"Takipçiler"
+    },
+    "AddFoodScreen":{
+        "add_recipe":"Tarif Ekle",
 
+        "recipe_image":"Fotoğraf Ekle",
+        "recipe_name":"Tarif Adı",
+        "search":"Ara..",
+        "select_ingredient":"Malzeme Seç..",
+        "select_quantity":"Ölçü Seç..",
+        "select_world_cuisines":"Mutfak Seç..",
+        "select_category":"Kategori Seç..",
+        "select_level":"Yemek Seviyesi",
+        
+        "enter_quantity":"Miktar Gir..",
+        "enter_calory":"Kalori Miktarı",
+        "enter_cooking_time":"Pişme Süresi",
+
+        "btn_save_ingredients":"Malzeme Kaydet!",
+
+        "label_recipe_desc":"Tarif Açıklaması",
+        
+        "recipe_name_placeholder":"Tarif Adı Gir..",
+        "recipe_desc_placeholder":"Tarif Açıklaması Girin",
+
+        "btn_save_recipe":"Tarifi Kaydet!"
+        
     }
 
 

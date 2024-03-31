@@ -6,11 +6,14 @@ import levelData from "../../assets/datas/level.json";
 import { ButtonComp } from "../../components/Button";
 import { TopHeader } from "../../components/Header";
 import { TextInputComp } from "../../components/Inputs";
+import useI18n from "../../hooks/useI18n";
 import { getAllIngredients, getAllMeasurements, getCategories, getInterestedData } from "../../services/ApiService";
 import { LIGHT_GRAY, LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
  
 
 export default function AddFoodScreen(){
+
+  const {t} = useI18n("AddFoodScreen");
 
   const {width, height} = Dimensions.get("screen");
 
@@ -139,7 +142,6 @@ export default function AddFoodScreen(){
 
   }
 
-  console.log("savedcomponents", savedComponents);
 
   const RenderItem = ({ item, index }: { item: any; index: number }) => {
     if (index === 0) {
@@ -170,7 +172,7 @@ export default function AddFoodScreen(){
         <ScrollView style={styles.container}>
 
             <View style={{marginTop:50}}>
-                <TopHeader title="Tarif Ekle"/>
+                <TopHeader title={t("add_recipe")}/>
                 <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
             </View>
 
@@ -180,7 +182,7 @@ export default function AddFoodScreen(){
             </View>
 
                 
-            <ButtonComp title="Fotoğraf Seç" onPress={updateRecipeImage} styleContainer={{marginTop:20,paddingVertical:10, 
+            <ButtonComp title={t("recipe_image")} onPress={updateRecipeImage} styleContainer={{marginTop:20,paddingVertical:10, 
             width:150, alignSelf:"center", alignItems:"center", borderRadius:12, backgroundColor:MAIN_COLOR}} styleText={{fontWeight:"600"
             }}/>
 
@@ -198,15 +200,15 @@ export default function AddFoodScreen(){
           }}
           styleContainer={{ alignItems: "center", marginTop: 25, width:"100%" }}
 
-           label="Tarif Adı" placeholder="Tarif Adı Gir.." value={recipeName} onchangeValue={setRecipeName}/>
+           label={t("recipe_name")} placeholder={t("recipe_name_placeholder")}  value={recipeName} onchangeValue={setRecipeName}/>
 
           <SelectList
             data={ingredientsData}
             setSelected={(val:any) => setSelectedIngredients(val)}
             boxStyles={{width:width*0.8, marginTop:20}}
             dropdownStyles={{width:width*0.8}}
-            searchPlaceholder="Ara.."  
-            placeholder="Malzeme Seç.."
+            searchPlaceholder={t("search")}  
+            placeholder={t("select_ingredient")}
           />
           
           
@@ -223,14 +225,14 @@ export default function AddFoodScreen(){
           }}
           styleContainer={{ alignItems: "flex-start",  width:width*0.35, justifyContent:"center", position:"relative", top:-8}}
 
-          placeholder="Miktar Gir.." value={enterMeasurement} onchangeValue={setEnterMeasurement}/>
+          placeholder={t("enter_quantity")} value={enterMeasurement} onchangeValue={setEnterMeasurement}/>
 
             <SelectList
               data={measurementData}
               setSelected={(val:any) => setSelectedMeasurement(val)}
               boxStyles={{paddingVertical:14, width:width*0.35}}
-              searchPlaceholder="Ara.."  
-              placeholder="Ölçü Seç.."
+              searchPlaceholder={t("search")}  
+              placeholder={t("select_quantity")} 
             />
             
           </View>
@@ -249,7 +251,7 @@ export default function AddFoodScreen(){
           
 
         <ButtonComp
-          title="Malzeme Kaydet!"
+          title={t("btn_save_ingredients")}
           onPress={() => handleSaveComponents()}
           styleContainer={{
             alignSelf:"center",
@@ -266,24 +268,24 @@ export default function AddFoodScreen(){
           data={interestData}
           setSelected={(val:any) => setSelectedInterest(val)}
           boxStyles={{marginTop:20, width:width*0.8}}
-          searchPlaceholder="Ara.."
-          placeholder="Mutfak Seç.."
+          searchPlaceholder={t("search")}
+          placeholder={t("select_world_cuisines")}
         />
 
         <SelectList
           data={categoriesData}
           setSelected={(val:any) => setSelectedCategory(val)}
           boxStyles={{marginTop:20, width:width*0.8}}
-          searchPlaceholder="Ara.."
-          placeholder="Kategori Seç.."
+          searchPlaceholder={t("search")}
+          placeholder={t("select_category")}
         />
 
           <SelectList
             data={levelData}
             setSelected={(val:any) => setSelectedLevel(val)}
             dropdownStyles={{}}
-            placeholder="Yemek Seviyesi"
-            searchPlaceholder="Ara.."
+            placeholder={t("select_level")}
+            searchPlaceholder={t("search")}
             boxStyles={{marginTop:20, width:width*0.8}}
           />
 
@@ -299,7 +301,7 @@ export default function AddFoodScreen(){
             }}
             styleContainer={{ alignItems: "center", width:width*0.35, justifyContent:"center",}}
 
-            placeholder="Kalori Miktarı" value={enterCalory} onchangeValue={setEnterCalory}/>
+            placeholder={t("enter_calory")} value={enterCalory} onchangeValue={setEnterCalory}/>
 
           <TextInputComp styleInputContainer={{
               borderWidth: 1,
@@ -311,13 +313,13 @@ export default function AddFoodScreen(){
             }}
             styleContainer={{ alignItems: "center", width:width*0.35, justifyContent:"center",}}
 
-            placeholder="Pişme Süresi" value={enterCookingTime} onchangeValue={setEnterCookingTime}/>
+            placeholder={t("enter_cooking_time")} value={enterCookingTime} onchangeValue={setEnterCookingTime}/>
 
           
 
         </View>
 
-        <TextInputComp isTextArea={true} label="Tarif Açıklaması" placeholder="Tarif Açıklaması" value={recipeDescription} 
+        <TextInputComp isTextArea={true} label={t("label_recipe_desc")} placeholder={t("recipe_desc_placeholder")} value={recipeDescription} 
         onchangeValue={setRecipeDescription}
         styleInputContainer={{
           borderWidth:1, borderColor:"black",
@@ -336,7 +338,7 @@ export default function AddFoodScreen(){
 
 
       <ButtonComp
-        title="Tarifi Kaydet!"
+        title={t("btn_save_recipe")}
         onPress={() => handlePostRecipe()}
         styleContainer={{
           borderWidth: 1,
