@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, View, Image, Text, FlatList, Pressable } from "react-native";
-import { SearchHeader, TopHeader } from "../../components/Header";
-import { MAIN_COLOR, WHITE, keyGenerator } from "../../utils/utils";
-import { TabAccountScreenProps } from "../../navigations/AddFoodNavigation";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState } from "react";
+import { FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useQuery } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
+import { SearchHeader } from "../../components/Header";
+import useI18n from "../../hooks/useI18n";
 import { getCategories, getUserDetail } from "../../services/ApiService";
 import { userSliceActions } from "../../store/reducer/userSlice";
+import { WHITE } from "../../utils/utils";
 
 export default function HomeScreen({ route }: any) {
+
+    const {t} = useI18n("HomeScreen");
 
     const [text, setText] = useState("");
 
@@ -62,7 +63,7 @@ export default function HomeScreen({ route }: any) {
         </View>
 
         <View style={{ marginTop: 20, marginLeft: 20, }}>
-          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>Categories</Text>
+          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>{t("categories")}</Text>
 
           {/* CARD */}
           {
@@ -79,7 +80,7 @@ export default function HomeScreen({ route }: any) {
         </View>
 
         <View style={{ marginTop: 50, marginLeft: 20, }}>
-          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>Popular Foods</Text>
+          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>{t("popular_foods")}</Text>
 
           {/* CARD */}
           {/* <FlatList

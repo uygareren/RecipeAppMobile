@@ -66,12 +66,16 @@
         "btn_save_ingredients":"Malzeme Kaydet!",
 
         "label_recipe_desc":"Tarif Açıklaması",
-        
+
         "recipe_name_placeholder":"Tarif Adı Gir..",
         "recipe_desc_placeholder":"Tarif Açıklaması Girin",
 
         "btn_save_recipe":"Tarifi Kaydet!"
         
+    },
+    "HomeScreen":{
+        "categories":"Kategoriler",
+        "popular_foods":"Popüler Tarifler"
     }
 
 
