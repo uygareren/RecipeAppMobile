@@ -1,8 +1,7 @@
-import { FormControl, useTheme } from "native-base"
-import { useState } from "react";
-import { KeyboardTypeOptions, Pressable, TextInput, TextStyle, View, ViewStyle } from "react-native"
 import { Feather } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import { FormControl, useTheme } from "native-base";
+import { useState } from "react";
+import { KeyboardTypeOptions, Pressable, TextInput, TextStyle, View, ViewStyle } from "react-native";
 
 type TextInputParams = {
     value: string,

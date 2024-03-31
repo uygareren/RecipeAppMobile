@@ -1,12 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 
 
 const initialState = {
     userInfo:{
         token: null,
-        id: null
+        id: 1
     } as any,
     lang: "tr"
 }

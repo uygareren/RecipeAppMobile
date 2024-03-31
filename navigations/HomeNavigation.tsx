@@ -1,15 +1,16 @@
-import { StackScreenProps, createStackNavigator } from "@react-navigation/stack"
-import HomeScreen from "../screens/Home/HomeScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackScreenProps, createStackNavigator } from "@react-navigation/stack";
 import { useSelector } from "react-redux";
+import HomeScreen from "../screens/Home/HomeScreen";
+import InterestSelectionScreen from "../screens/InterestSelectionScreen";
 import { RootStateType } from "../store/store";
 import { keyGenerator } from "../utils/utils";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import InterestSelectionScreen from "../screens/InterestSelectionScreen";
 
 
 type TabStackParamList = {
    Home: any,
-   InterestSelection:undefined
+   InterestSelection:undefined,
+   AddFoodScreen:undefined
 }
 export type TabAccountScreenProps<T extends keyof TabStackParamList> = StackScreenProps<TabStackParamList, T, T>;
 const Stack = createStackNavigator<TabStackParamList>();

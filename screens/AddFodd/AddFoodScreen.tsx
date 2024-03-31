@@ -1,90 +1,170 @@
-import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import { TopHeader } from "../../components/Header";
-import { ButtonComp } from "../../components/Button";
-import { LIGHT_GRAY, MAIN_COLOR } from "../../utils/utils";
-import { TextInputComp } from "../../components/Inputs";
 import { useState } from "react";
-import components from "../../assets/datas/components.json";
-import { Pressable } from "react-native";
-import { TextArea } from "native-base";
-import { SelectList } from 'react-native-dropdown-select-list';
-import category_data from "../../assets/datas/category_for_select.json";
-
-
+import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SelectList } from "react-native-dropdown-select-list";
+import { useQuery } from "react-query";
+import levelData from "../../assets/datas/level.json";
+import { ButtonComp } from "../../components/Button";
+import { TopHeader } from "../../components/Header";
+import { TextInputComp } from "../../components/Inputs";
+import { getAllIngredients, getAllMeasurements, getCategories, getInterestedData } from "../../services/ApiService";
+import { LIGHT_GRAY, LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
+ 
 
 export default function AddFoodScreen(){
 
-  const width = Dimensions.get("screen").width;
-  const height = Dimensions.get("screen").height;
+  const {width, height} = Dimensions.get("screen");
 
   const [recipeName, setRecipeName] = useState("");
   const [recipeDescription, setRecipeDescription] = useState("");
+  const [enterMeasurement, setEnterMeasurement] = useState("");
+  const [enterCalory, setEnterCalory] = useState("");
+  const [enterCookingTime, setEnterCookingTime] = useState("");
 
-  const [categorySelected, setCategorySelected] = useState("");
+  const [ingredientsData, setIngredientsData] = useState([])
+  const [measurementData, setMeasurementData] = useState([])
+  const [interestData, setInterestData] = useState([])
+  const [categoriesData, setCategoriesData] = useState([])
 
-  
-  const [componentValue, setComponentValue] = useState("");
-  const [allComponents, setAllComponents] = useState<string[]>([]);
-  const [filteredComponents, setFilteredComponents] = useState<any[]>([]);
+  const [selectedIngredient, setSelectedIngredients] = useState("")
+  const [selectedMeasurement, setSelectedMeasurement] = useState("")
+  const [selectedInterest, setSelectedInterest] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("")
+  const [selectedLevel, setSelectedLevel] = useState("")
 
+  const [savedComponents, setSavedComponents] = useState<any>([{}])
 
-  const saveComponent = () => {
-    if (componentValue === "") {
-      return false;
-    } else {
-      setAllComponents((prevComponents) => [...prevComponents, componentValue]);
-      setComponentValue("");
-    }
-  };
-
-  const handleSearch = (text: string) => {
-    setComponentValue(text);
-
-    if (text === "") {
-      setFilteredComponents([]);
-    } else {
-      const filtered = components.filter(
-        (comp) => comp.component_name.toLowerCase().includes(text.toLowerCase())
+  const {data, isLoading} = useQuery({
+    queryKey: ["get_all_ingredients"],
+    queryFn: getAllIngredients,
+    onSuccess: (data) => {
+      const newData = data?.data[0]?.Ingredients_id?.flatMap((item:any) =>
+        item?.IngredientsData?.map((e:any) => ({
+          key: e?._id,
+          value: e?.type
+        })) || []
       );
-      setFilteredComponents(filtered);
+      setIngredientsData(newData);
+    },
+  });
+  
+
+  const { data: measurements_data } = useQuery({
+    queryKey: ["get_measurements"],
+    queryFn: getAllMeasurements,
+    onSuccess: (data) => {
+      console.log(data);
+      const newData = data?.measurements_data[0]?.measurement_names?.map((item:any) => ({
+        key: item?._id,
+        value: item?.name
+      }));
+      setMeasurementData(newData || []);
     }
-  };
+  });
 
-  const selectComponent = (selectedComponent: string) => {
-    setComponentValue(selectedComponent);
-    setFilteredComponents([]);
-  };
+  const {} = useQuery({
+    queryKey:["get-all-world-cuisines"],
+    queryFn: getInterestedData,
+    onSuccess(data) {
+      console.log("interested data", data);
+      const newData = data?.data[0]?.cuisines_name?.map((item:any) => ({
+        key:item?._id,
+        value:item?.type
+      }))
 
-  const removeComponentItem = ({id}:any) => {
-    setAllComponents((prevComponents) => {
-        const updatedComponents = [...prevComponents];
-        updatedComponents.splice(id, 1);
-        return updatedComponents;
-    }) 
+      setInterestData(newData || []);
+    },
+
+  });
+
+
+  const {} = useQuery({
+    queryKey:["categories"],
+    queryFn: getCategories,
+    onSuccess(data) {
+      const newData = data?.data?.map((item:any) => ({
+        key:item?._id,
+        value:item?.categoryName
+      }));
+
+      setCategoriesData(newData || []);
+    },
+  });
+ 
+  const handleSaveComponents = () => {
+   
+    const componentName = selectedIngredient ? ingredientsData?.filter((item:any) => item?.key == selectedIngredient)[0]["value"] : null;
+    const measurementName = selectedMeasurement ? measurementData?.filter((item:any) => item?.key == selectedMeasurement)[0]["value"] : null; 
+    
+    setSavedComponents((prev:any) => [
+      ...prev,
+      {
+        componentId: selectedIngredient,
+        componentName: componentName,
+        quantity: enterMeasurement,
+        measurementId: selectedMeasurement,
+        measurementName: measurementName,
+      }
+    ]);
+    
   }
-
-  const showComponents = ({ item }: any) => {
-    return (
-      <View style={{ marginTop: 10, alignItems:"center", alignSelf:"center", width: width * 6 / 10, paddingVertical: 12, borderRadius: 12, 
-      backgroundColor: "#f2f0f0" }}>
-        <Text onPress={() => selectComponent(item.component_name)} style={{paddingHorizontal:60, paddingVertical:10}}>{item.component_name}</Text>
-      </View>
-    );
-  };
-
-
-  const showSavedComponents = ({ item, index }: any) => {
-
-    return (
-      <Pressable onLongPress={() => removeComponentItem(index)} style={{ marginTop: 10, marginHorizontal:10, height:75, justifyContent:"center", alignItems: "center", paddingVertical: 5, borderRadius: 12, backgroundColor: "#f2f0f0" }}>
-        <Text style={{paddingHorizontal:40  }}>{item}</Text>
-      </Pressable>
-    );
-  };
 
   const updateRecipeImage = () => {
 
   }
+
+  async function handlePostRecipe(){
+    const payload = {
+      recipeName: recipeName,
+      image: null,
+      ingredients: savedComponents.length > 1 ? savedComponents.slice(1).map((item:any) => item?.componentId) : [],
+      ingredients_with_measurements: 
+      savedComponents.length > 1 ? 
+        savedComponents.slice(1).map((item:any) => ({
+          ingredients_id:item.componentId,
+          measurement_id:item.measurementId,
+          measurement:item.quantity
+        })): []
+      ,
+      worldCuisinesTagId: selectedInterest,
+      recipeDescription: recipeDescription,
+      categoryId: selectedCategory,
+      userId: "65d8a6e30bfdd040ec236e92",
+      calory: enterCalory,
+      level: levelData.filter(item => item.key == selectedLevel)[0].value,
+      cooking_time: enterCookingTime
+    }
+    
+
+    console.log("payloadd", payload)
+
+  }
+
+  console.log("savedcomponents", savedComponents);
+
+  const RenderItem = ({ item, index }: { item: any; index: number }) => {
+    if (index === 0) {
+      return null;
+    }
+  
+    return (
+          <Pressable style={{paddingVertical:12, paddingHorizontal:8, alignSelf:"center", minWidth:width*0.3,
+          marginRight:10, borderRadius:10, alignItems:"center", justifyContent:"center", backgroundColor:LIGHT_GRAY_2,}}>
+                <Text key={index} style={{fontWeight:"500"}}>{item?.componentName}</Text>
+                <View style={{flexDirection:"row", alignItems:"center"}}> 
+
+                  {item?.quantity ? (
+                  <Text key={index}  style={{fontWeight:"300", fontSize:14, marginTop:4, marginRight:5}}>{item?.quantity}</Text>
+                  ): 
+                  <Text  style={{fontWeight:"300", fontSize:14, marginTop:4}}>{}</Text>
+                  }
+                  
+                  <Text style={{fontWeight:"300", fontSize:14, marginTop:4}}>{item?.measurementName}</Text>
+                </View>
+
+          </Pressable>
+    );
+  }
+  
     
     return(
         <ScrollView style={styles.container}>
@@ -105,7 +185,7 @@ export default function AddFoodScreen(){
             }}/>
 
             
-      <View style={{ alignItems: "center" }}>
+      <View style={{ alignItems: "center", paddingHorizontal:20}}>
         
         <TextInputComp styleInputContainer={{
             borderWidth: 1,
@@ -116,45 +196,64 @@ export default function AddFoodScreen(){
             paddingHorizontal: 5,
             width: width * 8 / 10,
           }}
-          styleContainer={{ alignItems: "center", marginTop: 25 }}
+          styleContainer={{ alignItems: "center", marginTop: 25, width:"100%" }}
 
            label="Tarif Adı" placeholder="Tarif Adı Gir.." value={recipeName} onchangeValue={setRecipeName}/>
 
+          <SelectList
+            data={ingredientsData}
+            setSelected={(val:any) => setSelectedIngredients(val)}
+            boxStyles={{width:width*0.8, marginTop:20}}
+            dropdownStyles={{width:width*0.8}}
+            searchPlaceholder="Ara.."  
+            placeholder="Malzeme Seç.."
+          />
+          
+          
+          <View style={{flexDirection:"row", alignItems:"flex-start", justifyContent:"space-between", 
+        marginTop:20, width:"90%",}}>
 
-        <TextInputComp
-          styleInputContainer={{
+          <TextInputComp styleInputContainer={{
             borderWidth: 1,
             borderColor: "black",
-            marginTop: 10,
             borderRadius: 10,
             paddingVertical: 10,
             paddingHorizontal: 5,
-            width: width * 8 / 10,
+            width: width * 0.35,
           }}
-          styleContainer={{ alignItems: "center", marginTop: 25 }}
-          label="Malzemeler"
-          placeholder="Malzeme"
-          onchangeValue={handleSearch}
-          value={componentValue}
-        />
+          styleContainer={{ alignItems: "flex-start",  width:width*0.35, justifyContent:"center", position:"relative", top:-8}}
 
-        <View style={{marginTop: 10, maxHeight: 250, backgroundColor:"#a9abaa", }}>
-          <ScrollView
-            style={{ width: width * 8 / 10, display: filteredComponents.length > 0 ? "flex": "none" }}
-          >
-            <FlatList
-              data={filteredComponents}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={showComponents}
+          placeholder="Miktar Gir.." value={enterMeasurement} onchangeValue={setEnterMeasurement}/>
+
+            <SelectList
+              data={measurementData}
+              setSelected={(val:any) => setSelectedMeasurement(val)}
+              boxStyles={{paddingVertical:14, width:width*0.35}}
+              searchPlaceholder="Ara.."  
+              placeholder="Ölçü Seç.."
             />
-          </ScrollView>
+            
+          </View>
+          {/* FLATLİST INGREDİENTS WİTH MEASUREMENTS */}
+          <View style={{height:100, width:width, paddingHorizontal:20, display: savedComponents.length > 1 ? "flex":"none"}}>
+          <FlatList
+            data={savedComponents}
+            keyExtractor={(index:number) => index.toString()}
+            renderItem={RenderItem}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
         </View>
+        
+      
+          
 
         <ButtonComp
           title="Malzeme Kaydet!"
-          onPress={saveComponent}
+          onPress={() => handleSaveComponents()}
           styleContainer={{
-            marginTop: 15,
+            alignSelf:"center",
+            marginTop: 20,
             paddingVertical: 10,
             paddingHorizontal: 10,
             borderRadius: 15,
@@ -163,33 +262,72 @@ export default function AddFoodScreen(){
           styleText={{ fontWeight: "bold", color: "#292828" }}
         />
 
-        <View style={{display:allComponents.length > 0 ? "flex": "none", marginTop: 30, alignItems: "center", height: 100 }}>
-          <ScrollView
-            horizontal
-            style={{ width: width * 8 / 10 }}
-            contentContainerStyle={{ alignItems: "center" }}
-          >
-            <FlatList
-              data={allComponents}
-              horizontal
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={showSavedComponents}
-            />
-          </ScrollView>
+        <SelectList
+          data={interestData}
+          setSelected={(val:any) => setSelectedInterest(val)}
+          boxStyles={{marginTop:20, width:width*0.8}}
+          searchPlaceholder="Ara.."
+          placeholder="Mutfak Seç.."
+        />
+
+        <SelectList
+          data={categoriesData}
+          setSelected={(val:any) => setSelectedCategory(val)}
+          boxStyles={{marginTop:20, width:width*0.8}}
+          searchPlaceholder="Ara.."
+          placeholder="Kategori Seç.."
+        />
+
+          <SelectList
+            data={levelData}
+            setSelected={(val:any) => setSelectedLevel(val)}
+            dropdownStyles={{}}
+            placeholder="Yemek Seviyesi"
+            searchPlaceholder="Ara.."
+            boxStyles={{marginTop:20, width:width*0.8}}
+          />
+
+        <View style={{flexDirection:"row", marginTop:20, width:"100%", alignItems:"center",justifyContent:"space-between", paddingHorizontal:20,  }}>
+
+          <TextInputComp styleInputContainer={{
+              borderWidth: 1,
+              borderColor: "black",
+              borderRadius: 10,
+              paddingVertical: 10,
+              paddingHorizontal: 5,
+              width: width * 0.35,
+            }}
+            styleContainer={{ alignItems: "center", width:width*0.35, justifyContent:"center",}}
+
+            placeholder="Kalori Miktarı" value={enterCalory} onchangeValue={setEnterCalory}/>
+
+          <TextInputComp styleInputContainer={{
+              borderWidth: 1,
+              borderColor: "black",
+              borderRadius: 10,
+              paddingVertical: 10,
+              paddingHorizontal: 5,
+              width: width * 0.35,
+            }}
+            styleContainer={{ alignItems: "center", width:width*0.35, justifyContent:"center",}}
+
+            placeholder="Pişme Süresi" value={enterCookingTime} onchangeValue={setEnterCookingTime}/>
+
+          
+
         </View>
 
         <TextInputComp isTextArea={true} label="Tarif Açıklaması" placeholder="Tarif Açıklaması" value={recipeDescription} 
         onchangeValue={setRecipeDescription}
         styleInputContainer={{
-          borderWidth: 1,
-          borderColor: "black",
+          borderWidth:1, borderColor:"black",
           marginTop: 10,
-          borderRadius: 10,
+          borderRadius: 15,
           paddingVertical: 10,
           paddingHorizontal: 5,
-          width: width * 8 / 10,
+          width:"100%",
         }}
-        styleContainer={{ alignItems: "center", marginTop: 25 }}
+        styleContainer={{ alignItems: "center", marginTop: 25,}}
 
         />
 
@@ -199,11 +337,11 @@ export default function AddFoodScreen(){
 
       <ButtonComp
         title="Tarifi Kaydet!"
-        onPress={() => console.log("sds")}
+        onPress={() => handlePostRecipe()}
         styleContainer={{
           borderWidth: 1,
           borderColor: "black",
-          marginTop: 25,
+          marginVertical: 25,
           paddingHorizontal:25,
           alignSelf: "center",
           alignItems: "center",

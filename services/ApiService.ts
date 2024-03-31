@@ -1,6 +1,8 @@
-import { api } from "./api"
+import { api } from "./api";
 
 const API = process.env.API;
+console.log("apiiii: ", API);
+
 
 // INTEREST QUERİES
 
@@ -86,6 +88,8 @@ export const getRecipeByIngredients = async(payload:any) => {
 
 export const getRecipeById = async(id:any) => {
     const response = await api.get(`${API}/recipe-detail/${id}`);
+    console.log("response", response);
+
     return response.data;
 }
 
@@ -116,3 +120,5 @@ export const postComment = async(payload:any) => {
     const response = await api.post(`${API}/post_comment`, payload);
     return response.data;
 }
+
+

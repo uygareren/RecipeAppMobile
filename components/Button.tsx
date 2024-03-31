@@ -1,4 +1,4 @@
-import { TextStyle, TouchableOpacity, ViewStyle, Text, ActivityIndicator } from "react-native";
+import { ActivityIndicator, Text, TextStyle, TouchableOpacity, ViewStyle } from "react-native";
 
 type ButtonCompParams = {
     loading?: boolean, 

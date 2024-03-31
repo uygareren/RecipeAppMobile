@@ -1,10 +1,10 @@
-import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BLACK_COLOR, LIGHT_GRAY, WHITE } from "../utils/utils";
-import { useMutation } from "react-query";
-import { getRecipeByIngredients } from "../services/ApiService";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
+import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useMutation } from "react-query";
 import { TopHeader } from "../components/Header";
+import { getRecipeByIngredients } from "../services/ApiService";
+import { LIGHT_GRAY, WHITE } from "../utils/utils";
 
 
 export default function SearchResultScreen({route}:any){
@@ -45,7 +45,7 @@ export default function SearchResultScreen({route}:any){
                     <Text style={{fontWeight:"500", fontSize:15, marginLeft:10}}>{`${item?.user?.name} ${item?.user?.surname}`}</Text>
                 </View>
 
-                <Pressable onPress={() => navigation.navigate("RecipeDetail", {id:item?._id})} style={{width:width-30}}>
+                <Pressable onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{width:width-30}}>
                     <Image source={require('../assets/images/default_recipe.jpeg')}
                     style={{width:width-30, height:width-50, resizeMode:"contain"}}/>
                 </Pressable>

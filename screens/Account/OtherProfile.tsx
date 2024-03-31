@@ -1,11 +1,11 @@
-import { Image, SafeAreaView, StyleSheet, Text, View, Pressable, Dimensions, ScrollView, TouchableOpacity, FlatList } from "react-native";
-import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
-import { useEffect, useState } from "react";
-import { GoBackHeader, TopHeader } from "../../components/Header";
-import { useMutation, useQuery } from "react-query";
-import { addFollowed, getFollowing, getRecipeByUserId, getUserDetail } from "../../services/ApiService";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { GoBackHeader } from "../../components/Header";
+import { addFollowed, getFollowing, getRecipeByUserId, getUserDetail } from "../../services/ApiService";
+import { BLACK_COLOR, LIGHT_GRAY, PINK, WHITE } from "../../utils/utils";
 
 
 export default function OtherProfile({route}:any){
@@ -140,13 +140,13 @@ export default function OtherProfile({route}:any){
                 </View>
                 <View style={{borderWidth:1, borderColor:LIGHT_GRAY, height:40}}/>
 
-                <TouchableOpacity onPress={() => navigation.navigate("Follow", {user_id:id})} style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
+                <TouchableOpacity onPress={() => navigation.navigate("Follow", {user_id:id, id:0})} style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
                     <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>{followed_data?.length ?? "0"}</Text>
                     <Text style={{fontSize:14, fontWeight:"300"}}>Following</Text>
                 </TouchableOpacity>
                 <View style={{borderWidth:1, borderColor:LIGHT_GRAY, height:40}}/>
 
-                <TouchableOpacity onPress={() => navigation.navigate("Follow", {user_id:id})} style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
+                <TouchableOpacity onPress={() => navigation.navigate("Follow", {user_id:id, id:1})} style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
                     <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>{follower_data?.length ?? "0"}</Text>
                     <Text style={{fontSize:14, fontWeight:"300"}}>Followers</Text>
                 </TouchableOpacity>

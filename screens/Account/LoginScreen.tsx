@@ -1,16 +1,14 @@
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
-import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
-import { TextInputComp, TextInputPassword } from "../../components/Inputs";
-import { useState } from "react";
-import { MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
-import { ButtonComp } from "../../components/Button";
-import { AuthServices, login } from "../../services/AuthServices";
-import axios from "axios";
-import { Alert } from "native-base";
-import { useDispatch } from "react-redux";
-import { userSliceActions } from "../../store/reducer/userSlice";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMutation } from "react-query";
+import { useDispatch } from "react-redux";
+import { ButtonComp } from "../../components/Button";
+import { TextInputComp, TextInputPassword } from "../../components/Inputs";
+import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
+import { login } from "../../services/AuthServices";
+import { userSliceActions } from "../../store/reducer/userSlice";
+import { MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 
 
 export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {

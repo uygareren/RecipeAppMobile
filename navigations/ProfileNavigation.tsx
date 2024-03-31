@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StackScreenProps } from "@react-navigation/stack";
 import { useSelector } from "react-redux";
-import { RootStateType } from "../store/store";
 import LoginScreen from "../screens/Account/LoginScreen";
-import RegisterScreen from "../screens/Account/RegisterScreen";
 import ProfileScreen from "../screens/Account/ProfileScreen";
+import RegisterScreen from "../screens/Account/RegisterScreen";
+import { RootStateType } from "../store/store";
 
 
 
