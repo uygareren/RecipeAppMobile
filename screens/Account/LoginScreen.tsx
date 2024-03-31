@@ -5,6 +5,7 @@ import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { ButtonComp } from "../../components/Button";
 import { TextInputComp, TextInputPassword } from "../../components/Inputs";
+import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { login } from "../../services/AuthServices";
 import { userSliceActions } from "../../store/reducer/userSlice";
@@ -12,6 +13,8 @@ import { MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 
 
 export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
+
+    const {t} = useI18n("LoginScreen");
 
     const [email, setEmail] = useState("mehmetyılmazsdsdsd@gmail.com");
     const [password, setPassword] = useState("789456123");
@@ -46,26 +49,26 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
                 </View>
 
                 <View>
-                    <Text style={{fontSize: 25, fontWeight:"500", alignSelf:"center"}}>Sıgn In</Text>
+                    <Text style={{fontSize: 25, fontWeight:"500", alignSelf:"center"}}>{t("sign_in")}</Text>
                 </View>
 
                 <View>
-                    <TextInputComp value={email} onchangeValue={setEmail} label="Email" placeholder="Email Girin" 
+                    <TextInputComp value={email} onchangeValue={setEmail} label={t("email")} placeholder={t("email_placeholder")} 
                     styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                    <TextInputPassword value={password} onchangeValue={setPassword} label="Password" placeholder="Parola Girin" 
+                    <TextInputPassword value={password} onchangeValue={setPassword} label={t("password")} placeholder={t("password_placeholder")}
                     styleContainer={styles.TextInputPassword} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                 </View>
 
                 <View>
-                    <ButtonComp loading={loading} title="Login" onPress={() => handleLogin()} styleContainer={styles.buttonContainer}
+                    <ButtonComp loading={loading} title={t("btn_title")} onPress={() => handleLogin()} styleContainer={styles.buttonContainer}
                     styleText={styles.textButton}/>
                 </View>
 
                 <View style={{marginTop: 30, flexDirection: "row", 
                 justifyContent: "flex-end", alignItems: "center", paddingRight: 40}}>
-                    <Text style={{fontWeight:"500", color:WHITE,marginRight: 5}}>Hesabım Yok!</Text>
+                    <Text style={{fontWeight:"500", color:WHITE,marginRight: 5}}>{t("no_account")}</Text>
                     <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-                        <Text style={{fontWeight:"600", fontSize:16, color:PINK,marginRight: 10}}>Kayıt Ol</Text>
+                        <Text style={{fontWeight:"600", fontSize:16, color:PINK,marginRight: 10}}>{t("get_register")}</Text>
                     </TouchableOpacity>
                 </View>
 

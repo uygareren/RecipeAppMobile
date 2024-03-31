@@ -4,7 +4,37 @@
     "profile_update_btn_txt": "Profil Güncelle",
     "change_language_btn_txt": "Dil Değiştirme",
     "logout_btn_txt": "Çıkış Yap"
-}
+    },
+    "LoginScreen":{
+        "sign_in":"Giriş Yap",
+        "email":"E-Mail",
+        "password":"Parola",
+        "btn_title":"Giriş Yap",
+        "email_placeholder":"E-Mail Girin",
+        "password_placeholder":"Parola Girin",
+        "no_account":"Hesabım Yok",
+        "get_register":"Kayıt Ol"
+    },
+    "RegisterScreen":{
+        "sign_up":"Kayıt Ol",
+        "name":"İsim",
+        "surname":"Soyisim",
+        "email":"E-Mail",
+        "password":"Parola",
+        "confirm_password":"Parolayı Tekrarla",
+
+        "name_placeholder":"İsim Girin",
+        "surname_placeholder":"Soyadınızı Girin",
+        "email_placeholder":"Email Girin",
+        "password_placeholder":"Parola Girin",
+        "confirm_password_placeholder":"Parolayı Tekrar Girin",
+
+        "register_btn":"Kayıt Ol",
+
+        "already_have_account":"Zaten Bir Hesabım Var!",
+        "sign_in":"Giriş Yap"
+        
+    }
 
 
 }
