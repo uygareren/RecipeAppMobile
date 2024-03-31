@@ -1,16 +1,18 @@
-import { Dimensions, StyleSheet } from "react-native";
-import { View } from "react-native";
-import { MAIN_COLOR, WHITE } from "../utils/utils";
-import { TextInputComp } from "../components/Inputs";
 import { useState } from "react";
-import { ButtonComp } from "../components/Button";
-import { useDispatch, useSelector } from "react-redux";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { useMutation } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
+import { ButtonComp } from "../components/Button";
+import { TextInputComp } from "../components/Inputs";
+import useI18n from "../hooks/useI18n";
 import { updateUser } from "../services/ApiService";
 import { userSliceActions } from "../store/reducer/userSlice";
+import { MAIN_COLOR, WHITE } from "../utils/utils";
 
 
 export default function UpdateProfileScreen(){
+
+    const {t} = useI18n("UpdateProfileScreen");
 
     const {width, height} = Dimensions.get("screen");
 
@@ -66,43 +68,43 @@ export default function UpdateProfileScreen(){
     return(
         <View style={styles.container}>
             <View style={{paddingHorizontal:20, marginTop:50, alignItems:"center"}}>
-                <TextInputComp placeholder="Name" value={name} onchangeValue={setName} 
+                <TextInputComp placeholder={t("name")} value={name} onchangeValue={setName} 
                 styleContainer={{width:width*0.8, height:40, marginVertical:15,  borderRadius:12, justifyContent:"center", alignItems:"center"}}
                 styleInputContainer={{width:width*0.8, height:40,alignSelf:"center", borderWidth:1, borderColor:"black",marginBottom:5, borderRadius:12}}
                 styleInput={{paddingVertical:4, paddingHorizontal:18,fontWeight:"500", fontSize:15}}
                 />
-                <TextInputComp placeholder="Surname" value={surname} onchangeValue={setSurname} 
+                <TextInputComp placeholder={t("surname")} value={surname} onchangeValue={setSurname} 
                 styleContainer={{width:width*0.8, height:40, marginVertical:15, borderRadius:12, justifyContent:"center", alignItems:"center"}}
                 styleInputContainer={{width:width*0.8, height:40,alignSelf:"center", borderWidth:1, borderColor:"black",marginBottom:5, borderRadius:12}}
                 styleInput={{paddingVertical:4, paddingHorizontal:18, fontWeight:"500", fontSize:15}}
                 />
-                <TextInputComp placeholder="Email" value={email} onchangeValue={setEmail} 
+                <TextInputComp placeholder={t("email")} value={email} onchangeValue={setEmail} 
                 styleContainer={{width:width*0.8, height:40, marginVertical:15,  borderRadius:12, justifyContent:"center", alignItems:"center"}}
                 styleInputContainer={{width:width*0.8, height:40,alignSelf:"center", borderWidth:1, borderColor:"black",marginBottom:5, borderRadius:12}}
                 styleInput={{paddingVertical:4, paddingHorizontal:18,fontWeight:"500", fontSize:15}}
                 />
-                <TextInputComp placeholder="Phone" value={phone} onchangeValue={setPhone} type="number" 
+                <TextInputComp placeholder={t("phone")} value={phone} onchangeValue={setPhone} type="number" 
                 styleContainer={{width:width*0.8, height:40, marginVertical:15, borderRadius:12, justifyContent:"center", alignItems:"center"}}
                 styleInputContainer={{width:width*0.8, height:40,alignSelf:"center", borderWidth:1, borderColor:"black",marginBottom:5, borderRadius:12}}
                 styleInput={{paddingVertical:4, paddingHorizontal:18,fontWeight:"500", fontSize:15}}
                 />
-                <TextInputComp placeholder="Country" value={country} onchangeValue={setCountry} 
+                <TextInputComp placeholder={t("country")} value={country} onchangeValue={setCountry} 
                 styleContainer={{width:width*0.8, height:40, marginVertical:15, borderRadius:12, justifyContent:"center", alignItems:"center"}}
                 styleInputContainer={{width:width*0.8, height:40,alignSelf:"center", borderWidth:1, borderColor:"black",marginBottom:5, borderRadius:12}}
                 styleInput={{paddingVertical:4, paddingHorizontal:18,fontWeight:"500", fontSize:15}}
                 />
-                <TextInputComp placeholder="City" value={city} onchangeValue={setCity} 
+                <TextInputComp placeholder={t("city")} value={city} onchangeValue={setCity} 
                 styleContainer={{width:width*0.8, height:40, marginVertical:15, borderRadius:12, justifyContent:"center", alignItems:"center"}}
                 styleInputContainer={{width:width*0.8, height:40,alignSelf:"center", borderWidth:1, borderColor:"black",marginBottom:5, borderRadius:12}}
                 styleInput={{paddingVertical:4, paddingHorizontal:18,fontWeight:"500", fontSize:15}}
                 />
-                <TextInputComp placeholder="Biography" value={biography} onchangeValue={setBiography} isTextArea={true} 
+                <TextInputComp placeholder={t("biography")} value={biography} onchangeValue={setBiography} isTextArea={true} 
                 styleContainer={{width:width*0.8, marginVertical:15,borderRadius:12, justifyContent:"center", alignItems:"center", }}
                 styleInputContainer={{width:width*0.8,alignSelf:"center", borderWidth:1, borderColor:"black",marginBottom:5, borderRadius:12}}
                 styleInput={{paddingVertical:4, paddingHorizontal:18}}
                 />
                 
-                <ButtonComp title="Kaydet!" isActive={isActive} loading={loading} onPress={() => handleSave()} 
+                <ButtonComp title={t("save")} isActive={isActive} loading={loading} onPress={() => handleSave()} 
                 styleContainer={{
                     marginTop: 25,
                     paddingHorizontal:25,

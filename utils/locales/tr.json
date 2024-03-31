@@ -125,6 +125,16 @@
 
         "update_btn":"Parola Güncelle"
 
+    },
+    "UpdateProfileScreen":{
+        "name":"İsim",
+        "surname":"Soyisim",
+        "email":"E-Mail",
+        "phone":"Telefon Numarası",
+        "country":"Ülke",
+        "city":"Şehir",
+        "biography":"Biyografi",
+        "save":"Kaydet"
     }
    
 
