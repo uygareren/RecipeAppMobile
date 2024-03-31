@@ -34,6 +34,14 @@
         "already_have_account":"Zaten Bir Hesabım Var!",
         "sign_in":"Giriş Yap"
         
+    },
+    "OtherProfile":{
+        "keep_following":"Takip Ediliyor",
+        "follow":"Takip Et",
+        "recipes":"Tarifler",
+        "followings":"Takip Edilenler",
+        "followers":"Takipçiler"
+
     }
 
 
