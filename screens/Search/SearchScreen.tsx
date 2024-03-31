@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Dimensions, FlatList, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
+import { Dimensions, FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useQuery } from "react-query";
+import { ButtonComp } from "../../components/Button";
 import { TopHeader } from "../../components/Header";
 import { TextInputComp } from "../../components/Inputs";
-import { ButtonComp } from "../../components/Button";
+import useI18n from "../../hooks/useI18n";
+import { getAllIngredients } from "../../services/ApiService";
 import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
-import components from "../../assets/datas/components.json";
-import { useMutation, useQuery } from "react-query";
-import { getAllIngredients, getRecipeByIngredients } from "../../services/ApiService";
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from "@react-navigation/native";
 
 export default function SearchScreen({}) {
   const {width, height} = Dimensions.get("screen");
+
+  const {t} = useI18n("SearchScreen");
 
   const navigation = useNavigation<any>();
 
@@ -77,11 +78,6 @@ export default function SearchScreen({}) {
 
   }
 
-  // console.log("selectedid", selectedComponentsId);
-  console.log("İDDDD", componentId);
-  console.log("collected ids", selectedComponentsId);
-  console.log("collected value", selectedComponentValue);
-
 
   const RenderItem = ({ item }: any) => {
     return (
@@ -121,7 +117,7 @@ export default function SearchScreen({}) {
   return (
     <View style={styles.container}>
       <View style={{ marginTop: 50 }}>
-        <TopHeader title="Tarif Ara"/>
+        <TopHeader title={t("search_recipe_title")}/>
         <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
       </View>
 
@@ -139,13 +135,13 @@ export default function SearchScreen({}) {
           marginTop: 25
         }}>
           <Text style={{color : componentValue ? BLACK_COLOR : GRAY}}>
-            {componentValue ? componentValue: "Malzeme Seç"}
+            {componentValue ? componentValue: t("select_ingredient")}
             </Text>
         </TouchableOpacity>
         
 
         <ButtonComp
-          title="Malzeme Kaydet!"
+          title={t("save_ingredient")}
           onPress={() => handleSaveComponents()}
           styleContainer={{
             marginTop: 15,
@@ -172,7 +168,7 @@ export default function SearchScreen({}) {
 
       <ButtonComp
         isActive={isActive}
-        title="Ara!"
+        title={t("search")}
         onPress={() => handleSearchRecipe()}
         styleContainer={{
           borderWidth: 1,
@@ -196,7 +192,7 @@ export default function SearchScreen({}) {
               </TouchableOpacity>
 
               <TextInputComp 
-                placeholder="Ara..."
+                placeholder={t("search")}
                 value={searchComponent}
                 onchangeValue={setSearchComponent}
                 styleContainer={{

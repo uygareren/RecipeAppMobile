@@ -52,7 +52,7 @@
 
         "recipe_image":"Fotoğraf Ekle",
         "recipe_name":"Tarif Adı",
-        "search":"Ara..",
+        "search":"Ara",
         "select_ingredient":"Malzeme Seç..",
         "select_quantity":"Ölçü Seç..",
         "select_world_cuisines":"Mutfak Seç..",
@@ -76,6 +76,13 @@
     "HomeScreen":{
         "categories":"Kategoriler",
         "popular_foods":"Popüler Tarifler"
+    },
+    "SearchScreen":{
+        "search_recipe_title":"Tarif Ara",
+        "select_ingredient":"Malzeme Seç",
+        "save_ingredient":"Malzeme Kaydet!",
+        "search":"Ara"
+
     }
 
 
