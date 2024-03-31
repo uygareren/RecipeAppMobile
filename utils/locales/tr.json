@@ -83,6 +83,16 @@
         "save_ingredient":"Malzeme Kaydet!",
         "search":"Ara"
 
+    },
+    "CategoryDetail":{
+        "no_recipe":"Hiç Tarif Yok.."
+    },
+    "CategoryScreen":{
+        "category":"Kategori"
+    },
+    "FollowScreen":{
+        "following":"Takip Edilen",
+        "follower":"Takipçi"
     }
 
 

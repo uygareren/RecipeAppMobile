@@ -1,16 +1,14 @@
-import { Dimensions, FlatList, Image, Text, View } from "react-native";
-import { useEffect, useState } from "react";
-import category_data from "../assets/datas/category_data.json";
+import { Dimensions, FlatList, Image, ScrollView, Text, View } from "react-native";
 import { useQuery } from "react-query";
+import { TopHeader } from "../components/Header";
+import useI18n from "../hooks/useI18n";
 import { getCategoryDetail } from "../services/ApiService";
 import { LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../utils/utils";
-import { ScrollView } from "react-native";
-import { TopHeader } from "../components/Header";
 
 export default function CategoryDetail({ route }: any) {
     const { id, name } = route.params;
     
-
+    const {t} = useI18n("CategoryDetail")
 
     const {width, height} = Dimensions.get("screen");
     
@@ -54,7 +52,7 @@ export default function CategoryDetail({ route }: any) {
 
             <View style={{marginTop:50,}}>
             {category_detail_data?.length == 0 ? (
-                <Text>Hiç Tarif Yok...</Text>
+                <Text>{t("no_recipe")}</Text>
             ):<FlatList
                 data={category_detail_data}
                 keyExtractor={(item)=> item._id.toString()}

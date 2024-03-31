@@ -1,13 +1,16 @@
-import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BLACK_COLOR, LIGHT_GRAY, WHITE } from "../utils/utils";
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { getFollowing } from "../services/ApiService";
-import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
+import useI18n from "../hooks/useI18n";
+import { getFollowing } from "../services/ApiService";
+import { BLACK_COLOR, LIGHT_GRAY, WHITE } from "../utils/utils";
 
 
 export default function FollowScreen({route}:any){
+
+    const {t} = useI18n("FollowScreen");
 
     const {width, height} = Dimensions.get("screen");
 
@@ -86,7 +89,7 @@ export default function FollowScreen({route}:any){
                     <TouchableOpacity onPress={() => setVisible(0)} style={{paddingVertical:10, paddingHorizontal:8, 
                     alignItems:"center", justifyContent:"center"}}>
                         <View style={{alignItems:"center", width:width*0.3}}>
-                            <Text style={{fontWeight:"700", fontSize:16}}>Takip Edilen</Text>
+                            <Text style={{fontWeight:"700", fontSize:16}}>{t("following")}</Text>
                             {visible == 0 ? (
                                 <View style={{height: 2, backgroundColor:BLACK_COLOR, width:width*0.3, marginTop:5}}/>                        
                             ):null}
@@ -95,7 +98,7 @@ export default function FollowScreen({route}:any){
                     <TouchableOpacity onPress={() => setVisible(1)} style={{paddingVertical:10, paddingHorizontal:8, 
                     alignItems:"center", justifyContent:"center"}}>
                         <View style={{alignItems:"center", width:width*0.3}}>
-                            <Text style={{fontWeight:"700", fontSize:16}}>Takipçi</Text>
+                            <Text style={{fontWeight:"700", fontSize:16}}>{t("follower")}</Text>
                             {visible == 1 ? (
                                 <View style={{height: 2, backgroundColor:BLACK_COLOR, width:width*0.3, marginTop:5}}/>                        
                             ):null}

@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
-import { FlatList, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from "react-native";
-import { WHITE } from "../utils/utils";
-import { TopHeader } from "../components/Header";
-import category_data from "../assets/datas/category_data.json";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import category_data from "../assets/datas/category_data.json";
+import { TopHeader } from "../components/Header";
+import useI18n from "../hooks/useI18n";
+import { WHITE } from "../utils/utils";
 
 export default function CategoryScreen({}) {
+
+    const {t} = useI18n("CategoryScreen");
 
     const navigation = useNavigation<any>();
 
@@ -30,7 +33,7 @@ export default function CategoryScreen({}) {
         </View>
 
         <ScrollView>
-            <Text style={{ alignSelf: "center", fontSize: 28, fontWeight: "600", marginVertical: 20 }}>Category</Text>
+            <Text style={{ alignSelf: "center", fontSize: 28, fontWeight: "600", marginVertical: 20 }}>{t("category")}</Text>
 
             <View style={{marginBottom:50}}>
             <FlatList
