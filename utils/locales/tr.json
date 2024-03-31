@@ -93,6 +93,10 @@
     "FollowScreen":{
         "following":"Takip Edilen",
         "follower":"Takipçi"
+    },
+    "InterestSelectionScreen":{
+        "select_interest":"İlgini Çeken Mutfaklar",
+        "question_interest":" Hangi mutfaklar ilgini çekiyor?"
     }
 
 

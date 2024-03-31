@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Button } from "react-native";
-import { BLACK_COLOR, LIGHT_GRAY_2, MAIN_COLOR, WHITE, keyGenerator } from "../utils/utils";
-import { TopHeader } from "../components/Header";
-import { FlatList } from "react-native";
-import { ButtonComp } from "../components/Button";
-import { useMutation, useQuery } from "react-query";
-import { getInterestedData, postUserInterest } from "../services/ApiService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useSelector } from "react-redux";
 import { CommonActions, useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
+import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useMutation, useQuery } from "react-query";
+import { useSelector } from "react-redux";
+import { ButtonComp } from "../components/Button";
+import { TopHeader } from "../components/Header";
+import useI18n from "../hooks/useI18n";
+import { getInterestedData, postUserInterest } from "../services/ApiService";
+import { BLACK_COLOR, LIGHT_GRAY_2, MAIN_COLOR, WHITE, keyGenerator } from "../utils/utils";
 
 export default function InterestSelectionScreen() {
+  const {t} = useI18n("InterestSelectionScreen");
+
   const {width, height} = Dimensions.get("screen");
 
   const navigation = useNavigation<any>()
@@ -91,13 +93,13 @@ export default function InterestSelectionScreen() {
       <View style={styles.container}>
           
         <View style={{ marginTop: 50 }}>
-          <TopHeader title="Select Interest" />
+          <TopHeader title={t("select_interest")}/>
           <View style={{ backgroundColor: LIGHT_GRAY_2, height: 1, width: width * 8 / 10, alignSelf: "center", marginTop: 5 }} />
         </View>
 
         <View style={{ marginTop: 20, paddingHorizontal: 20 }}>
           <Text style={{ fontSize: 16, fontWeight: "700" }}>
-            Hangi mutfaklar ilgini çekiyor?
+          {t("question_interest")}
           </Text>
 
           <View style={{marginTop: 20, marginBottom:0, alignItems:"center", height:height*6.5/10, }}>
