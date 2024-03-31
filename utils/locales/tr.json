@@ -112,6 +112,19 @@
     },
     "SearchResultScreen":{
 
+    },
+    "UpdatePasswordScreen":{
+        "update_password":"Parola Güncelle",
+        "enter_current_password":"Mevcut Şifre",
+        "enter_new_password":"Yeni Şifre",
+        "enter_new_confirm_password":"Şifreyi Tekrar Girin",
+
+        "enter_current_password_placeholder":"Mevcut Şifrenizi Girin",
+        "enter_new_password_placeholder":"Yeni Şifrenizi Girin",
+        "enter_new_confirm_password_placeholder":"Şifreyi Tekrar Girin",
+
+        "update_btn":"Parola Güncelle"
+
     }
    
 
