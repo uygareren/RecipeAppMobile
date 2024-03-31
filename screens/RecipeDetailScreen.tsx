@@ -1,25 +1,23 @@
-import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
 import { useEffect, useState } from "react";
-import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeFromNow } from "../utils/utils";
-import { RecipeDetailHeader, SettingsHeader } from "../components/Header";
-import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { Fontisto } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { GRAY, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeFromNow } from "../utils/utils";
 
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { useMutation, useQuery } from "react-query";
+import { useSelector } from "react-redux";
+import { TextInputComp } from "../components/Inputs";
 import { Ingredients } from "../components/RecipeDetailComponents/Ingredients";
 import { Instructions } from "../components/RecipeDetailComponents/Instructions";
-import { useMutation, useQuery } from "react-query";
+import useI18n from '../hooks/useI18n';
 import { getAllIngredients, getAllMeasurements, getRecipeById, postComment, postLike, removeLike } from "../services/ApiService";
-import { useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import { TextInputComp } from "../components/Inputs";
 
 export default function RecipeDetailScreen({route}:any){
 
-    const navigation = useNavigation<any>(); 
+    const {t} = useI18n("RecipeDetailScreen");
 
+    const navigation = useNavigation<any>(); 
 
     const recipe_id = route?.params?.id
     const userInfo = useSelector((state:any) => state.user.userInfo)
@@ -42,7 +40,6 @@ export default function RecipeDetailScreen({route}:any){
 
     useEffect(() => {
         if(isSuccess){
-            console.log("dataaa", data)
             setInitialLike(data?.data?.likeData.filter((item:any) => item?.userId == userInfo.userId )[0]?.isLike ?? false)
             setIsLıke(data?.data?.likeData.filter((item:any) => item?.userId == userInfo.userId )[0]?.isLike ?? false);
             setLıkeCount(data?.data?.likeData?.length)
@@ -152,7 +149,7 @@ export default function RecipeDetailScreen({route}:any){
                         isTextArea={true}
                         value={comment}
                         onchangeValue={setComment}
-                        placeholder="Yorum Ekle"
+                        placeholder={t("add_comment")}
                         styleContainer={{width: Dimensions.get("screen").width * 7.8 / 10,}}
                         styleInputContainer={{ borderRadius: 15, }}
                         styleInput={{
@@ -212,7 +209,7 @@ export default function RecipeDetailScreen({route}:any){
                     <View style={{marginVertical:6, flexDirection:"row", alignItems:"center",}}>
                         <AntDesign name="heart" size={12} color={LIGHT_RED} />
                         <Text style={{ marginLeft: 6, fontSize: 12, fontWeight: "300" }}>
-                            {likeCount?.toString()} {likeCount === 1 || likeCount === 0 ? "Like" : "Likes"}
+                            {likeCount?.toString()} {likeCount === 1 || likeCount === 0 ? t("like") : t("likes")}
                         </Text>
 
                     </View>
@@ -242,15 +239,15 @@ export default function RecipeDetailScreen({route}:any){
                     {/* SELECT SECTİON */}
                     <View style={{flexDirection:"row", justifyContent:"space-around", paddingVertical:15}}>
                         <TouchableOpacity onPress={() => setIndex(0)} style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16, fontWeight:index == 0 ? "500": "300"}}>Ingredients</Text>
+                            <Text style={{fontSize:16, fontWeight:index == 0 ? "500": "300"}}>{t("ingredients")}</Text>
                             <View style={{width:width*1.7/10, height:2, backgroundColor: index == 0 ? LIGHT_RED : LIGHT_GRAY_2 , marginTop:4}}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => setIndex(1)} style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16, fontWeight:index == 1 ? "500": "300"}}>Instructions</Text>
+                            <Text style={{fontSize:16, fontWeight:index == 1 ? "500": "300"}}>{t("instructions")}</Text>
                             <View style={{width:width*1.7/10, height:2, backgroundColor: index == 1 ? LIGHT_RED : LIGHT_GRAY_2 , marginTop:4}}/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => setIndex(2)} style={{alignItems:"center"}}>
-                            <Text style={{fontSize:16, fontWeight:index == 2 ? "500": "300"}}>Comments</Text>
+                            <Text style={{fontSize:16, fontWeight:index == 2 ? "500": "300"}}>{t("comments")}</Text>
                             <View style={{width:width*1.7/10, height:2, backgroundColor: index == 2 ? LIGHT_RED : LIGHT_GRAY_2 , marginTop:4}}/>
                         </TouchableOpacity>
                     </View>

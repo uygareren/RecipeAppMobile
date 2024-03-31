@@ -97,6 +97,15 @@
     "InterestSelectionScreen":{
         "select_interest":"İlgini Çeken Mutfaklar",
         "question_interest":" Hangi mutfaklar ilgini çekiyor?"
+    },
+    "RecipeDetailScreen":{
+        "add_comment":"Yorum Ekle",
+        "like":"Beğeni",
+        "likes":"Beğeni",
+        "ingredients":"Ingredients",
+        "instructions":"Instructions",
+        "comments":"Comments"
+
     }
 
 
