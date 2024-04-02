@@ -1,4 +1,5 @@
-import { Dimensions, FlatList, Image, ScrollView, Text, View } from "react-native";
+import { FlatList } from "native-base";
+import { Dimensions, Image, Text, View } from "react-native";
 import { useQuery } from "react-query";
 import { TopHeader } from "../components/Header";
 import useI18n from "../hooks/useI18n";
@@ -43,27 +44,24 @@ export default function CategoryDetail({ route }: any) {
       }
 
     return(
-        <ScrollView style={{flex:1, backgroundColor:WHITE, paddingHorizontal:15}}>
-
-            <View style={{ marginTop: 50 }}>
+        <View style={{flex:1, backgroundColor:WHITE, justifyContent:"center"}}>
+            <View style={{ marginTop: 50, position:"absolute", top:0, width:"100%" }}>
                 <TopHeader title={name} />
                 <View style={{ backgroundColor: LIGHT_GRAY_2, height: 1, width: width * 8 / 10, alignSelf: "center", marginTop: 5 }} />
             </View>
 
-            <View style={{marginTop:50,}}>
+            <View style={{marginTop:50, alignItems:"center"}}>
             {category_detail_data?.length == 0 ? (
-                <Text>{t("no_recipe")}</Text>
+                <Text style={{fontWeight:"600", fontSize:14}}>{t("no_recipe")}</Text>
             ):<FlatList
                 data={category_detail_data}
-                keyExtractor={(item)=> item._id.toString()}
+                keyExtractor={(item:any)=> item._id.toString()}
                 renderItem={RenderItem}
                 numColumns={2}
                 showsVerticalScrollIndicator={false}
             />}
             </View>
 
-           
-
-        </ScrollView>
+        </View>
     );
 }
