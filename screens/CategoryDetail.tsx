@@ -1,5 +1,5 @@
 import { FlatList } from "native-base";
-import { Dimensions, Image, Text, View } from "react-native";
+import { Dimensions, Image, ScrollView, Text, View } from "react-native";
 import { useQuery } from "react-query";
 import { TopHeader } from "../components/Header";
 import useI18n from "../hooks/useI18n";
@@ -44,13 +44,15 @@ export default function CategoryDetail({ route }: any) {
       }
 
     return(
-        <View style={{flex:1, backgroundColor:WHITE, justifyContent:"center"}}>
-            <View style={{ marginTop: 50, position:"absolute", top:0, width:"100%" }}>
+        <ScrollView style={{backgroundColor:WHITE}}>
+
+        <View style={{flex:1, backgroundColor:WHITE, }}>
+            <View style={{ marginTop: 50, }}>
                 <TopHeader title={name} />
                 <View style={{ backgroundColor: LIGHT_GRAY_2, height: 1, width: width * 8 / 10, alignSelf: "center", marginTop: 5 }} />
             </View>
 
-            <View style={{marginTop:50, alignItems:"center"}}>
+            <View style={{marginTop:50, alignItems:"center", justifyContent:"center",height:Dimensions.get("screen").height-120 }}>
             {category_detail_data?.length == 0 ? (
                 <Text style={{fontWeight:"600", fontSize:14}}>{t("no_recipe")}</Text>
             ):<FlatList
@@ -63,5 +65,7 @@ export default function CategoryDetail({ route }: any) {
             </View>
 
         </View>
+        </ScrollView>
+
     );
 }
