@@ -1,7 +1,7 @@
 import { api } from "./api";
 
 const API = process.env.API;
-console.log("apiiii: ", API);
+console.log("apiii: ", API);
 
 
 // INTEREST QUERİES
@@ -88,9 +88,14 @@ export const getRecipeByIngredients = async(payload:any) => {
 
 export const getRecipeById = async(id:any) => {
     const response = await api.get(`${API}/recipe-detail/${id}`);
-    console.log("response", response);
 
     return response.data;
+}
+
+export const getRecipeSearch = async(value:string) => {
+    const response = await api.get(`${API}/recipe-search?searchQuery=${value}`);
+    return response.data;
+
 }
 
 // MEASUREMENT QUERİES
@@ -118,6 +123,14 @@ export const removeLike = async(payload:any) => {
 
 export const postComment = async(payload:any) => {
     const response = await api.post(`${API}/post_comment`, payload);
+    return response.data;
+}
+
+// USER SEARCH QUERİES
+
+export const getUserSearch = async(value:string) => {
+    const response = await api.get(`${API}/user-search?userQuery=${value}`);
+
     return response.data;
 }
 

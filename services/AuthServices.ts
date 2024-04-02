@@ -3,7 +3,7 @@ import { RegisterTypes } from "../types/AuthTypes";
 import { api } from "./api";
 
 const API = process.env.API;
-console.log("apiiii: ", API);
+console.log("apii: ", API);
 
 
 export const AuthServices = {
