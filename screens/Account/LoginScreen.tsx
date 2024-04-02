@@ -16,8 +16,8 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
 
     const {t} = useI18n("LoginScreen");
 
-    const [email, setEmail] = useState("mehmetyılmazsdsdsd@gmail.com");
-    const [password, setPassword] = useState("789456123");
+    const [email, setEmail] = useState("uygarerenx@gmail.com");
+    const [password, setPassword] = useState("Uygareren111ue.");
 
     const [loading, setLoading] = useState(false)
 

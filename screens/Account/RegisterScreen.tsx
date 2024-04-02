@@ -49,9 +49,9 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
         <ScrollView style={styles.container}>
             <View style={styles.body_container}>
 
-                <View style={{alignItems: "center", position:"absolute", top: 0, justifyContent: "center"}}>
+                {/* <View style={{alignItems: "center", position:"absolute", top: 0, justifyContent: "center"}}>
                     <Text style={{fontStyle: "italic", fontSize: 28, color: "#7224a3"}}>Foody</Text>
-                </View>
+                </View> */}
 
                 <View>
                     <Text style={{fontSize: 25, fontWeight:"500", alignSelf:"center", marginTop: 100}}>{t("sign_up")}</Text>
