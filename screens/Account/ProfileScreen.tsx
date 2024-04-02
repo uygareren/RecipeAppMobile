@@ -3,6 +3,7 @@ import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, V
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { SettingsHeader } from "../../components/Header";
+import { Loading } from "../../components/Loading";
 import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { getFollowing, getRecipeByUserId } from "../../services/ApiService";
@@ -41,19 +42,17 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
 
     if(isLoading){
         return(
-          <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>
-              <Text>Loading...</Text>
-          </View>
+          <Loading/>
         )
       }
 
     const RenderItem = ({item}:any) => {
         return(
             <View style={{backgroundColor:LIGHT_GRAY, borderBottomLeftRadius:12, borderBottomRightRadius:12,
-                 width:width*0.35,alignItems:"center",
+                 width:width*0.4,alignItems:"center",
             marginBottom:20,marginHorizontal:width*0.04}}>
                 <Image source={{ uri: "http://dummyimage.com/118x100.png/ff4444/ffffff" }} 
-                style={{ width: width*0.35, height: width*0.35, resizeMode:"cover" }} />
+                style={{ width: width*0.4, height: width*0.35, resizeMode:"cover" }} />
                 <View style={{marginVertical:10, paddingHorizontal:5}}>
                 <Text >{item?.recipeName}</Text>
 
@@ -117,7 +116,7 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
             ): null}
 
             {/* POST AREA */}
-            <View style={{ marginTop:20}}>
+            <View style={{ marginTop:20, alignItems:"center"}}>
                 <FlatList
                     data={recipe_resp?.data?.data}
                     keyExtractor={(item)=> item._id.toString()}
