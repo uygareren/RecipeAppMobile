@@ -1,13 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from "react-native"
-import { BLACK_COLOR, LIGHT_GRAY, LIGHT_GRAY_2, MAIN_COLOR, WHITE } from "../utils/utils"
-import { TextInput } from "react-native"
-import { EvilIcons } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
+import { AntDesign, EvilIcons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { BLACK_COLOR, LIGHT_GRAY, LIGHT_GRAY_2 } from "../utils/utils";
 
 type TopHeaderParams={
     title: string
@@ -18,7 +13,9 @@ type SearchHeaderParams={
     value: string,
     onChangeValue: (text: string) => void,
     placeholder: string,
-    onPress : () => void
+    onPress : () => void,
+    openModal : () => void,
+    id: any
 }
 
 type RegularHeaderParams={
@@ -42,11 +39,18 @@ export const TopHeader = ({title}:any) => {
     )
 }
 
-export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress }: SearchHeaderParams) => {
+export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress, openModal, id }: SearchHeaderParams) => {
+
+
 
     return (
       <View style={{ ...styles.topHeaderContainer}}>
-        <Text>{`Merhaba ${name}`}</Text>
+        {id != null ? (
+          <Text>{`Merhaba, ${name}`}</Text>
+
+        ): (
+          null
+        )}
         <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
           <Text style={{fontSize:19, fontWeight:"700", marginTop:5}}>Bugün ne pişirmek istersiniz?</Text>
           {
@@ -62,8 +66,10 @@ export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress 
         </View>
   
         <View style={styles.searchContainer}>
-          <TextInput value={value} onChangeText={onChangeValue} placeholder={placeholder} style={styles.textInput} />
-  
+          <TouchableOpacity style={styles.textInput} onPress={openModal}>
+            <Text style={{fontWeight:'300' }}>{placeholder}</Text>
+          </TouchableOpacity>
+
           <View style={styles.searchIcon}>
             {value ? (<TouchableOpacity onPress={() => onChangeValue("")}> 
                 <EvilIcons name="close-o" size={26} color="black" />
