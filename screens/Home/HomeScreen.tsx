@@ -1,21 +1,25 @@
 import { AntDesign, Feather } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Dimensions, FlatList, Image, Modal, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import { SearchHeader } from "../../components/Header";
+import { SearchHeader } from '../../components/Header';
 import { TextInputComp } from '../../components/Inputs';
+import SkeletonComp from '../../components/Skeleton';
 import useI18n from "../../hooks/useI18n";
 import { getCategories, getRecipeSearch, getUserDetail, getUserSearch } from "../../services/ApiService";
 import { userSliceActions } from "../../store/reducer/userSlice";
-import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, GRAY, keyGenerator, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
 
 export default function HomeScreen({ route }: any) {
 
     const {t} = useI18n("HomeScreen");
 
     const {width, height} = Dimensions.get('screen');
+    
 
     const [text, setText] = useState("");
 
@@ -25,15 +29,32 @@ export default function HomeScreen({ route }: any) {
     const userInfo = useSelector((state:any) => state.user.userInfo);
     const userId = userInfo?.userId;
 
+    const key = keyGenerator("searched_values", userId);
+
+
     const [searchValue, setSearchValue] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
     const [searchSelectVisible, setSearchSelectVisible] = useState<number>(0)
 
     const [searchData, setSearchData] = useState<any[]>([]);
+
+    const [previusSearchedData, setPreviusSearchedData] = useState<any>([]);
     // const [searchUserData, setSearchUserData] = useState<any[]>([]);
 
     const [searchLoading, setSearchLoading] = useState(false)
 
+    const recipeData = useQuery(
+      ["recipe-search"],
+      () => getRecipeSearch(searchValue)
+      
+    );
+
+    const userData = useQuery(
+      ["user-search"],
+      () => getUserSearch(searchValue)
+      
+    )
+    
     const {data, isLoading} = useQuery({
       queryKey: ["categories"],
       queryFn: getCategories
@@ -64,36 +85,52 @@ export default function HomeScreen({ route }: any) {
       setSearchValue("");
     }
 
-    function handleNavigate(id:any){
+    async function handleNavigate(item:any){
+
       if(searchSelectVisible==0){
-        navigation.navigate("RecipeDetail", {id:id})
+
+        handleSaveValues(item?.recipeName);
+        navigation.push("RecipeDetail", {id:item?.id})
       }else if(searchSelectVisible == 1){
-        if(id == userId){
-          navigation.navigate("Profile")
+        const value = `${item?.name} ${item?.surname}`;
+        console.log("valueee", value)
+        handleSaveValues(value);
+
+        if(item?.id == userId){
+          navigation.push("Profile")
         }else{
-          navigation.navigate("OtherProfile",{id:id})
+          navigation.push("OtherProfile",{id:item?.id})
 
         }
       }
+
+      setModalVisible(false);
+      setSearchValue("");
+
     }
 
-    const recipeData = useQuery(
-      ["recipe-search"],
-      () => getRecipeSearch(searchValue)
-      
-    );
+    function handleSaveValues(value:string){
 
-    const userData = useQuery(
-      ["user-search"],
-      () => getUserSearch(searchValue)
-      
-    )
-    
+      let index = previusSearchedData.indexOf(value);
+
+      if(index != -1){
+        previusSearchedData.splice(index,1);
+        setPreviusSearchedData((prev:any) => [value, ...prev])
+      }else{
+        if(previusSearchedData.length < 5){
+          setPreviusSearchedData((prev:any) =>  [value, ...prev])
+        }else if(previusSearchedData.length == 5){
+          previusSearchedData.pop();
+          setPreviusSearchedData((prev:any) => [value, ...prev])
+        }
+      }
+      AsyncStorage.setItem(key, JSON.stringify(previusSearchedData));
+            
+    }
 
     useEffect(() => {
       if (searchSelectVisible === 0) {
         // Tarif arama
-        setSearchLoading(true);
 
         if(searchValue.length == 0){
           setSearchData([]);
@@ -104,7 +141,7 @@ export default function HomeScreen({ route }: any) {
       } else if (searchSelectVisible === 1) {
         // Kullanıcı arama
         setSearchLoading(true);
-        console.log("data", userData);
+        // console.log("data", userData);
 
         if(searchValue.length == 0){
           setSearchData([]);
@@ -119,6 +156,24 @@ export default function HomeScreen({ route }: any) {
 
 
     }, [searchValue])
+
+    useEffect(() => {
+      const getStoredData = async () => {
+        try {
+          const storedValues = await AsyncStorage.getItem(key);
+          if (storedValues !== null) {
+            // If there are stored values, parse them and set them to state
+            setPreviusSearchedData(JSON.parse(storedValues));
+          }
+        } catch (error) {
+          console.error("Error retrieving data from AsyncStorage:", error);
+        }
+      };
+    
+      getStoredData(); // Call the function to retrieve data when component mounts
+    }, []);
+    
+    
     
 
     const Card = ({ item }: any) => {
@@ -131,11 +186,10 @@ export default function HomeScreen({ route }: any) {
       );
     };
 
-    const RenderItem = ({item}:any) => {
+    const RenderSearchItem = ({item}:any) => {
 
-      console.log("itemm", item);
       return(
-        <TouchableOpacity onPress={() => handleNavigate(item?.id)} style={{flexDirection:'row', marginVertical:7, 
+        <TouchableOpacity onPress={() => handleNavigate(item)} style={{flexDirection:'row', marginVertical:7, 
           paddingHorizontal:15, paddingVertical:7,alignItems:'center'}}>
             <View style={{width:50, height:50, borderRadius:180}}>
               <Image style={{width: 50, height:50, borderRadius:180}} source={require("../../assets/images/default_profile.jpg")}/>
@@ -148,6 +202,20 @@ export default function HomeScreen({ route }: any) {
             )
             }
         </TouchableOpacity>
+      )
+    }
+
+    const RenderPreviusSearchData = ({item}:any) => {
+
+
+      return(
+        <View style={{flexDirection:"row", justifyContent:'space-between', paddingHorizontal:30, paddingVertical:7,
+          alignItems:'center'}}>
+            <Text>{item}</Text>
+            <TouchableOpacity onPress={() => setSearchValue(item)}>
+              <Feather name="arrow-up-left" size={24} color={GRAY} />
+            </TouchableOpacity>
+        </View>
       )
     }
 
@@ -202,11 +270,22 @@ export default function HomeScreen({ route }: any) {
               
               <ScrollView style={{}}>
                   
-                 <FlatList
+                 {searchValue.length > 0 ? (
+                  <FlatList
                   data={searchData}
                   keyExtractor={item=> item.id}
-                  renderItem={RenderItem}
+                  renderItem={RenderSearchItem}
                  />
+                 ):
+                 (
+                  <FlatList
+                    data={previusSearchedData}
+                    keyExtractor={item=> item.id}
+                    renderItem={RenderPreviusSearchData}
+                  />
+                 )
+                 } 
+                 
 
               </ScrollView>
               
@@ -221,9 +300,7 @@ export default function HomeScreen({ route }: any) {
 
     if(isLoading){
       return(
-        <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>
-            <Text>Loading...</Text>
-        </View>
+        <SkeletonComp/>
       )
     }
 
@@ -265,6 +342,8 @@ export default function HomeScreen({ route }: any) {
         </View>
       </SafeAreaView>
     );
+
+    
 }
 
 const styles = StyleSheet.create({
