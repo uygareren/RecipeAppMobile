@@ -21,30 +21,10 @@ export const LANG_STORE = "lang"
 //DEFAULTS 
 export const DEFAULT_LANGUAGE = "tr";
 
-export const keyGenerator = (id:string) => {
-    return "interest_"+id
+export const keyGenerator = (value:string,id:string) => {
+    return value+"_"+id
 }
 
-moment.updateLocale('en', {
-    relativeTime : {
-        future: "in %s",
-        past:   "%s ago",
-        s  : 'a few seconds',
-        ss : '%d seconds',
-        m:  "a minute",
-        mm: "%d minutes",
-        h:  "an hour",
-        hh: "%d hours",
-        d:  "a day",
-        dd: "%d days",
-        w:  "a week",
-        ww: "%d weeks",
-        M:  "a month",
-        MM: "%d months",
-        y:  "a year",
-        yy: "%d years"
-    }
-});
 
 moment.updateLocale("tr", {
     relativeTime : {
