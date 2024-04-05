@@ -13,7 +13,7 @@ export const getInterestedData = async() => {
     return data;
 }
 
-export const postUserInterest = async(payload:any) => {
+export const postUserInterest = async(payload:PostUserInterestType) => {
 
     
     const response = await api.post( `${API}/post_user_interests`, payload);
@@ -27,25 +27,25 @@ export const getCategories = async () => {
     return response.data;
 }
 
-export const getCategoryDetail = async (category_id:any) => {
+export const getCategoryDetail = async (category_id:String) => {
     const response = await api.get(`${API}/recipe-by-category/${category_id}`);
     return response.data;
 }
 
 // USER DETAİL 
 
-export const getUserDetail = async (id:any) => {
+export const getUserDetail = async (id:String) => {
     const response = await api.get(`${API}/get_user_detail/${id}`)
     return response.data
 }
 
-export const getFollowing = async (userId: any) => {
+export const getFollowing = async (userId: String) => {
     const response = await api.post(`${API}/get_following`, { user_id: userId });
     return response.data;
 }
 
 
-export const addFollowed = async (payload:any) => {
+export const addFollowed = async (payload:AddFollowedType) => {
     try {
         const response = await api.post(`${API}/add_followed`, payload);
         return response.data;
@@ -56,14 +56,12 @@ export const addFollowed = async (payload:any) => {
 };
 
 
-export const getRecipeByUserId = async(payload:any) => {
-    console.log("payload", payload)
-    const response = await api.post(`${API}/get_recipe_by_userid`, payload);
-    console.log("response", response);
+export const getRecipeByUserId = async(user_id:any) => {
+    const response = await api.post(`${API}/get_recipe_by_userid`, user_id);
     return response.data;
 }
 
-export const updateUser = async(payload:any) => {
+export const updateUser = async(payload:UpdateUserType) => {
     const response = await api.post(`${API}/update_user`, payload);
     return response.data;
 }
@@ -86,7 +84,7 @@ export const getRecipeByIngredients = async(payload:any) => {
 
 // RECİPE QUERİES
 
-export const getRecipeById = async(id:any) => {
+export const getRecipeById = async(id:String) => {
     const response = await api.get(`${API}/recipe-detail/${id}`);
 
     return response.data;
@@ -107,12 +105,12 @@ export const getAllMeasurements = async() => {
 
 // LIKE QUERİES
 
-export const postLike = async(payload:any) => {
+export const postLike = async(payload:LikeType) => {
     console.log("payload post like", payload);
     const response = await api.post(`${API}/post_like`, payload);
     return response.data
 }
-export const removeLike = async(payload:any) => {
+export const removeLike = async(payload:LikeType) => {
     console.log("payload remove like", payload);
 
     const response = await api.post(`${API}/remove_like`, payload);
@@ -121,7 +119,7 @@ export const removeLike = async(payload:any) => {
 
 // COMMENT QUERİES
 
-export const postComment = async(payload:any) => {
+export const postComment = async(payload:CommentType) => {
     const response = await api.post(`${API}/post_comment`, payload);
     return response.data;
 }
