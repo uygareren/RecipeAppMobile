@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import { RegisterTypes } from "../types/AuthTypes";
+import { LoginTypes, RegisterTypes } from "../types/AuthTypes";
 import { api } from "./api";
 
 const API = process.env.API;
@@ -40,11 +40,9 @@ export const AuthServices = {
     }
 }
 
-export const login = async (payload: any) => {
+export const login = async (payload: LoginTypes) => {
     try {
         const response = await api.post(`${API}/login`, payload);
-        console.log("respnıse", response);
-
         return response;
     } catch (error) {
         throw error;
