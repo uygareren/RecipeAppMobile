@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet } from "react-native"
+import { ActivityIndicator, StyleSheet, View } from "react-native"
 import { WHITE } from "../utils/utils"
 
 
 export const Loading = () => {
     return(
-        <View style={styles.container}>
-            <Text>LOADİNG...</Text>
+        <View style={{flex:1,alignItems:"center", justifyContent:"center"}}>
+            <ActivityIndicator size={32}/>
         </View>
     )
 }
