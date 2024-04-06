@@ -2,6 +2,7 @@ import { FlatList } from "native-base";
 import { Dimensions, Image, ScrollView, Text, View } from "react-native";
 import { useQuery } from "react-query";
 import { TopHeader } from "../components/Header";
+import { Loading } from "../components/Loading";
 import useI18n from "../hooks/useI18n";
 import { getCategoryDetail } from "../services/ApiService";
 import { LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../utils/utils";
@@ -37,9 +38,7 @@ export default function CategoryDetail({ route }: any) {
 
     if(isLoading){
         return(
-          <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>
-              <Text>Loading...</Text>
-          </View>
+          <Loading/>
         )
       }
 

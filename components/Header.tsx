@@ -2,7 +2,8 @@ import { AntDesign, EvilIcons, Feather, Ionicons, MaterialIcons } from '@expo/ve
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BLACK_COLOR, LIGHT_GRAY, LIGHT_GRAY_2 } from "../utils/utils";
+import { BLACK_COLOR, LIGHT_GRAY_2 } from "../utils/utils";
+import { Divider } from './Divider';
 
 type TopHeaderParams={
     title: string
@@ -102,7 +103,7 @@ export const RegularHeader = ({title}:RegularHeaderParams) => {
     return(
         <View style={{marginTop: 50, alignItems: "center"}}>
             <Text style={styles.titleText}>{title}</Text>
-            <View style={{height:1, backgroundColor:LIGHT_GRAY, width:"90%", alignSelf: "center", marginTop:10}}/>
+            <Divider height={1} width="90%"/>
         </View>
     )
     

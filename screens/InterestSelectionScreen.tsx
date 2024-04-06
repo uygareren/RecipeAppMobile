@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { ButtonComp } from "../components/Button";
 import { TopHeader } from "../components/Header";
+import { Loading } from "../components/Loading";
 import useI18n from "../hooks/useI18n";
 import { getInterestedData, postUserInterest } from "../services/ApiService";
 import { BLACK_COLOR, LIGHT_GRAY_2, MAIN_COLOR, WHITE, keyGenerator } from "../utils/utils";
@@ -32,7 +33,7 @@ export default function InterestSelectionScreen() {
       mutationKey:["post_user_interests"],
       mutationFn:postUserInterest,
       onSuccess: async() => {
-        const key = keyGenerator(userInfo?.userId);
+        const key = keyGenerator("interest",userInfo?.userId);
         await AsyncStorage.setItem(key,"true");
         navigation.dispatch(
           CommonActions.reset({
@@ -83,9 +84,7 @@ export default function InterestSelectionScreen() {
 
     if(isLoading){
       return(
-        <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>
-            <Text>Loading...</Text>
-        </View>
+        <Loading/>
       )
     }
 

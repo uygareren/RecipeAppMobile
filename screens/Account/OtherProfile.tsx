@@ -4,6 +4,7 @@ import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpa
 import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { GoBackHeader } from "../../components/Header";
+import { Loading } from "../../components/Loading";
 import useI18n from "../../hooks/useI18n";
 import { addFollowed, getFollowing, getRecipeByUserId, getUserDetail } from "../../services/ApiService";
 import { BLACK_COLOR, LIGHT_GRAY, PINK, WHITE } from "../../utils/utils";
@@ -94,9 +95,7 @@ export default function OtherProfile({route}:any){
 
     if(isLoading){
         return(
-            <View style={{flex:1, backgroundColor:WHITE, justifyContent:"center", alignItems:"center"}}>
-                <Text>Loading...</Text>
-            </View>
+            <Loading/>
         )
     }
     

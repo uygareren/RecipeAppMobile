@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMutation } from "react-query";
 import { TopHeader } from "../components/Header";
+import { Loading } from "../components/Loading";
 import useI18n from "../hooks/useI18n";
 import { getRecipeByIngredients } from "../services/ApiService";
 import { LIGHT_GRAY, WHITE } from "../utils/utils";
@@ -64,9 +65,7 @@ export default function SearchResultScreen({route}:any){
 
     if(searchMutation.isLoading){
         return(
-            <View style={{flex:1, backgroundColor:WHITE, alignItems:"center", justifyContent:"center"}}>
-                <Text>Loading...</Text>
-            </View>
+            <Loading/>
         )
     }
 
