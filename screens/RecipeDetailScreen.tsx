@@ -5,9 +5,12 @@ import { GRAY, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeFromNow } from
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import { Actionsheet } from 'native-base';
 import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
-import { TextInputComp } from "../components/Inputs";
+import { Divider } from '../components/Divider';
+import { TextInputComp } from '../components/Inputs';
+import { Loading } from '../components/Loading';
 import { Ingredients } from "../components/RecipeDetailComponents/Ingredients";
 import { Instructions } from "../components/RecipeDetailComponents/Instructions";
 import useI18n from '../hooks/useI18n';
@@ -22,11 +25,15 @@ export default function RecipeDetailScreen({route}:any){
     const recipe_id = route?.params?.id
     const userInfo = useSelector((state:any) => state.user.userInfo)
 
+    const [commentData, setCommentData] = useState<CommentData[]>([]); 
+
     const [initialLike, setInitialLike] = useState(false)
     const [isLike, setIsLıke] = useState(false)
     const [likeCount, setLıkeCount] = useState(0);
 
     const [comment, setComment] = useState("");
+
+    const [isActionVisible, setisActionVisible] = useState<boolean>(false)
 
     const {width, height} = Dimensions.get("screen");
     
@@ -36,18 +43,14 @@ export default function RecipeDetailScreen({route}:any){
     const {data, isLoading, isSuccess} = useQuery(
         ["recipe-detail"],
         () => getRecipeById(recipe_id),
+        {onSuccess(data){
+            setCommentData(data?.data?.commentData);
+        }}
     );
 
-    useEffect(() => {
-        if(isSuccess){
-            setInitialLike(data?.data?.likeData.filter((item:any) => item?.userId == userInfo.userId )[0]?.isLike ?? false)
-            setIsLıke(data?.data?.likeData.filter((item:any) => item?.userId == userInfo.userId )[0]?.isLike ?? false);
-            setLıkeCount(data?.data?.likeData?.length)
-        }
-    }, [isSuccess, data, userInfo]);
-    
-    
 
+    console.log("commnetssss", commentData);
+    
     const ingredientsData = useQuery({
         queryKey: ["get_all_ingredients"],
         queryFn: getAllIngredients
@@ -69,7 +72,6 @@ export default function RecipeDetailScreen({route}:any){
         }
     })
 
-    console.log("addlikemutation", addlikeMutation);
     const removelikeMutation = useMutation({
         mutationKey:["remove_like"],
         mutationFn: removeLike, 
@@ -88,6 +90,14 @@ export default function RecipeDetailScreen({route}:any){
         }
     });
 
+    useEffect(() => {
+        if(isSuccess){
+            setInitialLike(data?.data?.likeData.filter((item:any) => item?.userId == userInfo.userId )[0]?.isLike ?? false)
+            setIsLıke(data?.data?.likeData.filter((item:any) => item?.userId == userInfo.userId )[0]?.isLike ?? false);
+            setLıkeCount(data?.data?.likeData?.length)
+        }
+    }, [isSuccess, data, userInfo]);
+    
     
 
 
@@ -139,12 +149,16 @@ export default function RecipeDetailScreen({route}:any){
         return(
             <View style={{width:"100%", paddingVertical:10 }}>
                 <FlatList
-                    data={data?.data?.commentData}
+                    data={commentData.slice(0,3)}
                     keyExtractor={(item:any) => item?._id.toString()}
                     renderItem={RenderCommentItem}
                 />
+
+                <TouchableOpacity style={{marginTop:10}} onPress={() => setisActionVisible(true)}>
+                    <Text style={{fontWeight:'600', fontSize:13, color:GRAY}}>{`${commentData.length} Yorumun Hepsini Gör`}</Text>
+                </TouchableOpacity>
     
-                <View style={{marginTop: 10,flexDirection: "row", alignItems:"center", }}>
+                {/* <View style={{marginTop: 10,flexDirection: "row", alignItems:"center", }}>
                     <TextInputComp
                         isTextArea={true}
                         value={comment}
@@ -164,7 +178,7 @@ export default function RecipeDetailScreen({route}:any){
                     <TouchableOpacity onPress={() => handleComment()} style={{marginLeft:10}}>
                         <FontAwesome name="send" size={24} color="black" />
                     </TouchableOpacity>
-                </View>
+                </View> */}
     
             </View>
         )
@@ -172,9 +186,7 @@ export default function RecipeDetailScreen({route}:any){
 
     if(isLoading){
         return(
-            <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>
-                <Text>Loading...</Text>
-            </View>
+           <Loading/>
         )
     }
 
@@ -260,6 +272,58 @@ export default function RecipeDetailScreen({route}:any){
                     {index === 1 && <Instructions item={data?.data?.recipe?.recipeDescription}/>}
                     {index === 2 && <Comments />}
                 </View>
+
+                <Actionsheet isOpen={isActionVisible} onClose={() => setisActionVisible(false)} >
+                    <Actionsheet.Content style={{height:height*0.7}}> 
+                        
+                        <View style={{height:height*0.05, }}>
+                            <Text style={{fontWeight:'600', fontSize:16,marginBottom:10}}>Yorumlar</Text>
+                            <Divider height={1} width="90%"/>
+                        </View>
+
+                        <View style={{width:"100%", paddingHorizontal:20, height:height*0.5}}>
+                            <View style={{marginBottom:0,marginTop:0,height:"100%" }}>
+
+                                <FlatList
+                                    data={commentData}
+                                    keyExtractor={(item:any) => item?._id.toString()}
+                                    renderItem={RenderCommentItem}
+                                    showsVerticalScrollIndicator={false}
+                                />
+                            </View>
+
+                        </View>
+
+                        <View style={{flexDirection: "row", alignItems:"center", marginBottom:20,marginTop:10, height:height*0.07, }}>
+                            <TextInputComp
+                                isTextArea={true}
+                                value={comment}
+                                onchangeValue={setComment}
+                                placeholder={t("add_comment")}
+                                styleContainer={{width: Dimensions.get("screen").width * 7.8 / 10,}}
+                                styleInputContainer={{ borderRadius: 15, }}
+                                styleInput={{
+                                    borderWidth:1,
+                                    borderColor:LIGHT_GRAY,
+                                    minHeight:50,
+                                    width: Dimensions.get("screen").width * 7.8 / 10,
+                                    paddingVertical: 13,
+                                    paddingHorizontal: 7,
+                                    backgroundColor: LIGHT_GRAY_2,
+                                    borderRadius: 15,
+                                }}
+                            />
+                            {comment.length > 0 ? (
+                                <TouchableOpacity onPress={() => handleComment()} style={{marginLeft:10}}>
+                                    <FontAwesome name="send" size={24} color="black" />
+                                </TouchableOpacity>
+                            ): null}
+                            
+                        </View> 
+                        
+                    </Actionsheet.Content>
+
+                </Actionsheet>
 
                 </View>
 
