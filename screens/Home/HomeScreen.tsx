@@ -158,11 +158,11 @@ export default function HomeScreen({ route }: any) {
     }, [searchValue])
 
     useEffect(() => {
+
       const getStoredData = async () => {
         try {
           const storedValues = await AsyncStorage.getItem(key);
           if (storedValues !== null) {
-            // If there are stored values, parse them and set them to state
             setPreviusSearchedData(JSON.parse(storedValues));
           }
         } catch (error) {
@@ -170,7 +170,11 @@ export default function HomeScreen({ route }: any) {
         }
       };
     
-      getStoredData(); // Call the function to retrieve data when component mounts
+      getStoredData(); 
+
+      return () => {
+        
+    };
     }, []);
     
     
@@ -288,12 +292,7 @@ export default function HomeScreen({ route }: any) {
                  
 
               </ScrollView>
-              
-              
             </View >
-              
-
-
           </Modal>
       )
     }
