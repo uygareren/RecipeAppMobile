@@ -122,12 +122,39 @@ export default function RecipeDetailScreen({route}:any){
         }
     } 
 
+    console.log("comments", commentData);
+    // console.log("data", data?.data);
+    // console.log("USER", userInfo);
+
     async function handleComment() {
+
+        const date = new Date();
+        const formattedDate = date.toISOString();
+
+        const comment_data = {
+            comment: comment,
+            createdAt: formattedDate,
+            postId: recipe_id,
+            userdata : {
+                userId: userInfo.userId,
+                user_image: null,
+                user_name: userInfo.name,
+                user_surname: userInfo.surname
+
+            }
+        }
+
+        console.log("commentdata", comment_data);
+
+        setCommentData((prev:any) => [...prev, comment_data]);
+
         commentMutation.mutate({
             userId: userInfo.userId,
             recipeId: recipe_id,
             comment:comment
-        })
+        });
+        setComment("");
+
     }
 
     const RenderCommentItem = ({item}:any) => {
@@ -150,7 +177,7 @@ export default function RecipeDetailScreen({route}:any){
             <View style={{width:"100%", paddingVertical:10 }}>
                 <FlatList
                     data={commentData.slice(0,3)}
-                    keyExtractor={(item:any) => item?._id.toString()}
+                    keyExtractor={(_, index) => index.toString()}
                     renderItem={RenderCommentItem}
                 />
 
@@ -286,7 +313,7 @@ export default function RecipeDetailScreen({route}:any){
 
                                 <FlatList
                                     data={commentData}
-                                    keyExtractor={(item:any) => item?._id.toString()}
+                                    keyExtractor={(_, index) => index.toString()}
                                     renderItem={RenderCommentItem}
                                     showsVerticalScrollIndicator={false}
                                 />
