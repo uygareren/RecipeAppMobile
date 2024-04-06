@@ -1,15 +1,12 @@
-import { Dimensions, Modal, Text, TouchableOpacity, View } from "react-native"
-import { useEffect } from "react";
-import { FontAwesome5 } from '@expo/vector-icons';
-import { LANG_STORE, LIGHT_GRAY, setMomentLanguage } from "../../utils/utils";
-import { Image } from "react-native";
-import { AntDesign, Ionicons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from "react-redux";
-import { RootStateType } from "../../store/store";
-import { userSliceActions } from "../../store/reducer/userSlice";
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Dimensions, Image, Modal, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import useI18n from "../../hooks/useI18n";
-import { useTranslation } from "react-i18next";
+import { userSliceActions } from "../../store/reducer/userSlice";
+import { RootStateType } from "../../store/store";
+import { LANG_STORE, setMomentLanguage } from "../../utils/utils";
+import { Divider } from "../Divider";
 
 
 type ChangeLanguageParams = {
@@ -55,7 +52,7 @@ export const ChangeLanguage = ({isModalVisible, setIsModalVisible}: ChangeLangua
                     <Text style={{fontSize: 18, fontWeight: "300"}}>Change Language</Text>
                 </View>
 
-                <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
+                <Divider height={1} width={width*0.8} style={{alignSelf:"center", marginTop:5}}/>
 
                 <View style={{marginTop:20}}>
                 {languages.map((v, i) => (

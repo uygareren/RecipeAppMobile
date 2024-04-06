@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { Loading } from "../components/Loading";
 import useI18n from "../hooks/useI18n";
 import { getFollowing } from "../services/ApiService";
 import { BLACK_COLOR, LIGHT_GRAY, WHITE } from "../utils/utils";
@@ -109,9 +110,7 @@ export default function FollowScreen({route}:any){
                 <View style={{height:1, backgroundColor:LIGHT_GRAY, marginTop:-10}}/>
 
                 {isLoading ? (
-                    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                        <Text>LOADING...</Text>
-                    </View>
+                    <Loading/>
                     ) : (
                     visible === 0 ? (
                         <FollowedComponent />

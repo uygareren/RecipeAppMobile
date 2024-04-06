@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { Divider } from "../../components/Divider";
 import { SettingsHeader } from "../../components/Header";
 import { Loading } from "../../components/Loading";
 import useI18n from "../../hooks/useI18n";
@@ -105,7 +106,7 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
 
             </View>
 
-            <View style={{height:1, backgroundColor:LIGHT_GRAY, width:"90%", alignSelf:"center"}}/>
+            <Divider height={1} width={"90%"} style={{alignSelf:"center",backgroundColor:LIGHT_GRAY}}/>
 
             {/* BIOGRAPHI AREA */}
             {userInfo?.biography ? (

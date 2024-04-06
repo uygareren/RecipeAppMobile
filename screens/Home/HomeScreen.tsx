@@ -6,6 +6,7 @@ import { Dimensions, FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
+import { Divider } from '../../components/Divider';
 import { SearchHeader } from '../../components/Header';
 import { TextInputComp } from '../../components/Inputs';
 import SkeletonComp from '../../components/Skeleton';
@@ -270,7 +271,7 @@ export default function HomeScreen({ route }: any) {
                 </TouchableOpacity>
 
               </View>
-              <View style={{height:1, backgroundColor:LIGHT_GRAY, width:"90%", alignSelf: "center", marginTop:4}}/>
+              <Divider height={1} width={"90%"} style={{alignSelf:'center', marginTop:4}}/>
               
               <ScrollView style={{}}>
                   

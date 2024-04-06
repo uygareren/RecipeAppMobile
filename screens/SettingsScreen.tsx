@@ -3,6 +3,7 @@ import { Actionsheet } from "native-base";
 import { useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
+import { Divider } from "../components/Divider";
 import { ChangeLanguage } from "../components/Modals/ChangeLanguageModal";
 import useI18n from "../hooks/useI18n";
 import { userSliceActions } from "../store/reducer/userSlice";
@@ -43,7 +44,7 @@ export default function SettingsScreen(){
 
             <View style={{marginTop: 50, alignItems: "center"}}>
                 <Text style={styles.titleText}>{t("settings")}</Text>
-                <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
+                <Divider height={1} width={width*8/10} style={{alignSelf:"center", marginTop:5}}/>
 
             </View>
 
@@ -81,7 +82,7 @@ export default function SettingsScreen(){
                                 <Text style={{...styles.logoutText, color:PINK, fontWeight:"400"}}>{t("logout_btn_txt")}</Text>
                             </TouchableOpacity>
 
-                            <View style={{height:1, width:"90%", backgroundColor: LIGHT_GRAY}}/>
+                            <Divider height={1} width={"90%"}/>
 
                             <TouchableOpacity style={{marginTop: 20}} onPress={() => setIsLogoutVisible(false)}>
                             <Text style={{...styles.logoutText, color:"black", fontWeight: "600"}}>{t("cancel")}</Text>

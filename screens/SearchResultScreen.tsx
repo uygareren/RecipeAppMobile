@@ -2,11 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMutation } from "react-query";
+import { Divider } from "../components/Divider";
 import { TopHeader } from "../components/Header";
 import { Loading } from "../components/Loading";
 import useI18n from "../hooks/useI18n";
 import { getRecipeByIngredients } from "../services/ApiService";
-import { LIGHT_GRAY, WHITE } from "../utils/utils";
+import { WHITE } from "../utils/utils";
 
 
 export default function SearchResultScreen({route}:any){
@@ -54,7 +55,7 @@ export default function SearchResultScreen({route}:any){
                 <View style={{alignItems:"center"}}>
                     <Text style={{fontWeight:"300", fontSize:16, marginBottom:10}}>{item?.recipeName}</Text>
                 </View>
-                <View style={{backgroundColor: LIGHT_GRAY, height:1, width: "90%", alignSelf: "center", marginTop: 5}}/>
+                <Divider height={1} width={"90%"}/>
 
             </View>
             
@@ -74,7 +75,7 @@ export default function SearchResultScreen({route}:any){
             <View style={{marginTop:50}}>
                 <View>
                     <TopHeader title={`Sonuç ${searchMutation?.data?.data?.data.length.toString() ?? ""}`}/>
-                    <View style={{backgroundColor: LIGHT_GRAY, height:1, width: "90%", alignSelf: "center", marginTop: 5}}/>
+                    <Divider height={1} width={"90%"} />
 
                 </View>
 

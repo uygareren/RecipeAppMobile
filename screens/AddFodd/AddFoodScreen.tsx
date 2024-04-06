@@ -4,11 +4,12 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { useQuery } from "react-query";
 import levelData from "../../assets/datas/level.json";
 import { ButtonComp } from "../../components/Button";
+import { Divider } from "../../components/Divider";
 import { TopHeader } from "../../components/Header";
 import { TextInputComp } from "../../components/Inputs";
 import useI18n from "../../hooks/useI18n";
 import { getAllIngredients, getAllMeasurements, getCategories, getInterestedData } from "../../services/ApiService";
-import { LIGHT_GRAY, LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
+import { LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
  
 
 export default function AddFoodScreen(){
@@ -173,7 +174,7 @@ export default function AddFoodScreen(){
 
             <View style={{marginTop:50}}>
                 <TopHeader title={t("add_recipe")}/>
-                <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
+                <Divider height={1} width={width*0.8} style={{alignSelf:"center", marginTop:5}}/>
             </View>
 
             <View style={{ marginTop:20, alignItems:"center", width:150, height:150, alignSelf:"center",}}>

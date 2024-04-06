@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Dimensions, FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useQuery } from "react-query";
 import { ButtonComp } from "../../components/Button";
+import { Divider } from '../../components/Divider';
 import { TopHeader } from "../../components/Header";
 import { TextInputComp } from "../../components/Inputs";
 import useI18n from "../../hooks/useI18n";
@@ -118,7 +119,7 @@ export default function SearchScreen({}) {
     <View style={styles.container}>
       <View style={{ marginTop: 50 }}>
         <TopHeader title={t("search_recipe_title")}/>
-        <View style={{backgroundColor:LIGHT_GRAY, height:1, width:width*8/10, alignSelf:"center", marginTop:5}}/>
+        <Divider height={1} width={width*0.8} style={{alignSelf:'center', marginTop:5}}/>
       </View>
 
       <View style={{ alignItems: "center" }}>

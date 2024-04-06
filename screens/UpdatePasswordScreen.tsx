@@ -3,16 +3,19 @@ import { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import { ButtonComp } from "../components/Button";
+import { Divider } from "../components/Divider";
 import { TopHeader } from "../components/Header";
 import { TextInputPassword } from "../components/Inputs";
 import useI18n from "../hooks/useI18n";
 import { AuthServices } from "../services/AuthServices";
-import { LIGHT_GRAY, PINK, WHITE } from "../utils/utils";
+import { PINK, WHITE } from "../utils/utils";
 
 
 export default function UpdatePasswordScreen({}){
 
     const {t} = useI18n("UpdatePasswordScreen");
+
+    const width = Dimensions.get("screen").width;
     
     const [currentPassword, setCurrentPassword] = useState("Uygareren111ue.");
     const [password, setPassword] = useState("parola111.");
@@ -56,8 +59,7 @@ export default function UpdatePasswordScreen({}){
 
             <View style={{backgroundColor:WHITE, paddingBottom: 60, borderBottomLeftRadius:25, borderBottomRightRadius:25, marginTop:50  }}>
                 <TopHeader title={t("update_password")}/>
-                <View style={{backgroundColor:LIGHT_GRAY, height:1, width:Dimensions.get("screen").width*8/10, alignSelf:"center", marginTop:5}}/>
-                
+                <Divider height={1} width={width*0.8} style={{alignSelf:"center", marginTop:5}}/>
 
                 <View>
                     <TextInputPassword value={currentPassword} onchangeValue={setCurrentPassword} placeholder={t("enter_current_password_placeholder")}
