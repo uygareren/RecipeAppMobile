@@ -22,7 +22,7 @@ export const LANG_STORE = "lang"
 export const DEFAULT_LANGUAGE = "tr";
 
 export const keyGenerator = (value:string,id:string) => {
-    return value+"_"+id
+    return value+"_"+id;
 }
 
 

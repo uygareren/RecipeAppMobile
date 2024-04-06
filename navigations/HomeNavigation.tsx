@@ -17,7 +17,7 @@ const Stack = createStackNavigator<TabStackParamList>();
 
 export default function HomeNavigation(){
     const userInfo = useSelector<RootStateType, any>((state) => state.user.userInfo)
-    const key = keyGenerator(userInfo?.userId)
+    const key = keyGenerator("interest",userInfo?.userId)
     let value :any;
     AsyncStorage.getItem(key).then((storedValue) => value = storedValue);
 
