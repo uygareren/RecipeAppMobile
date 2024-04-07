@@ -4,7 +4,7 @@ import { WHITE } from "../utils/utils"
 
 export const Loading = () => {
     return(
-        <View style={{flex:1,alignItems:"center", justifyContent:"center"}}>
+        <View style={styles.container}>
             <ActivityIndicator size={32}/>
         </View>
     )

@@ -35,7 +35,6 @@ export default function SearchResultScreen({route}:any){
 
     const RenderItem = ({item}:any) => {
 
-        console.log("item", item);
         return(
             <View style={{ paddingHorizontal:15, marginBottom:20}}>
                 {/* USER */}

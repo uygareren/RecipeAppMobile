@@ -1,28 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import i18n from "./utils/i18n"
-import { StyleSheet, Text, View } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import { TabNavigation } from './navigations/Tab';
-import { Provider } from 'react-redux';
-import { store } from './store/store';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import { NativeBaseProvider, extendTheme } from 'native-base';
-import SettingsScreen from './screens/SettingsScreen';
-import ProtectProvider from './provider/ProtectProvider';
 import { I18nextProvider } from 'react-i18next';
-import UpdatePasswordScreen from './screens/UpdatePasswordScreen';
-import FavoritesScreen from './screens/FavoritesScreen';
-import RecipeDetailScreen from './screens/RecipeDetailScreen';
-import CategoryScreen from './screens/CategoryScreen';
-import CategoryDetail from './screens/CategoryDetail';
-import OtherProfile from './screens/Account/OtherProfile';
+import { StyleSheet } from 'react-native';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import InterestSelectionScreen from './screens/InterestSelectionScreen';
+import { Provider } from 'react-redux';
+import { TabNavigation } from './navigations/Tab';
+import ProtectProvider from './provider/ProtectProvider';
+import OtherProfile from './screens/Account/OtherProfile';
+import CategoryDetail from './screens/CategoryDetail';
+import CategoryScreen from './screens/CategoryScreen';
 import FollowScreen from './screens/FollowScreen';
-import UpdateProfile from './screens/UpdateProfile';
-import UpdateProfileScreen from './screens/UpdateProfile';
+import InterestSelectionScreen from './screens/InterestSelectionScreen';
+import FavoritesScreen from './screens/LikedScreen';
+import RecipeDetailScreen from './screens/RecipeDetailScreen';
 import SearchResultScreen from './screens/SearchResultScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import UpdatePasswordScreen from './screens/UpdatePasswordScreen';
+import UpdateProfileScreen from './screens/UpdateProfile';
+import { store } from './store/store';
+import i18n from "./utils/i18n";
 
 
 type StackParamList = {

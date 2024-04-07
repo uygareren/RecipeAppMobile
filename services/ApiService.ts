@@ -132,4 +132,11 @@ export const getUserSearch = async(value:string) => {
     return response.data;
 }
 
+// LİKED RECİPES
+
+export const getLikedRecipes = async(user_id:string) => {
+    const response = await api.get(`${API}/liked-recipes?user_id=${user_id}`);
+    return response.data;
+}
+
 
