@@ -22,6 +22,8 @@ export default function InterestSelectionScreen() {
 
   const userInfo = useSelector((state:any) => state.user.userInfo);
 
+  console.log("userınfı", userInfo);
+
 
     const {isError, isSuccess, isLoading, data, error} = useQuery(
       ["get-all-world-cuisines"],

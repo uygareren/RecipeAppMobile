@@ -72,7 +72,6 @@ export default function HomeScreen({ route }: any) {
 
     function openModal(){
       setModalVisible(!modalVisible);
-      console.log(modalVisible)
     }
 
     function handleSwitch(){
@@ -93,7 +92,6 @@ export default function HomeScreen({ route }: any) {
         navigation.push("RecipeDetail", {id:item?.id})
       }else if(searchSelectVisible == 1){
         const value = `${item?.name} ${item?.surname}`;
-        console.log("valueee", value)
         handleSaveValues(value);
 
         if(item?.id == userId){
@@ -159,22 +157,27 @@ export default function HomeScreen({ route }: any) {
 
     useEffect(() => {
 
-      const getStoredData = async () => {
-        try {
-          const storedValues = await AsyncStorage.getItem(key);
-          if (storedValues !== null) {
-            setPreviusSearchedData(JSON.parse(storedValues));
-          }
-        } catch (error) {
-          console.error("Error retrieving data from AsyncStorage:", error);
-        }
-      };
+      // const getStoredData = async () => {
+      //   try {
+      //     const storedValues = await AsyncStorage.getItem(key);
+      //     if (storedValues !== null) {
+      //       setPreviusSearchedData(JSON.parse(storedValues));
+      //     }
+      //   } catch (error) {
+      //     console.error("Error retrieving data from AsyncStorage:", error);
+      //   }
+      // };
     
-      getStoredData(); 
+      // getStoredData(); 
 
-      return () => {
-        
-    };
+      const key = keyGenerator("interest",userInfo?.userId)
+      let value :any;
+      AsyncStorage.getItem(key).then((storedValue) => value = storedValue);
+
+      console.log("key", key);
+      console.log("value", value);
+
+      
     }, []);
     
     

@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -9,14 +10,14 @@ import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { login } from "../../services/AuthServices";
 import { userSliceActions } from "../../store/reducer/userSlice";
-import { MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
+import { keyGenerator, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 
 
 export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
 
     const {t} = useI18n("LoginScreen");
 
-    const [email, setEmail] = useState("uygarerenx@gmail.com");
+    const [email, setEmail] = useState("uygarerenxxxx@gmail.com");
     const [password, setPassword] = useState("Uygareren111ue.");
 
     const [loading, setLoading] = useState(false)
@@ -27,9 +28,9 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
     const loginMutation = useMutation({
         mutationKey:["login"],
         mutationFn: login,
-        onSuccess: (data) => {
-            dispatch(userSliceActions.setUser(data?.data?.data));
-            navigation.navigate("HomeNavigation");
+        onSuccess: async (data) => {
+            await dispatch(userSliceActions.setUser(data?.data?.data));
+            await handleNavigate(data?.data?.data?.userId);
         }
     })
 
@@ -39,6 +40,20 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
         setLoading(false)
 
     };
+
+    const handleNavigate = async (id:string) => {
+        const key = keyGenerator("interest",id)
+        let value :any;
+        await AsyncStorage.getItem(key).then((storedValue) => value = storedValue);
+
+        console.log("value?", value);
+
+        if(value == undefined){
+            navigation.navigate("InterestSelection");
+        }else{
+            navigation.navigate("HomeNavigation");
+        }
+    }
 
 
     return(
