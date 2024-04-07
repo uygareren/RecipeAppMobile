@@ -16,7 +16,9 @@ type SearchHeaderParams={
     placeholder: string,
     onPress : () => void,
     openModal : () => void,
-    id: any
+    id: any,
+    greeting: string,
+    title: string
 }
 
 type RegularHeaderParams={
@@ -40,7 +42,7 @@ export const TopHeader = ({title}:any) => {
     )
 }
 
-export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress, openModal, id }: SearchHeaderParams) => {
+export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress, openModal, id, greeting, title }: SearchHeaderParams) => {
 
 
 

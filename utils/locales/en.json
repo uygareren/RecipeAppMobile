@@ -1,10 +1,140 @@
 {
     "SettingsScreen": {
-    "password_update_btn_txt": "Parola Güncelle",
-    "profile_update_btn_txt": "Profil Güncelle",
-    "change_language_btn_txt": "Dil Değiştirme",
-    "logout_btn_txt": "Çıkış Yap"
-}
+        "settings": "Settings",
+        "favorite": "Favorites",
+        "password_update_btn_txt": "Update Password",
+        "profile_update_btn_txt": "Update Profile",
+        "change_language_btn_txt": "Change Language",
+        "logout_btn_txt": "Logout",
+        "cancel": "Cancel"
+    },
+    "LoginScreen": {
+        "sign_in": "Sign In",
+        "email": "E-Mail",
+        "password": "Password",
+        "btn_title": "Sign In",
+        "email_placeholder": "Enter E-Mail",
+        "password_placeholder": "Enter Password",
+        "no_account": "Don't Have an Account",
+        "get_register": "Register"
+    },
+    "RegisterScreen": {
+        "sign_up": "Sign Up",
+        "name": "Name",
+        "surname": "Surname",
+        "email": "E-Mail",
+        "password": "Password",
+        "confirm_password": "Confirm Password",
 
+        "name_placeholder": "Enter Name",
+        "surname_placeholder": "Enter Surname",
+        "email_placeholder": "Enter Email",
+        "password_placeholder": "Enter Password",
+        "confirm_password_placeholder": "Confirm Password",
 
+        "register_btn": "Register",
+
+        "already_have_account": "Already Have an Account!",
+        "sign_in": "Sign In"
+    },
+    "OtherProfile": {
+        "keep_following": "Following",
+        "follow": "Follow",
+        "recipes": "Recipes",
+        "followings": "Following",
+        "followers": "Followers"
+    },
+    "ProfileScreen": {
+        "recipes": "Recipes",
+        "followings": "Following",
+        "followers": "Followers"
+    },
+    "AddFoodScreen": {
+        "add_recipe": "Add Recipe",
+
+        "recipe_image": "Add Photo",
+        "recipe_name": "Recipe Name",
+        "search": "Search",
+        "select_ingredient": "Select Ingredient",
+        "select_quantity": "Select Quantity",
+        "select_world_cuisines": "Select Cuisine",
+        "select_category": "Select Category",
+        "select_level": "Select Cooking Level",
+        
+        "enter_quantity": "Enter Quantity",
+        "enter_calory": "Enter Calory",
+        "enter_cooking_time": "Enter Cooking Time",
+
+        "btn_save_ingredients": "Save Ingredients",
+
+        "label_recipe_desc": "Recipe Description",
+
+        "recipe_name_placeholder": "Enter Recipe Name",
+        "recipe_desc_placeholder": "Enter Recipe Description",
+
+        "btn_save_recipe": "Save Recipe"
+        
+    },
+    "HomeScreen": {
+        "categories": "Categories",
+        "popular_foods": "Popular Recipes",
+        "greeting": "Hello",
+        "title": "What would you like to cook today?"
+    },
+    "SearchScreen": {
+        "search_recipe_title": "Search Recipe",
+        "select_ingredient": "Select Ingredient",
+        "save_ingredient": "Save Ingredient",
+        "search": "Search"
+
+    },
+    "CategoryDetail": {
+        "no_recipe": "No Recipe Available"
+    },
+    "CategoryScreen": {
+        "category": "Category"
+    },
+    "FollowScreen": {
+        "following": "Following",
+        "follower": "Follower"
+    },
+    "InterestSelectionScreen": {
+        "select_interest": "Select Interests",
+        "question_interest": "Which cuisines are you interested in?"
+    },
+    "RecipeDetailScreen": {
+        "add_comment": "Add Comment",
+        "like": "Like",
+        "likes": "Likes",
+        "ingredients": "Ingredients",
+        "instructions": "Instructions",
+        "comments": "Comments"
+
+    },
+    "SearchResultScreen": {
+
+    },
+    "UpdatePasswordScreen": {
+        "update_password": "Update Password",
+        "enter_current_password": "Current Password",
+        "enter_new_password": "New Password",
+        "enter_new_confirm_password": "Confirm New Password",
+
+        "enter_current_password_placeholder": "Enter Current Password",
+        "enter_new_password_placeholder": "Enter New Password",
+        "enter_new_confirm_password_placeholder": "Confirm New Password",
+
+        "update_btn": "Update Password"
+
+    },
+    "UpdateProfileScreen": {
+        "name": "Name",
+        "surname": "Surname",
+        "email": "E-Mail",
+        "phone": "Phone Number",
+        "country": "Country",
+        "city": "City",
+        "biography": "Biography",
+        "save": "Save"
+    }
 }

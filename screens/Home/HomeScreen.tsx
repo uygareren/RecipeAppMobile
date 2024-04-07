@@ -20,7 +20,6 @@ export default function HomeScreen({ route }: any) {
     const {t} = useI18n("HomeScreen");
 
     const {width, height} = Dimensions.get('screen');
-    
 
     const [text, setText] = useState("");
 
@@ -308,7 +307,7 @@ export default function HomeScreen({ route }: any) {
       <SafeAreaView style={styles.container}>
         <View style={{ marginTop: 50 }}>
           <SearchHeader openModal={openModal} value={text} onChangeValue={setText} placeholder="Search Recipes..." name={userInfo.name ?? ""}
-          onPress={() => navigation.navigate("Profile")} id={userId}/>
+          onPress={() => navigation.navigate("Profile")} id={userId} greeting={t("greeting")} title={t("title")}/>
         </View>
 
         <View style={{ marginTop: 20, marginLeft: 20, }}>

@@ -78,7 +78,9 @@
     },
     "HomeScreen":{
         "categories":"Kategoriler",
-        "popular_foods":"Popüler Tarifler"
+        "popular_foods":"Popüler Tarifler",
+        "greeting": "Merhaba",
+        "title": "Bugün ne pişirmek istersiniz?"
     },
     "SearchScreen":{
         "search_recipe_title":"Tarif Ara",
