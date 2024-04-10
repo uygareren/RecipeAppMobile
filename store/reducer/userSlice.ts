@@ -8,6 +8,7 @@ const initialState = {
         token: null,
         id: null
     } as any,
+    image:"",
     lang: "tr"
 }
 
@@ -18,6 +19,10 @@ const userSlice = createSlice({
         setUser: (state, action: PayloadAction<any>) => {
             state.userInfo = action.payload;
         },
+        setUserImage: (state, action: PayloadAction<any>) => {
+            state.image = action.payload;
+        },
+        
         updateUser: (state, action: PayloadAction<any>) => {
             state.userInfo = {...state.userInfo, ...action.payload};
         },

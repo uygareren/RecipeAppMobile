@@ -1,7 +1,7 @@
 import { api } from "./api";
 
 const API = process.env.API;
-console.log("apiii: ", API);
+console.log("apiiii: ", API);
 
 
 // INTEREST QUERİES
@@ -63,6 +63,14 @@ export const getRecipeByUserId = async(user_id:any) => {
 
 export const updateUser = async(payload:UpdateUserType) => {
     const response = await api.post(`${API}/update_user`, payload);
+    return response.data;
+}
+
+export const updateProfileImage = async(payload:any) => {
+    const response = await api.post(`${API}/update_profile_image`, payload, {
+        headers: {Accept: 'application/json',
+         "Content-Type": "multipart/form-data"}
+    });
     return response.data;
 }
 
