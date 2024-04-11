@@ -20,7 +20,7 @@ const userSlice = createSlice({
             state.userInfo = action.payload;
         },
         setUserImage: (state, action: PayloadAction<any>) => {
-            state.image = action.payload;
+            state.userInfo = {...state.userInfo, image:action.payload};
         },
         
         updateUser: (state, action: PayloadAction<any>) => {

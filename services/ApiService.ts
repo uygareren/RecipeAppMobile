@@ -66,13 +66,19 @@ export const updateUser = async(payload:UpdateUserType) => {
     return response.data;
 }
 
-export const updateProfileImage = async(payload:any) => {
-    const response = await api.post(`${API}/update_profile_image`, payload, {
-        headers: {Accept: 'application/json',
-         "Content-Type": "multipart/form-data"}
+export const updateProfileImage = async (user_id: string, payload: any) => {
+    console.log("id", user_id);
+    console.log(`${API}/update_profile_image/${user_id}`);
+  
+    const response = await api.post(`${API}/update_profile_image/${user_id}`, payload, {
+      headers: {
+        Accept: 'application/json',
+        "Content-Type": "multipart/form-data"
+      }
     });
     return response.data;
-}
+  }
+  
 
 
 // INGREDİENTS
@@ -86,6 +92,26 @@ export const getRecipeByIngredients = async(payload:any) => {
 
     const response = await api.post(`${API}/recipe-by-ingredients`, payload);
 
+    return response.data;
+}
+
+export const postRecipe = async(payload:any) => {
+    const response = await api.post(`${API}/post-recipe`, payload);
+    return response.data;
+}
+
+export const postRecipeImage = async(recipe_id:string,payload:any) => {
+    console.log("recipe id : ", recipe_id);
+    console.log(`${API}/post-recipe-image/${recipe_id}`);
+
+    const response = await api.post(`${API}/post-recipe-image/${recipe_id}`, payload, {
+        headers: {
+          Accept: 'application/json',
+          "Content-Type": "multipart/form-data"
+        }
+      }
+        
+    );
     return response.data;
 }
 

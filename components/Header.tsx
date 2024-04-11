@@ -2,6 +2,8 @@ import { AntDesign, EvilIcons, Feather, Ionicons, MaterialIcons } from '@expo/ve
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useSelector } from 'react-redux';
+import { RootStateType } from '../store/store';
 import { BLACK_COLOR, LIGHT_GRAY_2 } from "../utils/utils";
 import { Divider } from './Divider';
 
@@ -44,8 +46,8 @@ export const TopHeader = ({title}:any) => {
 
 export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress, openModal, id, greeting, title }: SearchHeaderParams) => {
 
-
-
+    const user_image = useSelector((state:RootStateType) => state.user.userInfo.image);
+    
     return (
       <View style={{ ...styles.topHeaderContainer}}>
         {id != null ? (
@@ -60,8 +62,14 @@ export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress,
             name.length > 0 ? (
               <TouchableOpacity onPress={onPress} style={{width:Dimensions.get("screen").width/9, height:Dimensions.get("screen").width/9, borderRadius:180, borderWidth:1,
               borderColor:"black", alignItems:"center", justifyContent:"center" }}>
-                  <Image style={{width:Dimensions.get("screen").width/10, height:Dimensions.get("screen").width/10, borderRadius:180,  }}
+                  {user_image != undefined ? (
+                    <Image style={{width:Dimensions.get("screen").width/10, height:Dimensions.get("screen").width/10, borderRadius:180,  }}
+                  source={{uri: `http://192.168.1.29:3000/${user_image}`}}/>
+                  ) : (
+                    <Image style={{width:Dimensions.get("screen").width/10, height:Dimensions.get("screen").width/10, borderRadius:180,  }}
                   source={require("../assets/images/default_profile.jpg")}/>
+                  )}
+                  
               </TouchableOpacity>
             ):null
           }

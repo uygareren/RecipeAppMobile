@@ -9,7 +9,7 @@ import { keyGenerator } from "../utils/utils";
 type TabStackParamList = {
    Home: any,
    InterestSelection:undefined,
-   AddFoodScreen:undefined
+   AddFoodScreenOne:undefined
 }
 export type TabAccountScreenProps<T extends keyof TabStackParamList> = StackScreenProps<TabStackParamList, T, T>;
 const Stack = createStackNavigator<TabStackParamList>();

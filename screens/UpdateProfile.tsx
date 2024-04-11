@@ -45,50 +45,69 @@ export default function UpdateProfileScreen(){
         }
     });
 
-    const updateUserProfileMutation = useMutation({
-        mutationKey: ["update_profile_image"],
-        mutationFn: updateProfileImage,
-        onSuccess(){
-            
+    // const {updateUserProfileMutation} = useMutation(() => updateProfileImage, {
+    //     onSuccess: (data: any) => {
+    //       console.log("Image uploaded successfully", data);
+    //       dispatch(userSliceActions.setUserImage(image)); // Assuming `image` is the new image URI
+    //       setLoadingImage(false);
+    //     },
+    //   });
+
+    const mutateAsync = useMutation(
+        ["update_profile_image"],
+        async (params: { userId: string, formData: FormData }) => {
+          try {
+            const result = await updateProfileImage(params.userId, params.formData);
+            return result;
+          } catch (error) {
+            throw new Error(`Failed to update profile image: ${error}`);
+          }
+        },
+        {
+          onSuccess: (data) => {
+            console.log("data", data);
+            if(data?.success){
+                dispatch(userSliceActions.setUserImage(data?.data));
+            }
+          }
         }
-      });
+      );
+      
+      
+    console.log("id", user?.userInfo?.userId);
       
 
     async function updatePhoto() {
-            let resultImage: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 1,
-            });
+        let resultImage: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            base64:true,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
 
-            if (!resultImage.canceled) {
-                let localUri = resultImage.assets[0].uri;
-                let filename = localUri.split('/').pop();
+        if (!resultImage.canceled) {
+            let localUri = resultImage.assets[0].uri;
+            let filename = localUri.split('/').pop();
 
 
-                let match = /\.(\w+)$/.exec(filename as string);
-                let type = match ? `image/${match[1]}` : `image`;
+            let match = /\.(\w+)$/.exec(filename as string);
+            let type = match ? `image/${match[1]}` : `image`;
 
-                const formData = new FormData();
-                
-                formData.append('image', {
-                    uri: localUri,
-                    name: filename,
-                    type: type
-                } as any);
-                                
-                updateUserProfileMutation.mutate(formData);
+            const formData = new FormData();
+            
+            formData.append('image', {
+                uri: localUri,
+                name: filename,
+                type: type
+            } as any);
+                            
+            mutateAsync.mutate({ userId: user?.userInfo?.userId, formData: formData });
 
-                dispatch(userSliceActions.setUserImage(resultImage.assets[0].uri))
-                setImage(resultImage.assets[0].uri);
-                setLoadingImage(false);
+            setImage(resultImage.assets[0].uri);
+            setLoadingImage(false);
 
-                
-            }
-       
-        
-
+        }
     }
 
     async function handleSave() {
@@ -126,7 +145,7 @@ export default function UpdateProfileScreen(){
 
             <View style={{ marginTop:50, alignItems:"center", width:150, height:150, alignSelf:"center",}}>
                 {image != null ? (
-                    <Image source={{uri: image}} style={{width:150, height:150, borderRadius:15}}/>
+                    <Image source={{uri: `http://192.168.1.29:3000/${image}`}} style={{width:150, height:150, borderRadius:15}}/>
                 ) : (
                     <Image source={require("../assets/images/default_profile.jpg")} style={{width:150, height:150, borderRadius:15}}/>
 

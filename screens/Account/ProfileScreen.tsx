@@ -22,6 +22,7 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
 
     const userInfo = useSelector((state:any) => state.user.userInfo);
 
+    console.log("userınof", userInfo);
     const userId = userInfo?.userId
 
 
@@ -73,8 +74,15 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
             <View>
                 <View style={{borderWidth:3, borderColor:BLACK_COLOR,marginTop:30, width:width*2.7/10, height:width*2.7/10, alignSelf:"center",
             borderRadius:180, alignItems:"center", justifyContent:"center"}}>
+                    
+                    {userInfo?.image != null ? (
+                    <Image source={{uri: `http://192.168.1.29:3000/${userInfo?.image}`}} style={{width: width*2.5/10, height:width*2.5    /10, 
+                    borderRadius:180}}/>
+                ) : (
                     <Image source={require("../../assets/images/default_profile.jpg")} style={{width: width*2.5/10, height:width*2.5    /10, 
                     borderRadius:180}}/>
+
+                )}
                 </View>
 
                 {/* NAME, CİTY AREA  */}

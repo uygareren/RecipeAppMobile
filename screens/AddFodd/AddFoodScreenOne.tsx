@@ -1,15 +1,17 @@
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import levelData from "../../assets/datas/level.json";
 import { ButtonComp } from "../../components/Button";
 import { Divider } from "../../components/Divider";
 import { TopHeader } from "../../components/Header";
 import { TextInputComp } from "../../components/Inputs";
 import useI18n from "../../hooks/useI18n";
-import { getAllIngredients, getAllMeasurements, getCategories, getInterestedData } from "../../services/ApiService";
+import { getAllIngredients, getAllMeasurements, getCategories, getInterestedData, postRecipe } from "../../services/ApiService";
 import { LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
+
  
 
 export default function AddFoodScreen(){
@@ -17,6 +19,8 @@ export default function AddFoodScreen(){
   const {t} = useI18n("AddFoodScreen");
 
   const {width, height} = Dimensions.get("screen");
+
+  const navigation = useNavigation<any>();
 
   const [recipeName, setRecipeName] = useState("");
   const [recipeDescription, setRecipeDescription] = useState("");
@@ -35,7 +39,24 @@ export default function AddFoodScreen(){
   const [selectedCategory, setSelectedCategory] = useState("")
   const [selectedLevel, setSelectedLevel] = useState("")
 
+
   const [savedComponents, setSavedComponents] = useState<any>([{}])
+
+
+  const { mutate: postRecipeMutation, isLoading:buttonLoading } = useMutation(
+    "post-recipe",
+    postRecipe,
+    {
+      onSuccess: (data) => {
+        console.log("dataa", data);
+        if(data?.success){
+          navigation.push("AddFoodScreenTwo", {id:data?._id})
+        }
+      },
+    }
+  );
+
+  
 
   const {data, isLoading} = useQuery({
     queryKey: ["get_all_ingredients"],
@@ -112,14 +133,10 @@ export default function AddFoodScreen(){
     
   }
 
-  const updateRecipeImage = () => {
-
-  }
-
   async function handlePostRecipe(){
     const payload = {
       recipeName: recipeName,
-      image: null,
+      image: "Base64_encoded_image_data",
       ingredients: savedComponents.length > 1 ? savedComponents.slice(1).map((item:any) => item?.componentId) : [],
       ingredients_with_measurements: 
       savedComponents.length > 1 ? 
@@ -137,9 +154,11 @@ export default function AddFoodScreen(){
       level: levelData.filter(item => item.key == selectedLevel)[0].value,
       cooking_time: enterCookingTime
     }
+
+    postRecipeMutation(payload);
     
 
-    console.log("payloadd", payload)
+    console.log("payloadd", payload);
 
   }
 
@@ -148,6 +167,8 @@ export default function AddFoodScreen(){
     if (index === 0) {
       return null;
     }
+
+  
   
     return (
           <Pressable style={{paddingVertical:12, paddingHorizontal:8, alignSelf:"center", minWidth:width*0.3,
@@ -176,18 +197,7 @@ export default function AddFoodScreen(){
                 <TopHeader title={t("add_recipe")}/>
                 <Divider height={1} width={width*0.8} style={{alignSelf:"center", marginTop:5}}/>
             </View>
-
-            <View style={{ marginTop:20, alignItems:"center", width:150, height:150, alignSelf:"center",}}>
-                <Image source={require("../../assets/images/default_profile.jpg")} 
-                style={{width:150, height:150, borderRadius:15}}/>
-            </View>
-
-                
-            <ButtonComp title={t("recipe_image")} onPress={updateRecipeImage} styleContainer={{marginTop:20,paddingVertical:10, 
-            width:150, alignSelf:"center", alignItems:"center", borderRadius:12, backgroundColor:MAIN_COLOR}} styleText={{fontWeight:"600"
-            }}/>
-
-            
+    
       <View style={{ alignItems: "center", paddingHorizontal:20}}>
         
         <TextInputComp styleInputContainer={{
@@ -353,6 +363,7 @@ export default function AddFoodScreen(){
           backgroundColor: "black",
         }}
         styleText={{ color: MAIN_COLOR, fontWeight: "bold", fontSize: 16 }}
+        loading={buttonLoading}
       />
 
         </ScrollView>
