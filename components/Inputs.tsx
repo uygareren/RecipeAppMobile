@@ -37,7 +37,7 @@ export const TextInputComp = ({ value, onchangeValue, requiredError = false, lab
     return (
         <FormControl style={{ ...styleContainer }}>
             
-            <FormControl.Label style={{marginLeft: 20}}>{label}</FormControl.Label>
+            <FormControl.Label style={{marginLeft: 0}}>{label}</FormControl.Label>
             
             <View style={{ ...styleInputContainer }}>
                 {isTextArea ? (

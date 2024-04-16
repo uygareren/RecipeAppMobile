@@ -1,9 +1,11 @@
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StackScreenProps } from '@react-navigation/stack';
+import { registerRootComponent } from 'expo';
 import { NativeBaseProvider, extendTheme } from 'native-base';
 import { I18nextProvider } from 'react-i18next';
-import { StyleSheet } from 'react-native';
+import { AppRegistry, Platform, StyleSheet } from 'react-native';
+import "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { TabNavigation } from './navigations/Tab';
@@ -21,6 +23,7 @@ import UpdatePasswordScreen from './screens/UpdatePasswordScreen';
 import UpdateProfileScreen from './screens/UpdateProfile';
 import { store } from './store/store';
 import i18n from "./utils/i18n";
+
 
 
 type StackParamList = {
@@ -92,6 +95,11 @@ export default function App() {
     </QueryClientProvider>
     
   );
+}
+if (Platform.OS == "android") {
+  registerRootComponent(App);
+} else {
+  AppRegistry.registerComponent("recipeapp", () => App);
 }
 
 const styles = StyleSheet.create({

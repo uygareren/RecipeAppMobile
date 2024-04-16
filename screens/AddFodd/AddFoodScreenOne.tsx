@@ -209,7 +209,7 @@ export default function AddFoodScreen(){
             paddingHorizontal: 5,
             width: width * 8 / 10,
           }}
-          styleContainer={{ alignItems: "center", marginTop: 25, width:"100%" }}
+          styleContainer={{ alignItems: "center", marginTop: 25, width:"100%", borderWidth:1 }}
 
            label={t("recipe_name")} placeholder={t("recipe_name_placeholder")}  value={recipeName} onchangeValue={setRecipeName}/>
 

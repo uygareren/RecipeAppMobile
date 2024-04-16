@@ -1,9 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
-import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-import { Dimensions, Image, SafeAreaView, View } from "react-native";
+import { Dimensions, Image, SafeAreaView, TouchableOpacity, View } from "react-native";
 import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/Button";
 import useI18n from "../../hooks/useI18n";
