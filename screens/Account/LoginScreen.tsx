@@ -1,11 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { useToast } from "native-base";
 import { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { ButtonComp } from "../../components/Button";
 import { TextInputComp, TextInputPassword } from "../../components/Inputs";
+import { ToastError } from "../../components/Toast";
 import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { login } from "../../services/AuthServices";
@@ -16,6 +18,8 @@ import { keyGenerator, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
 
     const {t} = useI18n("LoginScreen");
+
+    const toast = useToast();
 
     const [email, setEmail] = useState("uygarerenx@gmail.com");
     const [password, setPassword] = useState("Uygareren111ue.");
@@ -29,8 +33,12 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
         mutationKey:["login"],
         mutationFn: login,
         onSuccess: async (data) => {
-            await dispatch(userSliceActions.setUser(data?.data?.data));
+            dispatch(userSliceActions.setUser(data?.data?.data));
             await handleNavigate(data?.data?.data?.userId);
+            console.log("data",data);
+        },
+        onError: () => {
+            toast.show(ToastError("E-mail veya Parola Hatalı!"));
         }
     })
 
@@ -69,9 +77,9 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
 
                 <View>
                     <TextInputComp value={email} onchangeValue={setEmail} label={t("email")} placeholder={t("email_placeholder")} 
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                     <TextInputPassword value={password} onchangeValue={setPassword} label={t("password")} placeholder={t("password_placeholder")}
-                    styleContainer={styles.TextInputPassword} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputPassword} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                 </View>
 
                 <View>
@@ -99,28 +107,30 @@ const styles = StyleSheet.create({
         backgroundColor: WHITE,
     },
     body_container:{
-        height: "70%",
         justifyContent: "center",
         backgroundColor: MAIN_COLOR,
         marginTop: 50,
+        paddingVertical:50,
         borderBottomLeftRadius: 40,
         borderBottomRightRadius: 40
     },
     TextInputComp:{
         marginVertical:10,
+        paddingHorizontal:20,
         marginTop: 20
+    },
+    TextInputPassword:{
+        paddingHorizontal:20,
+        marginVertical:10,
+        marginTop: 20,
     },
     InputContainer:{
         flexDirection: "row",
         backgroundColor: WHITE,
-        width: "90%",
+        width: Dimensions.get('screen').width*0.89,
         alignSelf: "center",
         borderRadius: 19
 
-    },
-    TextInputPassword:{
-        marginVertical:10,
-        marginTop: 20,
     },
     TextInput:{
         paddingVertical: 10,

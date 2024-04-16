@@ -12,6 +12,7 @@ type TextInputParams = {
     styleContainer?: ViewStyle,
     styleInputContainer?: ViewStyle,
     styleInput?: TextStyle,
+    styleLabel?: TextStyle,
     isTextArea?: boolean,
     type?: string; // Change the type to string
 }
@@ -26,18 +27,19 @@ type TextInputPasswordParams = {
     styleContainer?: ViewStyle,
     styleInputContainer?: ViewStyle,
     styleInput?: TextStyle,
+    styleLabel?: TextStyle,
     isTextArea?: string,
 }
 
 
 export const TextInputComp = ({ value, onchangeValue, requiredError = false, label, placeholder = "", styleContainer, 
-    styleInputContainer, styleInput, isTextArea, type="default" }: TextInputParams) => {
+    styleInputContainer, styleInput, styleLabel, isTextArea, type="default" }: TextInputParams) => {
     const theme = useTheme();
 
     return (
         <FormControl style={{ ...styleContainer }}>
             
-            <FormControl.Label style={{marginLeft: 0}}>{label}</FormControl.Label>
+            <FormControl.Label style={{...styleLabel}}>{label}</FormControl.Label>
             
             <View style={{ ...styleInputContainer }}>
                 {isTextArea ? (
@@ -73,6 +75,7 @@ export const TextInputPassword = ({
     placeholder="", 
     styleContainer,
     styleInputContainer, 
+    styleLabel,
     styleInput}:TextInputPasswordParams) => {
 
         const theme = useTheme();
@@ -80,7 +83,7 @@ export const TextInputPassword = ({
 
         return(
             <FormControl style={{...styleContainer}}>
-                <FormControl.Label style={{marginLeft: 20}}>{label}</FormControl.Label>
+                <FormControl.Label style={{...styleLabel}}>{label}</FormControl.Label>
                 <View style={{...styleInputContainer}}>
                     <TextInput value={value} onChangeText={onchangeValue} placeholder={placeholder} secureTextEntry={isShow} style={{...styleInput}}/>
 
