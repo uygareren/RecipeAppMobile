@@ -1,7 +1,7 @@
 import { AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from "react";
 import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { GRAY, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeFromNow } from "../utils/utils";
+import { GRAY, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeFromNow, handleNavigation } from "../utils/utils";
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetScrollView } from '@gorhom/bottom-sheet';
@@ -56,12 +56,12 @@ export default function RecipeDetailScreen({route}:any){
         ["recipe-detail"],
         () => getRecipeById(recipe_id),
         {onSuccess(data){
+            console.log("data",data)
             setCommentData(data?.data?.commentData);
         }}
     );
 
 
-    console.log("commnetssss", commentData);
     
     const ingredientsData = useQuery({
         queryKey: ["get_all_ingredients"],
@@ -171,15 +171,32 @@ export default function RecipeDetailScreen({route}:any){
 
     const RenderCommentItem = ({item}:any) => {
 
+        console.log("itemm", item?.userdata?.userId);
+        console.log(userInfo.userId)
+
         return(
             <View style={{marginVertical:4, paddingVertical:4,}}>
-                <View style={{flexDirection:"row"}}>
-                    <Pressable onPress={() => navigation.navigate("OtherProfile", {id:item?.user?.userId})}>
-                        <Text style={{fontSize:11, fontWeight:"700"}}>{item?.userdata?.user_name} {item?.userdata?.user_surname}</Text>
+                <View style={{flexDirection:"row",alignItems:'center'}}>
+                    <Pressable onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userInfo?.userId, id_2: item?.userdata?.userId})}
+                     style={{flexDirection:'row', 
+                         alignItems:'center', justifyContent:'center'
+                    }}>
+                        <View style={{width:width*0.1, height:width*0.1, borderRadius:360, borderWidth:1, borderColor:GRAY,}}>
+                        {item?.userdata?.user_image != null ? (
+                            <Image source={{uri: `http://192.168.235.107:3000/images/${item?.userdata?.user_image}`}} style={{width:width*0.09, 
+                            height:width*0.09, borderRadius:180, resizeMode:'contain'}}/>                            
+                        ): (
+                            <Image source={require("../assets/images/default_profile.jpg")}/>
+
+                        )}
+                        </View>
+                        
+                        
+                        <Text style={{fontSize:11, fontWeight:"700", marginLeft:10}}>{item?.userdata?.user_name} {item?.userdata?.user_surname}</Text>
                     </Pressable>
                     <Text style={{fontSize:12, color:GRAY, marginLeft:7, fontWeight:"600"}}>{getTimeFromNow(item?.createdAt)}</Text>
                 </View>
-                <Text style={{fontSize:13,marginTop:3}}>{item?.comment}</Text>
+                <Text style={{fontSize:13,marginTop:3, marginLeft:width*0.1+10}}>{item?.comment}</Text>
             </View>
         )
     }
@@ -193,8 +210,15 @@ export default function RecipeDetailScreen({route}:any){
                     renderItem={RenderCommentItem}
                 />
 
+                
                 <TouchableOpacity style={{marginTop:10}} onPress={handlePresentModal}>
-                    <Text style={{fontWeight:'600', fontSize:13, color:GRAY}}>{`${commentData.length} Yorumun Hepsini Gör`}</Text>
+                    {commentData.length == 0 ? (
+                        <Text style={{fontWeight:'600', fontSize:13, color:GRAY}}>Hiç Yorum Yok</Text>
+
+                    ) : (
+                        <Text style={{fontWeight:'600', fontSize:13, color:GRAY}}>{`${commentData.length} Yorumun Hepsini Gör`}</Text>
+
+                    )}
                 </TouchableOpacity>
     
                 {/* <View style={{marginTop: 10,flexDirection: "row", alignItems:"center", }}>
@@ -239,7 +263,7 @@ export default function RecipeDetailScreen({route}:any){
                 <ScrollView style={styles.container} >
 
                     <View style={{ marginTop: 40 }}>
-                        <Image source={require("../assets/images/default_recipe.jpeg")} style={{ width: "100%", height: height * 4 / 10, resizeMode: "cover" }} />
+                        <Image source={{uri:`http://192.168.235.107:3000/recipes/${data?.data?.recipe?.image}`}} style={{ width: "100%", height: height * 4 / 10, resizeMode: "cover" }} />
                         <Pressable style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, flexDirection:"row",justifyContent: 'space-between', 
                         alignItems: 'flex-start', paddingHorizontal: 16 }}>
                             <TouchableOpacity onPress={() => navigation.goBack()} style={{backgroundColor:LIGHT_GRAY_2, marginTop:10, borderRadius:180, paddingHorizontal:4, paddingVertical:4}}>
