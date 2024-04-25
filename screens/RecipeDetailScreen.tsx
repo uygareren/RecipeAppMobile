@@ -21,6 +21,8 @@ import { getAllIngredients, getAllMeasurements, getRecipeById, postComment, post
 
 export default function RecipeDetailScreen({route}:any){
 
+    const API = process.env.API;
+
     const {t} = useI18n("RecipeDetailScreen");
 
     const navigation = useNavigation<any>(); 
@@ -171,22 +173,21 @@ export default function RecipeDetailScreen({route}:any){
 
     const RenderCommentItem = ({item}:any) => {
 
-        console.log("itemm", item?.userdata?.userId);
-        console.log(userInfo.userId)
 
         return(
-            <View style={{marginVertical:4, paddingVertical:4,}}>
+            <View style={{marginVertical:4, paddingVertical:4, }}>
                 <View style={{flexDirection:"row",alignItems:'center'}}>
                     <Pressable onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userInfo?.userId, id_2: item?.userdata?.userId})}
                      style={{flexDirection:'row', 
-                         alignItems:'center', justifyContent:'center'
+                         alignItems:'center', justifyContent:'center',
                     }}>
-                        <View style={{width:width*0.1, height:width*0.1, borderRadius:360, borderWidth:1, borderColor:GRAY,}}>
+                        <View style={{width:width*0.1, height:width*0.1, borderRadius:360, borderWidth:1, borderColor:GRAY, alignItems:'center', justifyContent:'center'}}>
                         {item?.userdata?.user_image != null ? (
-                            <Image source={{uri: `http://192.168.235.107:3000/images/${item?.userdata?.user_image}`}} style={{width:width*0.09, 
-                            height:width*0.09, borderRadius:180, resizeMode:'contain'}}/>                            
+                            <Image source={{uri: `${API}/images/${item?.userdata?.user_image}`}} style={{width:width*0.09, 
+                            height:width*0.09, borderRadius:360, resizeMode:'cover'}}/>                            
                         ): (
-                            <Image source={require("../assets/images/default_profile.jpg")}/>
+                            <Image source={require("../assets/images/default_profile.jpg")} style={{width:width*0.09, 
+                                height:width*0.09, borderRadius:360, resizeMode:'cover'}}/>     
 
                         )}
                         </View>
@@ -263,7 +264,7 @@ export default function RecipeDetailScreen({route}:any){
                 <ScrollView style={styles.container} >
 
                     <View style={{ marginTop: 40 }}>
-                        <Image source={{uri:`http://192.168.235.107:3000/recipes/${data?.data?.recipe?.image}`}} style={{ width: "100%", height: height * 4 / 10, resizeMode: "cover" }} />
+                        <Image source={{uri:`${API}/recipes/${data?.data?.recipe?.image}`}} style={{ width: "100%", height: height * 4 / 10, resizeMode: "contain" }} />
                         <Pressable style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, flexDirection:"row",justifyContent: 'space-between', 
                         alignItems: 'flex-start', paddingHorizontal: 16 }}>
                             <TouchableOpacity onPress={() => navigation.goBack()} style={{backgroundColor:LIGHT_GRAY_2, marginTop:10, borderRadius:180, paddingHorizontal:4, paddingVertical:4}}>
@@ -419,7 +420,8 @@ export default function RecipeDetailScreen({route}:any){
 
                         </View>
 
-                        <View style={{flexDirection: "row", alignItems:"center", marginBottom:20,marginTop:10, marginHorizontal:20,height:height*0.07, }}>
+                        <View style={{flexDirection: "row", alignItems:"center", marginBottom:20,marginTop:10, 
+                        marginHorizontal:20,height:height*0.07, }}>
                             <TextInputComp
                                 isTextArea={true}
                                 value={comment}

@@ -20,7 +20,7 @@ export default function AuthProvider({children}: any){
                 
                 <View style={{width:"100%", alignItems:"center"}}>
                     <Text style={{fontWeight:"600", fontSize:14}}>Oturum Açmanız Gerekmektedir!</Text>
-                    <ButtonComp title="Giriş Yap!" onPress={() => navigation.navigate("Profile")} styleContainer={{
+                    <ButtonComp title="Giriş Yap!" onPress={() => navigation.navigate("ProfileNavigation")} styleContainer={{
                         alignSelf: "center",
                         alignItems: "center",
                         marginTop: 20,

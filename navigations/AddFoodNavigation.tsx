@@ -2,13 +2,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StackScreenProps } from "@react-navigation/stack";
 import AuthProvider from "../provider/AuthProvider";
 import AddFoodScreenOne from "../screens/AddFodd/AddFoodScreenOne";
-import AddFoodScreenTwo from "../screens/AddFodd/AddFoodScreenTwo";
 
 
 
 type TabStackParamList = {
     AddFoodScreenOne:undefined,
-    AddFoodScreenTwo:undefined,
 
 }
 
@@ -22,7 +20,6 @@ export default function AddFoodNavigation(){
         <AuthProvider name="addFood">
             <Stack.Navigator>
                 <Stack.Screen component={AddFoodScreenOne} name={"AddFoodScreenOne"} options={{headerShown:false}}/>
-                <Stack.Screen component={AddFoodScreenTwo} name={"AddFoodScreenTwo"} options={{headerShown:false}}/>
             </Stack.Navigator>
         </AuthProvider>
 

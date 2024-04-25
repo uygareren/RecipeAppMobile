@@ -21,8 +21,8 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
 
     const toast = useToast();
 
-    const [email, setEmail] = useState("uygarerenx@gmail.com");
-    const [password, setPassword] = useState("Uygareren111ue.");
+    const [email, setEmail] = useState("mehmeteren@gmail.com");
+    const [password, setPassword] = useState("mehmet123456.");
 
     const [loading, setLoading] = useState(false)
 

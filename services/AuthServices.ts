@@ -3,26 +3,10 @@ import { LoginTypes, RegisterTypes } from "../types/AuthTypes";
 import { api } from "./api";
 
 const API = process.env.API;
-console.log("apii: ", API);
+console.log("apiii: ", API);
 
 
 export const AuthServices = {
-   
-    useRegister: () => {
-        return useMutation({
-            mutationKey: ["register"],
-            mutationFn: async (payload: RegisterTypes) => {
-
-
-                try {
-                    const registerResp = await api.post(`${API}/register`, payload);
-                    return registerResp;
-                } catch (error) {
-                    throw error
-                }
-            }
-        })
-    },
     
     useUpdatePassword: () => {
         return useMutation({
@@ -38,6 +22,11 @@ export const AuthServices = {
             }
         })
     }
+}
+
+export const register = async(payload: RegisterTypes) => {
+    const response = await api.post(`${API}/register`, payload);
+    return response.data;
 }
 
 export const login = async (payload: LoginTypes) => {

@@ -3,19 +3,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { Dimensions, FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { Divider } from '../../components/Divider';
 import { SearchHeader } from '../../components/Header';
 import { TextInputComp } from '../../components/Inputs';
 import SkeletonComp from '../../components/Skeleton';
 import useI18n from "../../hooks/useI18n";
-import { getCategories, getRecipeSearch, getUserDetail, getUserSearch } from "../../services/ApiService";
+import { getCategories, getRecipeByInterests, getRecipeSearch, getUserDetail, getUserSearch } from "../../services/ApiService";
 import { userSliceActions } from "../../store/reducer/userSlice";
-import { BLACK_COLOR, GRAY, keyGenerator, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, GRAY, handleNavigation, keyGenerator, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
 
 export default function HomeScreen({ route }: any) {
+
+    const API = process.env.API;
 
     const {t} = useI18n("HomeScreen");
 
@@ -30,6 +31,10 @@ export default function HomeScreen({ route }: any) {
     const userId = userInfo?.userId;
 
     const key = keyGenerator("searched_values", userId);
+
+    const [backPressCount, setBackPressCount] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(true); // State to track loading state
 
 
     const [searchValue, setSearchValue] = useState("");
@@ -55,10 +60,19 @@ export default function HomeScreen({ route }: any) {
       
     )
     
-    const {data, isLoading} = useQuery({
+    const {data} = useQuery({
       queryKey: ["categories"],
       queryFn: getCategories
     })
+
+    const interestMutation = useMutation({
+      mutationKey:["recipe-by-interests"],
+      mutationFn: getRecipeByInterests,
+      onSuccess(data, variables, context) {
+      },
+    }
+      
+    );
 
     const user_detail = useQuery(
       ['get_user_detail', userId],
@@ -84,6 +98,7 @@ export default function HomeScreen({ route }: any) {
       setSearchValue("");
     }
 
+
     async function handleNavigate(item:any){
 
       if(searchSelectVisible==0){
@@ -94,10 +109,10 @@ export default function HomeScreen({ route }: any) {
         const value = `${item?.name} ${item?.surname}`;
         handleSaveValues(value);
 
-        if(item?.id == userId){
+        if(item?._id == userId){
           navigation.push("Profile")
         }else{
-          navigation.push("OtherProfile",{id:item?.id})
+          navigation.push("OtherProfile",{id:item?._id})
 
         }
       }
@@ -126,6 +141,62 @@ export default function HomeScreen({ route }: any) {
             
     }
 
+    // useEffect(() => {
+    //   const backAction = () => {
+    //     if (backPressCount === 1) {
+    //       Alert.alert(
+    //         'Çıkış',
+    //         'Çıkış Yapmak İstediğinizden Emin misiniz?',
+    //         [
+    //           {
+    //             text: 'Cancel',
+    //             onPress: () => null,
+    //             style: 'cancel',
+    //           },
+    //           {
+    //             text: 'Leave',
+    //             onPress: () => BackHandler.exitApp(),
+    //           },
+    //         ],
+    //       );
+    //       setBackPressCount(0); 
+    //       return true; 
+    //     } else {
+    //       setBackPressCount(1);
+    //       setTimeout(() => setBackPressCount(0), DOUBLE_PRESS_INTERVAL);
+    //       return true; 
+    //     }
+    //   };
+  
+    //   const backHandler = BackHandler.addEventListener(
+    //     'hardwareBackPress',
+    //     backAction,
+    //   );
+  
+    //   return () => backHandler.remove(); 
+    // }, [backPressCount]);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+          setIsLoading(false); // After 4 seconds, set loading state to false
+      }, 4000);
+
+      return () => clearTimeout(timer); // Clear the timer on unmount
+  }, []);
+
+ 
+
+    useEffect(() => {
+      if (userInfo?.interests != null) {
+        const payload = {
+          interests_data_by_user: [...userInfo?.interests]
+        };
+        interestMutation.mutate(payload);
+      }
+    }, [userInfo]);
+    
+    
+
     useEffect(() => {
       if (searchSelectVisible === 0) {
         // Tarif arama
@@ -139,7 +210,6 @@ export default function HomeScreen({ route }: any) {
       } else if (searchSelectVisible === 1) {
         // Kullanıcı arama
         setSearchLoading(true);
-        // console.log("data", userData);
 
         if(searchValue.length == 0){
           setSearchData([]);
@@ -157,49 +227,40 @@ export default function HomeScreen({ route }: any) {
 
     useEffect(() => {
 
-      // const getStoredData = async () => {
-      //   try {
-      //     const storedValues = await AsyncStorage.getItem(key);
-      //     if (storedValues !== null) {
-      //       setPreviusSearchedData(JSON.parse(storedValues));
-      //     }
-      //   } catch (error) {
-      //     console.error("Error retrieving data from AsyncStorage:", error);
-      //   }
-      // };
-    
-      // getStoredData(); 
-
       const key = keyGenerator("interest",userInfo?.userId)
       let value :any;
       AsyncStorage.getItem(key).then((storedValue) => value = storedValue);
 
-      console.log("key", key);
-      console.log("value", value);
-
+      
       
     }, []);
-    
-    
-    
 
+    if (isLoading) {
+      // Render SkeletonComp for the first 4 seconds
+      return <SkeletonComp />;
+  }
+
+
+  
     const Card = ({ item }: any) => {
       return (
         <Pressable onPress={() => navigation.navigate("CategoryDetail", { id: item?._id, name: item?.categoryName })}
-        style={{ marginTop: 10, marginHorizontal: 10, width: 100, alignItems: "center" }}>
-          <Image source={{ uri: "http://dummyimage.com/118x100.png/ff4444/ffffff" }} style={{ width: 90, height: 90, resizeMode:"cover" }} />
-          <Text>{item.categoryName}</Text>
+        style={{ marginTop: 10, borderRadius:10, marginHorizontal: 10, width: width*0.3, height:width*0.3, alignItems: "center",justifyContent:'center',  ...styles.shadow, borderWidth:0 }}>
+          <Image source={{ uri: `${API}/categories/${item?.categoryImage}` }} style={{ borderRadius:10, width: width*0.25, height: width*0.2, resizeMode:"contain" }} />
+          <Text style={{fontSize:13, fontWeight:'500'}}>{item.categoryName}</Text>
         </Pressable>
       );
     };
 
     const RenderSearchItem = ({item}:any) => {
 
+      console.log("itemm", item);
+
       return(
         <TouchableOpacity onPress={() => handleNavigate(item)} style={{flexDirection:'row', marginVertical:7, 
           paddingHorizontal:15, paddingVertical:7,alignItems:'center'}}>
             <View style={{width:50, height:50, borderRadius:180}}>
-              <Image style={{width: 50, height:50, borderRadius:180}} source={require("../../assets/images/default_profile.jpg")}/>
+              <Image style={{width: 50, height:50, borderRadius:180, resizeMode:'cover'}} source={{uri: `${API}/recipes/${item?.image}`}}/>
             </View>
             {searchSelectVisible == 0 ? (
             <Text style={{marginLeft:15, fontWeight:'500', fontSize:15}}>{item?.recipeName}</Text>
@@ -226,9 +287,99 @@ export default function HomeScreen({ route }: any) {
       )
     }
 
-    if(modalVisible){
+    const RenderInterest = ({item}:any) => {
+
       return(
-          <Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)} >
+          <View style={{ paddingHorizontal:0, marginBottom:20, }}>
+              {/* USER */}
+              <View style={{flexDirection:"row",alignItems:"center", justifyContent:'flex-start', }}>
+              <TouchableOpacity onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userInfo?.userId, id_2: item?.user?.userId})} style={{width:width*0.1, height:width*0.1, borderRadius:180}}>
+                  {item?.user?.image != null ? (
+                    <Image source={{uri: `${API}/images/${item?.user?.image}`}}
+                    style={{width:width*0.1, height:width*0.1, borderRadius:180}}/>
+                  ): (
+                    <Image source={require("../../assets/images/default_profile.jpg")}
+                  style={{width:width*0.1, height:width*0.1, borderRadius:180}}/>
+                  )}
+                  
+                  <Image source={{uri: `${API}/images/${item?.user?.image}`}}
+                  style={{width:width*0.1, height:width*0.1, borderRadius:180}}/>
+                  </TouchableOpacity>
+                  
+                  <Text style={{fontWeight:"500", fontSize:15, marginLeft:10}}>{`${item?.user?.name} ${item?.user?.surname}`}</Text>
+              </View>
+
+              <Pressable onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{width:width-30,}}>
+                  <Image source={{uri: `${API}/recipes/${item?.image}`}}
+                  style={{width:width-50, height:width-50, resizeMode:"contain"}}/>
+              </Pressable>
+              <View style={{alignItems:"center", marginTop:10}}>
+                  <Text style={{fontWeight:"300", fontSize:16, marginBottom:10}}>{item?.recipeName}</Text>
+              </View>
+              <Divider height={1} width={"90%"}/>
+
+          </View>
+          
+
+          
+      )
+  }
+
+    
+
+
+    return (
+      <ScrollView style={styles.container}>
+        <View style={{ marginTop: 50 }}>
+          <SearchHeader openModal={openModal} value={text} onChangeValue={setText} placeholder="Search Recipes..." name={userInfo.name ?? ""}
+          onPress={() => navigation.navigate("Profile")} id={userId} greeting={t("greeting")} title={t("title")}/>
+        </View>
+
+        <View style={{ marginTop: 20, marginLeft: 20, paddingVertical:10}}>
+          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>{t("categories")}</Text>
+
+          {/* CARD */}
+          {
+            data && 
+            <FlatList
+            data={data?.data}
+            keyExtractor={(item) => item._id.toString()}
+            renderItem={Card}
+            horizontal
+            showsHorizontalScrollIndicator={false} 
+          />
+          }
+          
+        </View>
+
+        <View style={{ marginTop: 50, marginLeft: 20, }}>
+          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>{t("popular_foods")}</Text>
+
+          {/* CARD */}
+           <FlatList
+            data={data?.data}
+            keyExtractor={(item) => item._id.toString()}
+            renderItem={Card}
+            horizontal
+            showsHorizontalScrollIndicator={false} 
+          /> 
+        </View>
+        {interestMutation?.data?.data.length > 0 ? (
+          <View style={{ marginTop: 50, marginLeft: 20, }}>
+          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10, marginBottom:25 }}>İlgilendiğim Mutfaklar</Text>
+            <FlatList
+                data={interestMutation?.data?.data}
+                keyExtractor={(item:any) => item?._id.toString()}
+                renderItem={RenderInterest}
+            />
+        </View>
+        ): (
+          null
+        )}
+
+        
+
+        <Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)} >
             <View style={{flex:1, backgroundColor:WHITE}}>
 
               <View style={{flexDirection:"row",alignItems:'center', paddingHorizontal:20, paddingVertical:15,}}>
@@ -297,52 +448,7 @@ export default function HomeScreen({ route }: any) {
               </ScrollView>
             </View >
           </Modal>
-      )
-    }
-
-    if(isLoading){
-      return(
-        <SkeletonComp/>
-      )
-    }
-
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={{ marginTop: 50 }}>
-          <SearchHeader openModal={openModal} value={text} onChangeValue={setText} placeholder="Search Recipes..." name={userInfo.name ?? ""}
-          onPress={() => navigation.navigate("Profile")} id={userId} greeting={t("greeting")} title={t("title")}/>
-        </View>
-
-        <View style={{ marginTop: 20, marginLeft: 20, }}>
-          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>{t("categories")}</Text>
-
-          {/* CARD */}
-          {
-            data && 
-            <FlatList
-            data={data?.data}
-            keyExtractor={(item) => item._id.toString()}
-            renderItem={Card}
-            horizontal
-            showsHorizontalScrollIndicator={false} 
-          />
-          }
-          
-        </View>
-
-        <View style={{ marginTop: 50, marginLeft: 20, }}>
-          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>{t("popular_foods")}</Text>
-
-          {/* CARD */}
-          {/* <FlatList
-            data={category_data}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={Card}
-            horizontal
-            showsHorizontalScrollIndicator={false} 
-          /> */}
-        </View>
-      </SafeAreaView>
+      </ScrollView>
     );
 
     
@@ -353,4 +459,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: WHITE,
   },
+  shadow:{
+    shadowColor:LIGHT_GRAY,
+    shadowOffset:{
+        width:4,
+        height:2
+    },
+    shadowOpacity:0.1,
+    shadowRadius:1,
+    elevation:9
+}
 });

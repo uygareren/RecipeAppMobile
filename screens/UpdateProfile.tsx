@@ -1,10 +1,12 @@
 import * as ImagePicker from 'expo-image-picker';
+import { useToast } from 'native-base';
 import { useState } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { ButtonComp } from "../components/Button";
 import { TextInputComp } from "../components/Inputs";
+import { ToastSuccess } from '../components/Toast';
 import useI18n from "../hooks/useI18n";
 import { updateProfileImage, updateUser } from "../services/ApiService";
 import { userSliceActions } from "../store/reducer/userSlice";
@@ -14,16 +16,23 @@ import { LIGHT_GRAY_2, MAIN_COLOR, WHITE } from "../utils/utils";
 
 export default function UpdateProfileScreen(){
 
+    const API = process.env.API;
+
     const {t} = useI18n("UpdateProfileScreen");
+
+    const toast = useToast();
 
     const {width, height} = Dimensions.get("screen");
 
     const dispatch = useDispatch<any>();
     const user = useSelector((state:any) => state.user);
 
+    console.log("user", user);
+
     // console.log("userinfo", userInfo);
 
     const [loading, setLoading] = useState(false)
+    
 
     const [name, setName] = useState(user?.userInfo?.name ?? "");
     const [surname, setSurname] = useState(user?.userInfo?.surname ?? "");
@@ -40,8 +49,7 @@ export default function UpdateProfileScreen(){
         mutationKey:["update_user"],
         mutationFn:updateUser,
         onSuccess:(data: any)=>{
-            console.log("data",data);
-            dispatch(userSliceActions.setUser(data))
+            toast.show(ToastSuccess("Profil Başarıyla Güncellendi!"));
         }
     });
 
@@ -145,7 +153,7 @@ export default function UpdateProfileScreen(){
 
             <View style={{ marginTop:50, alignItems:"center", width:150, height:150, alignSelf:"center",}}>
                 {image != null ? (
-                    <Image source={{uri: `http://192.168.1.29:3000/${image}`}} style={{width:150, height:150, borderRadius:15}}/>
+                    <Image source={{uri: `${API}/images/${image}`}} style={{width:150, height:150, borderRadius:15, resizeMode:'cover'}}/>
                 ) : (
                     <Image source={require("../assets/images/default_profile.jpg")} style={{width:150, height:150, borderRadius:15}}/>
 
@@ -198,13 +206,14 @@ const styles = StyleSheet.create({
         
     },
     TextInputComp:{
+        paddingHorizontal:10,
         marginVertical:10,
-        marginTop: 20
+        marginTop: 20,
     },
     InputContainer:{
         flexDirection: "row",
         backgroundColor: WHITE,
-        width: "90%",
+        width: Dimensions.get('screen').width*0.89,
         alignSelf: "center",
         borderRadius: 19
 

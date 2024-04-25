@@ -1,16 +1,21 @@
+import { useToast } from "native-base";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/Button";
 import { TextInputComp, TextInputPassword } from "../../components/Inputs";
+import { ToastError } from "../../components/Toast";
 import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
-import { AuthServices } from "../../services/AuthServices";
+import { register } from "../../services/AuthServices";
 import { BLACK_COLOR, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 
 
 export default function RegisterScreen({navigation, route}: TabAccountScreenProps<"Register">){
 
     const {t} = useI18n("RegisterScreen");
+
+    const toast = useToast();
 
     const [name, setName] = useState("uygar")
     const [surname, setSurname] = useState("erenn")
@@ -20,27 +25,24 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
 
     const [loading, setLoading] = useState(false)
 
-    const registerMutation = AuthServices.useRegister();
+    const registerMutation = useMutation({
+        mutationKey: ["register"],
+        mutationFn: register,
+        onSuccess(data, variables, context) {
+            if(data?.data.success){
+                navigation.navigate("Login");
+            }
+        },
+        onError: () => {
+            toast.show(ToastError("Hata!"));
+            setLoading(false);
+        }
+    })
 
     const handleRegister = async () => {
-        setLoading(true)
-        try {
-            const registerResp = await registerMutation.mutateAsync({name, surname, email, password_1, password_2});
+        setLoading(true);
 
-            if(registerResp.data.success){
-                navigation.navigate("Login")
-            }else{
-                alert("Hata")
-            }
-
-        } catch (error) {
-            console.error("Login Failed:", error);
-    
-            // Log more details about the Axios error
-            if (error) {
-                console.error("Axios Error Details:", error);
-            }
-        }
+        const registerResp = await registerMutation.mutateAsync({name, surname, email, password_1, password_2});        
 
         setLoading(false);
     }
@@ -59,15 +61,15 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
 
                 <View>
                     <TextInputComp value={name} onchangeValue={setName} label={t("name")} placeholder={t("name_placeholder")}
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                     <TextInputComp value={surname} onchangeValue={setSurname} label={t("surname")} placeholder={t("surname_placeholder")}
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                     <TextInputComp value={email} onchangeValue={setEmail} label={t("email")} placeholder={t("email_placeholder")}
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                     <TextInputPassword value={password_1} onchangeValue={setPassword1} label={t("password")} placeholder={t("password_placeholder")}
-                    styleContainer={styles.TextInputPassword} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputPassword} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                     <TextInputPassword value={password_2} onchangeValue={setPassword2} label={t("confirm_password")} placeholder={t("confirm_password_placeholder")} 
-                    styleContainer={styles.TextInputPassword} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputPassword} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                 </View>
 
                 <View style={{marginBottom: 70}}>
@@ -103,6 +105,7 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 40
     },
     TextInputComp:{
+        paddingHorizontal:20,
         marginVertical:10,
         marginTop: 20
     },
@@ -115,6 +118,7 @@ const styles = StyleSheet.create({
 
     },
     TextInputPassword:{
+        paddingHorizontal:20,
         marginVertical:10,
         marginTop: 20,
     },

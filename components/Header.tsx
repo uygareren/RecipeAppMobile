@@ -35,6 +35,8 @@ type GoBackHeaderParams={
   goBackPress: ()=>void
 }
 
+const API = process.env.API;
+
 
 export const TopHeader = ({title}:any) => {
     return(
@@ -64,7 +66,7 @@ export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress,
               borderColor:"black", alignItems:"center", justifyContent:"center" }}>
                   {user_image != undefined ? (
                     <Image style={{width:Dimensions.get("screen").width/10, height:Dimensions.get("screen").width/10, borderRadius:180,  }}
-                  source={{uri: `http://192.168.1.29:3000/${user_image}`}}/>
+                  source={{uri: `${API}/images/${user_image}`}}/>
                   ) : (
                     <Image style={{width:Dimensions.get("screen").width/10, height:Dimensions.get("screen").width/10, borderRadius:180,  }}
                   source={require("../assets/images/default_profile.jpg")}/>

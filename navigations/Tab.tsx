@@ -1,18 +1,23 @@
+import { AntDesign, Feather, Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native";
-import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, TAB_INACTIVE_COLOR, WHITE } from "../utils/utils";
-import ProfileNavigation from "./ProfileNavigation";
-import { Ionicons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import HomeNavigation from "./HomeNavigation";
+import { useSelector } from "react-redux";
+import { RootStateType } from "../store/store";
+import { BLACK_COLOR, WHITE } from "../utils/utils";
 import AddFoodNavigation from "./AddFoodNavigation";
+import HomeNavigation from "./HomeNavigation";
+import ProfileNavigation from "./ProfileNavigation";
 import SearchNavigation from "./SearchNavigation";
 
 
 const Tab = createBottomTabNavigator();
 
 export const TabNavigation = () => {
+
+    const userInfo = useSelector((state:RootStateType) => state.user.userInfo);
+    const navigation = useNavigation<any>();
+
     return (
         <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
             <Tab.Navigator
@@ -58,6 +63,7 @@ export const TabNavigation = () => {
                         headerShown: false,
                         tabBarLabel: "Add Food",
                     }}
+                    
                 />
                 <Tab.Screen
                     name="DetailSearchNavigation"
@@ -72,7 +78,7 @@ export const TabNavigation = () => {
                 />
 
                 <Tab.Screen
-                    name="Profile"
+                    name="ProfileNavigation"
                     component={ProfileNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
@@ -85,7 +91,13 @@ export const TabNavigation = () => {
                         headerShown: false,
                         tabBarLabel: "Profile",
                     }}
-                />
+                    listeners={{
+                        tabPress: (e) => {
+                            navigation.push("ProfileNavigation")
+
+                        }
+                    }}                
+                    />
             </Tab.Navigator>
         </SafeAreaView>
     );

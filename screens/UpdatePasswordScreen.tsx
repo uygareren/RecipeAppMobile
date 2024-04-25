@@ -87,12 +87,14 @@ const styles = StyleSheet.create({
     },
     InputContainer:{
         flexDirection: "row",
-        width: "90%",
+        backgroundColor: WHITE,
+        width: Dimensions.get('screen').width*0.89,
         alignSelf: "center",
-        borderRadius: 19,
-        backgroundColor: "#faf8f7",
+        borderRadius: 19
+
     },
     TextInputPassword:{
+        paddingHorizontal:20,
         marginVertical:10,
         marginTop: 20,
     },
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         width: "83%",
         backgroundColor: "#faf8f7",
-        borderRadius: 18,
+        borderRadius: 18
     },
     buttonContainer:{
         alignSelf: "center",

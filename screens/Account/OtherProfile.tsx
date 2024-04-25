@@ -6,11 +6,13 @@ import { useSelector } from "react-redux";
 import { GoBackHeader } from "../../components/Header";
 import { Loading } from "../../components/Loading";
 import useI18n from "../../hooks/useI18n";
-import { addFollowed, getFollowing, getRecipeByUserId, getUserDetail } from "../../services/ApiService";
+import { addFollowed, getFollowing, getRecipeByUserId, getUserDetail, removeFollowed } from "../../services/ApiService";
 import { BLACK_COLOR, LIGHT_GRAY, PINK, WHITE } from "../../utils/utils";
 
 
 export default function OtherProfile({route}:any){
+
+    const API = process.env.API;
 
     const {t} = useI18n("OtherProfile");
 
@@ -25,6 +27,8 @@ export default function OtherProfile({route}:any){
     const [FollowerCount, setFollowerCount] = useState(0)
     const [isFollow, setIsFollow] = useState(false);
 
+    console.log("isfollowe", isFollow);
+
 
     const user_detail = useQuery(
         ['get_user_detail', id],
@@ -34,6 +38,7 @@ export default function OtherProfile({route}:any){
     const recipeResponse = useQuery(
         {queryKey:["get_recipe_by_userid"],
         queryFn:() => getRecipeByUserId({user_id:id})}
+        
     )
 
     const {data, isLoading, isSuccess} = useQuery({
@@ -43,7 +48,6 @@ export default function OtherProfile({route}:any){
     })
 
     const follower_data = data?.data?.follower
-    console.log(data?.data?.follower);
     const followed_data = data?.data?.followed
 
 
@@ -53,17 +57,31 @@ export default function OtherProfile({route}:any){
         mutationFn:addFollowed,
         onSuccess: () => {
             setIsFollow(true);
-            setFollowerCount(FollowerCount+ 1);
+            setFollowerCount((prev) => prev+ 1);
+        }
+    });
+    const removeFollowedMutation = useMutation({
+        mutationKey:["remove_followed"],
+        mutationFn:removeFollowed,
+        onSuccess: () => {
+
+            console.log("sdsdsd")
+            console.log("successs remove followed");
+            setIsFollow(false);
+            setFollowerCount((prev) => prev-1);
         }
     });
 
     useEffect(() => {
-        if (follower_data) {
+        if (data?.data?.follower.length > 0) {
+            console.log("follower data : ",data?.data?.follower)
           setFollowerCount(data?.data?.follower?.length);
           setIsFollow(data?.data?.follower.filter((v:any) => v?._id == userInfo.userId) ? true : false)
           console.log("ischeckk", data?.data?.follower.filter((v:any) => v?._id == userInfo.userId) ? true : false)
+        }else{
+            setIsFollow(false);
         }
-      }, [follower_data]);
+      }, []);
     
 
     async function handleFollow() {
@@ -72,25 +90,28 @@ export default function OtherProfile({route}:any){
         if(!isFollow){
             
             followMutation.mutate({user_id:userInfo?.userId, followed_id:id})
+        }else{
+            removeFollowedMutation.mutate({user_id:userInfo?.userId, followed_id:id});
         }
 
     }
 
+
     const RenderItem = ({item}:any) => {
         return(
-            <View style={{backgroundColor:LIGHT_GRAY,
+            <TouchableOpacity onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{backgroundColor:LIGHT_GRAY,
                  width:width*0.3,alignItems:"center",
             marginBottom:20,marginVertical:2, marginHorizontal:2}}>
-                <Image source={{ uri: "http://dummyimage.com/118x100.png/ff4444/ffffff" }} 
+                <Image source={{uri: `${API}/recipes/${item?.image}`}} 
                 style={{ width: width*0.3, height: width*0.3, resizeMode:"cover" }} />
 
-            </View>
+            </TouchableOpacity>
         )
     }
 
-    useEffect(() => {
-      follower_data?.map((item:any) => item?._id == userInfo?.userId ? setIsFollow(true): setIsFollow(false))
-    }, [])
+    // useEffect(() => {
+    //   follower_data?.map((item:any) => item?._id == userInfo?.userId ? setIsFollow(true): setIsFollow(false))
+    // }, [])
     
 
     if(isLoading){
@@ -100,20 +121,25 @@ export default function OtherProfile({route}:any){
     }
     
 
-
     return(
         <ScrollView style={{flex:1, backgroundColor:WHITE}}>
 
             <View>
-                <GoBackHeader goBackPress={() => console.log("Go back Tıklandı")}/>
+                <GoBackHeader goBackPress={() => navigation.goBack()}/>
             </View>
 
             {/* PROFİLE İMAGE*/}
             <View>
-                <View style={{borderWidth:3, borderColor:BLACK_COLOR,marginTop:10, width:width*2.7/10, height:width*2.7/10, alignSelf:"center",
+                <View style={{borderWidth:1, borderColor:BLACK_COLOR,marginTop:10, width:width*2.7/10, height:width*2.7/10, alignSelf:"center",
             borderRadius:180, alignItems:"center", justifyContent:"center"}}>
-                    <Image source={require("../../assets/images/default_profile.jpg")} style={{width: width*2.5/10, height:width*2.5    /10, 
+                    {user_detail?.data?.user?.image == null ? (
+                        <Image source={require('../../assets/images/default_profile.jpg')} style={{width: width*2.5/10, height:width*2.5    /10, 
                     borderRadius:180}}/>
+                    ): (
+                        <Image source={{uri: `${API}/images/${user_detail?.data?.user?.image}`}} style={{width: width*2.5/10, height:width*2.5    /10, 
+                        borderRadius:180}}/>
+                    )}
+                    
                 </View>
 
 
@@ -122,7 +148,7 @@ export default function OtherProfile({route}:any){
                     <View style={{alignItems:"center"}}>
                         <Text style={{fontSize:17, fontWeight:"600", marginTop:10}}>{`${user_detail?.data?.user?.name} ${user_detail?.data?.user?.surname}`}</Text>
                         {user_detail?.data?.user?.city ? (
-                        <Text style={{fontSize:14, fontWeight:"300", marginTop:2}}>Diyarbakır </Text>
+                        <Text style={{fontSize:14, fontWeight:"300", marginTop:2}}>{user_detail?.data?.user?.city}, {user_detail?.data?.user?.country} </Text>
 
                         ):null}
                     </View>
@@ -149,7 +175,7 @@ export default function OtherProfile({route}:any){
                 <View style={{borderWidth:1, borderColor:LIGHT_GRAY, height:40}}/>
 
                 <TouchableOpacity onPress={() => navigation.navigate("Follow", {user_id:id, id:1})} style={{width:width*2.5/10,paddingVertical:10, alignItems:"center", justifyContent:"center"}}>
-                    <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>{follower_data?.length ?? "0"}</Text>
+                    <Text style={{fontSize:19, fontWeight:"600", marginBottom:4}}>{FollowerCount ?? "0"}</Text>
                     <Text style={{fontSize:14, fontWeight:"300"}}>{t("followers")}</Text>
                 </TouchableOpacity>
 

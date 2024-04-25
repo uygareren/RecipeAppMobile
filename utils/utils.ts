@@ -71,3 +71,14 @@ export function getDateFormat(dateStr: string) {
         return "";
     }
 }
+
+export function handleNavigation({navigation, routeString, id_1, id_2}:any){
+
+    if(id_1 == id_2){
+        navigation.push("Profile")
+    }else{
+        navigation.push(routeString, {id:id_2});
+
+    }
+
+}

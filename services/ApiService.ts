@@ -14,7 +14,6 @@ export const getInterestedData = async() => {
 }
 
 export const postUserInterest = async(payload:PostUserInterestType) => {
-
     
     const response = await api.post( `${API}/post_user_interests`, payload);
     return response
@@ -54,6 +53,11 @@ export const addFollowed = async (payload:AddFollowedType) => {
         throw error; // rethrow the error for better error handling
     }
 };
+
+export const removeFollowed = async(payload:any) => {
+    const response = await api.post(`${API}/remove_followed`, payload);
+    return response.data;
+}
 
 
 export const getRecipeByUserId = async(user_id:any) => {
@@ -95,6 +99,12 @@ export const getRecipeByIngredients = async(payload:any) => {
     return response.data;
 }
 
+export const deleteRecipe = async(recipe_id:string) => {
+    console.log("delete recipe id", recipe_id);
+    const response = await api.post(`${API}/delete-recipe/${recipe_id}`);
+    return response.data;
+}
+
 export const postRecipe = async(payload:any) => {
     const response = await api.post(`${API}/post-recipe`, payload);
     return response.data;
@@ -129,6 +139,13 @@ export const getRecipeSearch = async(value:string) => {
     return response.data;
 
 }
+
+export const getRecipeByInterests = async (payload: any) => {
+    console.log("payload", payload);
+    const response = await api.post(`${API}/recipe-by-interests`, payload);
+  
+    return response.data;
+  };
 
 // MEASUREMENT QUERİES
 

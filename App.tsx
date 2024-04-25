@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { TabNavigation } from './navigations/Tab';
 import ProtectProvider from './provider/ProtectProvider';
 import OtherProfile from './screens/Account/OtherProfile';
+import AddFoodScreenTwo from './screens/AddFodd/AddFoodScreenTwo';
 import CategoryDetail from './screens/CategoryDetail';
 import CategoryScreen from './screens/CategoryScreen';
 import FollowScreen from './screens/FollowScreen';
@@ -41,6 +42,7 @@ type StackParamList = {
   InterestSelection:undefined,
   Follow:undefined,
   UpdateProfile:undefined,
+  AddFoodScreenTwo:undefined,
   SearchResult:{
     selectedComponentIds:any
   }
@@ -83,6 +85,7 @@ export default function App() {
                     <Stack.Screen component={FollowScreen} name='Follow' options={{headerShown:false}}/>
                     <Stack.Screen component={UpdateProfileScreen} name='UpdateProfile' options={{headerShown:false}}/>
                     <Stack.Screen component={SearchResultScreen} name='SearchResult' options={{headerShown:false}}/>
+                    <Stack.Screen component={AddFoodScreenTwo} name="AddFoodScreenTwo" options={{headerShown: false}}/>
 
                   </Stack.Group>
                   

@@ -1,19 +1,20 @@
-import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-import { Dimensions, Image, SafeAreaView, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/Button";
 import useI18n from "../../hooks/useI18n";
-import { postRecipeImage } from "../../services/ApiService";
-import { MAIN_COLOR, WHITE } from "../../utils/utils";
+import { deleteRecipe, postRecipeImage } from "../../services/ApiService";
+import { LIGHT_GRAY, MAIN_COLOR, WHITE } from "../../utils/utils";
 
 
 
 export default function AddFoodScreenTwo({route}:any){
 
-    const id = route.params.id;
+    const id = route.params?.id;
+
+    console.log("id", id);
 
     const navigation = useNavigation<any>();
 
@@ -42,6 +43,18 @@ export default function AddFoodScreenTwo({route}:any){
           }
         }
       );
+
+    const removeRecipeMutation = useMutation(
+      ["delete-recipe"],
+      (id:string) => deleteRecipe(id),
+      {onSuccess(data) {
+        console.log("dataa", data);
+
+          if(data?.success){
+            navigation.navigate("Home");
+          }
+      },}
+    )
 
 
     
@@ -79,22 +92,48 @@ export default function AddFoodScreenTwo({route}:any){
     
       }  
 
-      function handleNavigate() {
-        navigation.reset({
-            index: 0, // Yeni ekranın indeksi
-            routes: [{ name: 'HomeNavigation' }], // Ana sayfa stack navigator'ı
-        });
+    function handleNavigate() {
+      navigation.navigate("HomeNavigation");      
+    }
+
+    function handleCancel(){
+      Alert.alert("Tarif Kaydını İptal Et", "Tarifi İptal Etmek İstediğinizden Emin Misiniz?", 
+      [
+          { style: "default", text: "Sil", onPress: () => handleRemoveRecipe() },
+          { style: "default", text: "İptal", onPress: () => console.log("iptal") }
+      ])
+    }
+
+    
+    
+    function handleRemoveRecipe(){
+      removeRecipeMutation.mutate(id);
+      navigation.push("Home");
+
     }
     
 
 
     return(
         <SafeAreaView style={{flex:1, alignItems:"center", justifyContent:"center", backgroundColor:WHITE }}>
-            <TouchableOpacity style={{borderWidth:1}}>
-                <AntDesign name="left" size={24} color="black" />
-            </TouchableOpacity>
+            
 
             <View style={{ marginTop:0, alignItems:"center", justifyContent:"center", width:width, height:"100%",}}>
+
+              <View style={{ width:width, position:'absolute', top:50, flexDirection:'row', justifyContent:'flex-end',
+                paddingHorizontal:20
+              }}>
+                
+
+                <TouchableOpacity onPress={handleCancel} style={{ backgroundColor:LIGHT_GRAY, paddingHorizontal:12, paddingVertical:4, borderRadius:12}}>
+                  <Text style={{fontSize:13, fontWeight:'500'}}>İptal Et</Text>
+                </TouchableOpacity>
+
+
+              </View>
+              
+
+
               {image ? (
                 <Image source={{uri: image}} style={{width:width*0.7, height:width*0.7, borderRadius:15}}/>
 
@@ -118,7 +157,7 @@ export default function AddFoodScreenTwo({route}:any){
                     borderRadius: 10,
                     backgroundColor: "black",
                     position:"absolute",
-                    bottom:0,
+                    bottom:20,
                   }}
                   styleText={{ color: MAIN_COLOR, fontWeight: "bold", fontSize: 16 }}
                   isActive={image ? true : false}

@@ -11,6 +11,9 @@ import { LIGHT_GRAY, WHITE } from "../utils/utils";
 
 export default function FavoritesScreen(){
 
+    const API = process.env.API;
+
+
     const {height, width} = Dimensions.get("screen");
     const navigation = useNavigation<any>();
 
@@ -32,7 +35,7 @@ export default function FavoritesScreen(){
             <TouchableOpacity onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{backgroundColor:LIGHT_GRAY, borderBottomLeftRadius:12, borderBottomRightRadius:12,
                  width:width*0.4,alignItems:"center",
             marginBottom:20,marginHorizontal:width*0.04}}>
-                <Image source={{ uri: "http://dummyimage.com/118x100.png/ff4444/ffffff" }} 
+                <Image source={{uri: `${API}/recipes/${item?.image}`}}  
                 style={{ width: width*0.4, height: width*0.35, resizeMode:"cover" }} />
                 <View style={{marginVertical:10, paddingHorizontal:5}}>
                 <Text >{item?.recipeName}</Text>

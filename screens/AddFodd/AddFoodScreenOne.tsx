@@ -1,8 +1,10 @@
+import { EvilIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Dimensions, FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useMutation, useQuery } from "react-query";
+import { useSelector } from "react-redux";
 import levelData from "../../assets/datas/level.json";
 import { ButtonComp } from "../../components/Button";
 import { Divider } from "../../components/Divider";
@@ -10,6 +12,7 @@ import { TopHeader } from "../../components/Header";
 import { TextInputComp } from "../../components/Inputs";
 import useI18n from "../../hooks/useI18n";
 import { getAllIngredients, getAllMeasurements, getCategories, getInterestedData, postRecipe } from "../../services/ApiService";
+import { RootStateType } from "../../store/store";
 import { LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
 
  
@@ -20,35 +23,38 @@ export default function AddFoodScreen(){
 
   const {width, height} = Dimensions.get("screen");
 
+  const userInfo = useSelector((state:RootStateType) => state.user.userInfo);
+
   const navigation = useNavigation<any>();
 
   const [recipeName, setRecipeName] = useState("");
-  const [recipeDescription, setRecipeDescription] = useState("");
-  const [enterMeasurement, setEnterMeasurement] = useState("");
-  const [enterCalory, setEnterCalory] = useState("");
-  const [enterCookingTime, setEnterCookingTime] = useState("");
+  const [recipeDescription, setRecipeDescription] = useState("app test denem description");
+  const [enterMeasurement, setEnterMeasurement] = useState("5");
+  const [enterCalory, setEnterCalory] = useState("33");
+  const [enterCookingTime, setEnterCookingTime] = useState("66");
 
   const [ingredientsData, setIngredientsData] = useState([])
   const [measurementData, setMeasurementData] = useState([])
   const [interestData, setInterestData] = useState([])
   const [categoriesData, setCategoriesData] = useState([])
 
-  const [selectedIngredient, setSelectedIngredients] = useState("")
+  const [selectedIngredient, setSelectedIngredient] = useState("")
   const [selectedMeasurement, setSelectedMeasurement] = useState("")
   const [selectedInterest, setSelectedInterest] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("")
   const [selectedLevel, setSelectedLevel] = useState("")
 
 
-  const [savedComponents, setSavedComponents] = useState<any>([{}])
+  const [savedComponents, setSavedComponents] = useState<any>([{}]);
 
+  const isButtonActive = (selectedIngredient != null && selectedMeasurement != null && enterMeasurement.length > 0);
 
+ 
   const { mutate: postRecipeMutation, isLoading:buttonLoading } = useMutation(
     "post-recipe",
     postRecipe,
     {
       onSuccess: (data) => {
-        console.log("dataa", data);
         if(data?.success){
           navigation.push("AddFoodScreenTwo", {id:data?._id})
         }
@@ -77,7 +83,6 @@ export default function AddFoodScreen(){
     queryKey: ["get_measurements"],
     queryFn: getAllMeasurements,
     onSuccess: (data) => {
-      console.log(data);
       const newData = data?.measurements_data[0]?.measurement_names?.map((item:any) => ({
         key: item?._id,
         value: item?.name
@@ -90,7 +95,6 @@ export default function AddFoodScreen(){
     queryKey:["get-all-world-cuisines"],
     queryFn: getInterestedData,
     onSuccess(data) {
-      console.log("interested data", data);
       const newData = data?.data[0]?.cuisines_name?.map((item:any) => ({
         key:item?._id,
         value:item?.type
@@ -116,7 +120,6 @@ export default function AddFoodScreen(){
   });
  
   const handleSaveComponents = () => {
-   
     const componentName = selectedIngredient ? ingredientsData?.filter((item:any) => item?.key == selectedIngredient)[0]["value"] : null;
     const measurementName = selectedMeasurement ? measurementData?.filter((item:any) => item?.key == selectedMeasurement)[0]["value"] : null; 
     
@@ -130,8 +133,11 @@ export default function AddFoodScreen(){
         measurementName: measurementName,
       }
     ]);
-    
+  
+    // Clear the inputs
+    setEnterMeasurement("");
   }
+  
 
   async function handlePostRecipe(){
     const payload = {
@@ -149,7 +155,7 @@ export default function AddFoodScreen(){
       worldCuisinesTagId: selectedInterest,
       recipeDescription: recipeDescription,
       categoryId: selectedCategory,
-      userId: "65d8a6e30bfdd040ec236e92",
+      userId: userInfo.userId,
       calory: enterCalory,
       level: levelData.filter(item => item.key == selectedLevel)[0].value,
       cooking_time: enterCookingTime
@@ -157,23 +163,29 @@ export default function AddFoodScreen(){
 
     postRecipeMutation(payload);
     
-
-    console.log("payloadd", payload);
-
   }
 
+  function handleRemoveSavedComponents(id:String) {
+      setSavedComponents((prev:any) => prev.filter((item:any) => item.componentId !== id));
+
+  }
 
   const RenderItem = ({ item, index }: { item: any; index: number }) => {
     if (index === 0) {
       return null;
     }
 
-  
-  
+    // console.log("item", item);
+
+
     return (
-          <Pressable style={{paddingVertical:12, paddingHorizontal:8, alignSelf:"center", minWidth:width*0.3,
+          <Pressable style={{paddingVertical:12, paddingHorizontal:0, alignSelf:"center", minWidth:width*0.35,
           marginRight:10, borderRadius:10, alignItems:"center", justifyContent:"center", backgroundColor:LIGHT_GRAY_2,}}>
-                <Text key={index} style={{fontWeight:"500"}}>{item?.componentName}</Text>
+                  <Pressable style={{position: 'absolute', top: 8, right:5,}} onPress={() => handleRemoveSavedComponents(item?.componentId)}>
+                      <EvilIcons name="close-o" size={24} color="black" />
+                    </Pressable>
+                    <Text key={index} style={{fontWeight:"500", marginTop:10}}>{item?.componentName}</Text>
+
                 <View style={{flexDirection:"row", alignItems:"center"}}> 
 
                   {item?.quantity ? (
@@ -209,13 +221,13 @@ export default function AddFoodScreen(){
             paddingHorizontal: 5,
             width: width * 8 / 10,
           }}
-          styleContainer={{ alignItems: "center", marginTop: 25, width:"100%", borderWidth:1 }}
+          styleContainer={{ alignItems: "center", marginTop: 25, width:"100%" }}
 
            label={t("recipe_name")} placeholder={t("recipe_name_placeholder")}  value={recipeName} onchangeValue={setRecipeName}/>
 
           <SelectList
             data={ingredientsData}
-            setSelected={(val:any) => setSelectedIngredients(val)}
+            setSelected={(val:any) => setSelectedIngredient(val)}
             boxStyles={{width:width*0.8, marginTop:20}}
             dropdownStyles={{width:width*0.8}}
             searchPlaceholder={t("search")}  
@@ -248,7 +260,7 @@ export default function AddFoodScreen(){
             
           </View>
           {/* FLATLİST INGREDİENTS WİTH MEASUREMENTS */}
-          <View style={{height:100, width:width, paddingHorizontal:20, display: savedComponents.length > 1 ? "flex":"none"}}>
+          <View style={{ width:"100%", height:100, paddingHorizontal:10, display: savedComponents.length > 1 ? "flex":"none"}}>
           <FlatList
             data={savedComponents}
             keyExtractor={(index:number) => index.toString()}
@@ -262,6 +274,7 @@ export default function AddFoodScreen(){
           
 
         <ButtonComp
+          isActive={isButtonActive}
           title={t("btn_save_ingredients")}
           onPress={() => handleSaveComponents()}
           styleContainer={{

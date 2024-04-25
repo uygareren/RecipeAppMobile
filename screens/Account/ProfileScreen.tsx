@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Divider } from "../../components/Divider";
@@ -8,10 +8,12 @@ import { Loading } from "../../components/Loading";
 import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { getFollowing, getRecipeByUserId } from "../../services/ApiService";
-import { BLACK_COLOR, LIGHT_GRAY, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
 
 
 export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">){
+
+    const API = process.env.API;
 
     const {t} = useI18n("ProfileScreen");
 
@@ -22,7 +24,6 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
 
     const userInfo = useSelector((state:any) => state.user.userInfo);
 
-    console.log("userınof", userInfo);
     const userId = userInfo?.userId
 
 
@@ -49,17 +50,16 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
       }
 
     const RenderItem = ({item}:any) => {
-        return(
-            <View style={{backgroundColor:LIGHT_GRAY, borderBottomLeftRadius:12, borderBottomRightRadius:12,
-                 width:width*0.4,alignItems:"center",
-            marginBottom:20,marginHorizontal:width*0.04}}>
-                <Image source={{ uri: "http://dummyimage.com/118x100.png/ff4444/ffffff" }} 
-                style={{ width: width*0.4, height: width*0.35, resizeMode:"cover" }} />
-                <View style={{marginVertical:10, paddingHorizontal:5}}>
-                <Text >{item?.recipeName}</Text>
 
-                </View>
-            </View>
+            console.log("itme", item);
+        return(
+            <TouchableOpacity style={{backgroundColor:LIGHT_GRAY_2, borderBottomLeftRadius:12, borderBottomRightRadius:12,
+                 width:width*0.4,alignItems:"center",marginHorizontal:width*0.04}}
+                 onPress={() =>navigation.push("RecipeDetail", {id:item?._id})}>
+                <Image source={{uri: `${API}/recipes/${item?.image}`}} 
+                style={{ width: width*0.4, height: width*0.35, resizeMode:"cover" }} />
+                
+            </TouchableOpacity>
         )
     }
 
@@ -72,11 +72,11 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
 
             {/* PROFİLE İMAGE*/}
             <View>
-                <View style={{borderWidth:3, borderColor:BLACK_COLOR,marginTop:30, width:width*2.7/10, height:width*2.7/10, alignSelf:"center",
+                <View style={{borderWidth:1, borderColor:BLACK_COLOR,marginTop:30, width:width*2.7/10, height:width*2.7/10, alignSelf:"center",
             borderRadius:180, alignItems:"center", justifyContent:"center"}}>
                     
                     {userInfo?.image != null ? (
-                    <Image source={{uri: `http://192.168.1.29:3000/${userInfo?.image}`}} style={{width: width*2.5/10, height:width*2.5    /10, 
+                    <Image source={{uri: `${API}/images/${userInfo?.image}`}} style={{width: width*2.5/10, height:width*2.5    /10, 
                     borderRadius:180}}/>
                 ) : (
                     <Image source={require("../../assets/images/default_profile.jpg")} style={{width: width*2.5/10, height:width*2.5    /10, 
@@ -125,7 +125,7 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
             ): null}
 
             {/* POST AREA */}
-            <View style={{ marginTop:20, alignItems:"center"}}>
+            <View style={{ marginTop:20,}}>
                 <FlatList
                     data={recipe_resp?.data?.data}
                     keyExtractor={(item)=> item._id.toString()}

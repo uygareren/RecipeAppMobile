@@ -24,11 +24,21 @@ const userSlice = createSlice({
         },
         
         updateUser: (state, action: PayloadAction<any>) => {
-            state.userInfo = {...state.userInfo, ...action.payload};
+            console.log("action payload", action.payload);
+            state.userInfo = { 
+                userId: state.userInfo.userId, 
+                biography:action.payload.biography, 
+                city:action.payload.city, 
+                country:action.payload.country,
+                email:action.payload.email,
+                name:action.payload.name,
+                phone:action.payload.phone,
+                surname:action.payload.surname,
+             };
         },
         logout: (state, action: PayloadAction<any>) => {
 
-            const isLogout = action.payload;
+            const isLogout = action.payload;""
             
             if(isLogout){
                 state.userInfo = {

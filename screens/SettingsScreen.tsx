@@ -50,7 +50,7 @@ export default function SettingsScreen(){
 
             <View style={styles.cardView}>
 
-                <TouchableOpacity onPress={() => navigation.navigate("UpdateProfile")} style={styles.cardStyle}>
+                <TouchableOpacity onPress={() => navigation.push("UpdateProfile")} style={styles.cardStyle}>
                     <Text style={styles.cardText}>{t("profile_update_btn_txt")}</Text>
                 </TouchableOpacity>
 
@@ -77,9 +77,9 @@ export default function SettingsScreen(){
                     <Actionsheet.Item>
                         <View style={styles.logoutConfirmArea}>
 
-                            <TouchableOpacity style={{marginVertical: 18, backgroundColor: LIGHT_GRAY, 
+                            <TouchableOpacity style={{marginVertical: 5, backgroundColor: LIGHT_GRAY, 
                             paddingVertical:5, paddingHorizontal:18, borderRadius: 25}} onPress={handleLogout}>
-                                <Text style={{...styles.logoutText, color:PINK, fontWeight:"400"}}>{t("logout_btn_txt")}</Text>
+                                <Text style={{...styles.logoutText, color:PINK, fontWeight:"500"}}>{t("logout_btn_txt")}</Text>
                             </TouchableOpacity>
 
                             <Divider height={1} width={"90%"}/>
