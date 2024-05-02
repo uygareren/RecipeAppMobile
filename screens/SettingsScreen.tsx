@@ -3,10 +3,12 @@ import { Actionsheet } from "native-base";
 import { useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
+import { ButtonComp } from "../components/Button";
 import { Divider } from "../components/Divider";
 import { ChangeLanguage } from "../components/Modals/ChangeLanguageModal";
 import useI18n from "../hooks/useI18n";
 import { userSliceActions } from "../store/reducer/userSlice";
+import { authButtonContainer, authTextButton } from "../styles/styles";
 import { LIGHT_GRAY, PINK, WHITE } from "../utils/utils";
 
 
@@ -68,9 +70,10 @@ export default function SettingsScreen(){
 
             </View>
 
-            <TouchableOpacity style={styles.logoutView} onPress={() => setIsLogoutVisible(true)}>
-                <Text style={{fontSize: 16, fontWeight:"600", color:WHITE}}>{t("logout_btn_txt")}</Text>
-            </TouchableOpacity>
+            <ButtonComp title={t("logout_btn_txt")} onPress={() => setIsLogoutVisible(true)} styleContainer={{...authButtonContainer, 
+                position: "absolute", bottom:50
+            }}
+            styleText={{...authTextButton}}/>
 
             <Actionsheet isOpen={isLogoutVisible} onClose={() => setIsLogoutVisible(false)}>
                 <Actionsheet.Content>

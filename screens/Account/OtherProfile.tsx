@@ -85,8 +85,6 @@ export default function OtherProfile({route}:any){
     
 
     async function handleFollow() {
-        setIsFollow(() => (!isFollow));
-
         if(!isFollow){
             
             followMutation.mutate({user_id:userInfo?.userId, followed_id:id})

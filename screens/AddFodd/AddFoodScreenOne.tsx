@@ -13,6 +13,7 @@ import { TextInputComp } from "../../components/Inputs";
 import useI18n from "../../hooks/useI18n";
 import { getAllIngredients, getAllMeasurements, getCategories, getInterestedData, postRecipe } from "../../services/ApiService";
 import { RootStateType } from "../../store/store";
+import { ingredientPostButtonContainer, ingredientPostButtonText } from '../../styles/styles';
 import { LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
 
  
@@ -365,17 +366,9 @@ export default function AddFoodScreen(){
         title={t("btn_save_recipe")}
         onPress={() => handlePostRecipe()}
         styleContainer={{
-          borderWidth: 1,
-          borderColor: "black",
-          marginVertical: 25,
-          paddingHorizontal:25,
-          alignSelf: "center",
-          alignItems: "center",
-          paddingVertical: 12,
-          borderRadius: 10,
-          backgroundColor: "black",
+          ...ingredientPostButtonContainer
         }}
-        styleText={{ color: MAIN_COLOR, fontWeight: "bold", fontSize: 16 }}
+        styleText={{ ...ingredientPostButtonText }}
         loading={buttonLoading}
       />
 

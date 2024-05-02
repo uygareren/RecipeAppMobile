@@ -8,6 +8,7 @@ import { ToastError } from "../../components/Toast";
 import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { register } from "../../services/AuthServices";
+import { authButtonContainer, authTextButton } from "../../styles/styles";
 import { BLACK_COLOR, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 
 
@@ -73,8 +74,8 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
                 </View>
 
                 <View style={{marginBottom: 70}}>
-                    <ButtonComp loading={loading} title={t("register_btn")} onPress={() => handleRegister()} styleContainer={styles.buttonContainer}
-                    styleText={styles.textButton}/>
+                    <ButtonComp loading={loading} title={t("register_btn")} onPress={() => handleRegister()} styleContainer={{...authButtonContainer}}
+                    styleText={{...authTextButton}}/>
 
                     <View style={{marginTop: 30, flexDirection: "row", 
                         justifyContent: "center", alignItems: "center"}}>

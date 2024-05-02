@@ -27,7 +27,7 @@ export default function FavoritesScreen(){
 
     console.log("dataa", data);
 
-    const RenderItem = ({ item }: { item: Recipe }) => {
+    const RenderItem = ({ item }: { item: RecipeType }) => {
 
         console.log("item", item);
 
@@ -56,7 +56,7 @@ export default function FavoritesScreen(){
             <View style={{marginTop:20}}>
             <FlatList
                     data={data?.data}
-                    keyExtractor={(item:Recipe)=> item._id.toString()}
+                    keyExtractor={(item:RecipeType)=> item._id.toString()}
                     renderItem={RenderItem}
                     numColumns={2}
                     showsVerticalScrollIndicator={false}

@@ -135,6 +135,7 @@ export const getRecipeById = async(id:String) => {
 }
 
 export const getRecipeSearch = async(value:string) => {
+    console.log(`${API}/recipe-search?searchQuery=${value}`);
     const response = await api.get(`${API}/recipe-search?searchQuery=${value}`);
     return response.data;
 
@@ -178,6 +179,8 @@ export const postComment = async(payload:CommentType) => {
 // USER SEARCH QUERİES
 
 export const getUserSearch = async(value:string) => {
+    console.log(`${API}/recipe-search?searchQuery=${value}`);
+
     const response = await api.get(`${API}/user-search?userQuery=${value}`);
 
     return response.data;

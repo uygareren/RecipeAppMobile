@@ -43,23 +43,14 @@ export default function HomeScreen({ route }: any) {
 
     const [searchData, setSearchData] = useState<any[]>([]);
 
+    const [recipeData, setRecipeData] = useState<any[]>([]);
+
     const [previusSearchedData, setPreviusSearchedData] = useState<any>([]);
     // const [searchUserData, setSearchUserData] = useState<any[]>([]);
 
     const [searchLoading, setSearchLoading] = useState(false)
 
-    const recipeData = useQuery(
-      ["recipe-search"],
-      () => getRecipeSearch(searchValue)
-      
-    );
-
-    const userData = useQuery(
-      ["user-search"],
-      () => getUserSearch(searchValue)
-      
-    )
-    
+  
     const {data} = useQuery({
       queryKey: ["categories"],
       queryFn: getCategories
@@ -182,7 +173,38 @@ export default function HomeScreen({ route }: any) {
       }, 4000);
 
       return () => clearTimeout(timer); // Clear the timer on unmount
-  }, []);
+    }, []);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+
+          if(searchSelectVisible == 0){
+
+            const result = await getRecipeSearch(searchValue);
+
+            console.log("result", result?.data);
+            setSearchData(result?.data);
+          }else if(searchSelectVisible == 1){
+            
+            const result = await getUserSearch(searchValue);
+
+            console.log("result", result?.data);
+            setSearchData(result?.data);
+          }
+
+    
+        } catch (error) {
+          console.error("Error fetching recipe data:", error);
+        }
+      };
+    
+      // searchValue değiştiğinde fetchData fonksiyonunu çağır
+      if (searchValue) {
+        fetchData();
+      }
+    }, [searchValue]);
+    
 
  
 
@@ -196,34 +218,6 @@ export default function HomeScreen({ route }: any) {
     }, [userInfo]);
     
     
-
-    useEffect(() => {
-      if (searchSelectVisible === 0) {
-        // Tarif arama
-
-        if(searchValue.length == 0){
-          setSearchData([]);
-        }else{
-          setSearchData(recipeData?.data?.data)
-        }
-
-      } else if (searchSelectVisible === 1) {
-        // Kullanıcı arama
-        setSearchLoading(true);
-
-        if(searchValue.length == 0){
-          setSearchData([]);
-        }else{
-          setSearchData(userData?.data?.data)
-
-        }
-
-      }
-
-      setSearchLoading(false);
-
-
-    }, [searchValue])
 
     useEffect(() => {
 
@@ -252,26 +246,25 @@ export default function HomeScreen({ route }: any) {
       );
     };
 
-    const RenderSearchItem = ({item}:any) => {
-
-      console.log("itemm", item);
-
-      return(
-        <TouchableOpacity onPress={() => handleNavigate(item)} style={{flexDirection:'row', marginVertical:7, 
-          paddingHorizontal:15, paddingVertical:7,alignItems:'center'}}>
-            <View style={{width:50, height:50, borderRadius:180}}>
+    const RenderSearchItem = ({item}: any) => {
+      return (
+        <TouchableOpacity onPress={() => handleNavigate(item)} style={{flexDirection:'row', marginVertical:7, paddingHorizontal:15, paddingVertical:7, alignItems:'center'}}>
+          <View style={{width:50, height:50, borderRadius:180}}>
+            {searchSelectVisible === 0 ? (
+              // If searching for recipes, render recipe image
               <Image style={{width: 50, height:50, borderRadius:180, resizeMode:'cover'}} source={{uri: `${API}/recipes/${item?.image}`}}/>
-            </View>
-            {searchSelectVisible == 0 ? (
-            <Text style={{marginLeft:15, fontWeight:'500', fontSize:15}}>{item?.recipeName}</Text>
-
-            ): 
-            (<Text style={{marginLeft:15, fontWeight:'500', fontSize:15}}>{item?.name}</Text>
-            )
-            }
+            ) : (
+              // If searching for users, render profile image
+              <Image style={{width: 50, height:50, borderRadius:180, resizeMode:'cover'}} source={item?.image ? {uri: `${API}/images/${item?.image}`} : require("../../assets/images/default_profile.jpg")}/>
+            )}
+          </View>
+          <Text style={{marginLeft:15, fontWeight:'500', fontSize:15}}>
+            {searchSelectVisible === 0 ? item?.recipeName : `${item?.name} ${item?.surname}`}
+          </Text>
         </TouchableOpacity>
-      )
-    }
+      );
+    };
+    
 
     const RenderPreviusSearchData = ({item}:any) => {
 
@@ -302,8 +295,6 @@ export default function HomeScreen({ route }: any) {
                   style={{width:width*0.1, height:width*0.1, borderRadius:180}}/>
                   )}
                   
-                  <Image source={{uri: `${API}/images/${item?.user?.image}`}}
-                  style={{width:width*0.1, height:width*0.1, borderRadius:180}}/>
                   </TouchableOpacity>
                   
                   <Text style={{fontWeight:"500", fontSize:15, marginLeft:10}}>{`${item?.user?.name} ${item?.user?.surname}`}</Text>

@@ -5,7 +5,7 @@ interface IngredientWithMeasurement {
     _id: string;
 }
 
-interface Recipe {
+interface RecipeType {
     user: {
         userId: string;
         name: string;

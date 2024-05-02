@@ -6,7 +6,8 @@ import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/Button";
 import useI18n from "../../hooks/useI18n";
 import { deleteRecipe, postRecipeImage } from "../../services/ApiService";
-import { LIGHT_GRAY, MAIN_COLOR, WHITE } from "../../utils/utils";
+import { ingredientPostButtonContainer, ingredientPostButtonText, ingredientSaveButtonContainer, ingredientSaveButtonText } from "../../styles/styles";
+import { LIGHT_GRAY, WHITE } from "../../utils/utils";
 
 
 
@@ -142,24 +143,11 @@ export default function AddFoodScreenTwo({route}:any){
 
               )}
 
-              <ButtonComp title={t("recipe_image")} onPress={handlePickImage} styleContainer={{marginTop:20,paddingVertical:10, 
-            width:150, alignSelf:"center", alignItems:"center", borderRadius:12, backgroundColor:MAIN_COLOR}} styleText={{fontWeight:"600"
-            }}/>
+              <ButtonComp title={t("recipe_image")} onPress={handlePickImage} styleContainer={{...ingredientSaveButtonContainer}} 
+              styleText={{...ingredientSaveButtonText}}/>
             <ButtonComp title="Kaydet!" onPress={handleNavigate} 
-                styleContainer={{
-                    borderWidth: 1,
-                    borderColor: "black",
-                    marginVertical: 25,
-                    paddingHorizontal:25,
-                    alignSelf: "center",
-                    alignItems: "center",
-                    paddingVertical: 12,
-                    borderRadius: 10,
-                    backgroundColor: "black",
-                    position:"absolute",
-                    bottom:20,
-                  }}
-                  styleText={{ color: MAIN_COLOR, fontWeight: "bold", fontSize: 16 }}
+                styleContainer={{...ingredientPostButtonContainer, position:"absolute", bottom:50 }}
+                  styleText={{...ingredientPostButtonText}}
                   isActive={image ? true : false}
                   
             />

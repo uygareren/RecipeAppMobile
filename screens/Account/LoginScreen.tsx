@@ -12,6 +12,7 @@ import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { login } from "../../services/AuthServices";
 import { userSliceActions } from "../../store/reducer/userSlice";
+import { authButtonContainer, authTextButton } from "../../styles/styles";
 import { keyGenerator, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 
 
@@ -83,8 +84,8 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
                 </View>
 
                 <View>
-                    <ButtonComp loading={loading} title={t("btn_title")} onPress={() => handleLogin()} styleContainer={styles.buttonContainer}
-                    styleText={styles.textButton}/>
+                    <ButtonComp loading={loading} title={t("btn_title")} onPress={() => handleLogin()} styleContainer={{...authButtonContainer}}
+                    styleText={{...authTextButton}}/>
                 </View>
 
                 <View style={{marginTop: 30, flexDirection: "row", 

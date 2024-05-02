@@ -8,6 +8,7 @@ import { TopHeader } from "../components/Header";
 import { TextInputPassword } from "../components/Inputs";
 import useI18n from "../hooks/useI18n";
 import { AuthServices } from "../services/AuthServices";
+import { authButtonContainer, authTextButton } from "../styles/styles";
 import { PINK, WHITE } from "../utils/utils";
 
 
@@ -72,8 +73,8 @@ export default function UpdatePasswordScreen({}){
             </View>
 
             <View>
-                <ButtonComp loading={loading} title={t("update_btn")} onPress={() => handleUpdatePassord()} styleContainer={styles.buttonContainer}
-                styleText={styles.textButton}/>
+                <ButtonComp loading={loading} title={t("update_btn")} onPress={() => handleUpdatePassord()} styleContainer={{...authButtonContainer}}
+                styleText={{...authTextButton}}/>
             </View>
             
         </View>

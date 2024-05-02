@@ -8,7 +8,7 @@ import { Loading } from "../../components/Loading";
 import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { getFollowing, getRecipeByUserId } from "../../services/ApiService";
-import { BLACK_COLOR, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, LIGHT_GRAY, WHITE } from "../../utils/utils";
 
 
 export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">){
@@ -49,16 +49,14 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
         )
       }
 
-    const RenderItem = ({item}:any) => {
-
-            console.log("itme", item);
+      const RenderItem = ({item}:any) => {
         return(
-            <TouchableOpacity style={{backgroundColor:LIGHT_GRAY_2, borderBottomLeftRadius:12, borderBottomRightRadius:12,
-                 width:width*0.4,alignItems:"center",marginHorizontal:width*0.04}}
-                 onPress={() =>navigation.push("RecipeDetail", {id:item?._id})}>
+            <TouchableOpacity onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{backgroundColor:LIGHT_GRAY,
+                 width:width*0.3,alignItems:"center",
+            marginBottom:20,marginVertical:2, marginHorizontal:2}}>
                 <Image source={{uri: `${API}/recipes/${item?.image}`}} 
-                style={{ width: width*0.4, height: width*0.35, resizeMode:"cover" }} />
-                
+                style={{ width: width*0.3, height: width*0.3, resizeMode:"cover" }} />
+
             </TouchableOpacity>
         )
     }

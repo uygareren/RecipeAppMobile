@@ -10,7 +10,8 @@ import { ToastSuccess } from '../components/Toast';
 import useI18n from "../hooks/useI18n";
 import { updateProfileImage, updateUser } from "../services/ApiService";
 import { userSliceActions } from "../store/reducer/userSlice";
-import { LIGHT_GRAY_2, MAIN_COLOR, WHITE } from "../utils/utils";
+import { ingredientPostButtonContainer, ingredientPostButtonText, ingredientSaveButtonContainer, ingredientSaveButtonText } from '../styles/styles';
+import { LIGHT_GRAY_2, WHITE } from "../utils/utils";
 
 
 
@@ -158,9 +159,8 @@ export default function UpdateProfileScreen(){
                     <Image source={require("../assets/images/default_profile.jpg")} style={{width:150, height:150, borderRadius:15}}/>
 
                 )}
-                <ButtonComp title="Update Photo" onPress={updatePhoto} styleContainer={{marginTop:20,paddingVertical:10, 
-            width:150, alignSelf:"center", alignItems:"center", borderRadius:12, backgroundColor:MAIN_COLOR}} styleText={{fontWeight:"600"
-            }}/>
+                <ButtonComp title="Update Photo" onPress={updatePhoto} styleContainer={{...ingredientSaveButtonContainer}} 
+                styleText={{...ingredientSaveButtonText, fontWeight:'500'}}/>
             </View>
 
             <View style={{paddingHorizontal:20, marginTop:70, alignItems:"center"}}>
@@ -181,16 +181,8 @@ export default function UpdateProfileScreen(){
                     styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                 
                 <ButtonComp title={t("save")} isActive={isActive} loading={loading} onPress={() => handleSave()} 
-                styleContainer={{
-                    marginVertical:25,
-                    paddingHorizontal:25,
-                    alignSelf: "center",
-                    alignItems: "center",
-                    paddingVertical: 12,
-                    borderRadius: 10,
-                    backgroundColor: "black",
-                  }}
-                styleText={{ color: MAIN_COLOR, fontWeight: "bold", fontSize: 16 }}
+                styleContainer={{...ingredientPostButtonContainer}}
+                styleText={{...ingredientPostButtonText}}
                 />
                 
                 

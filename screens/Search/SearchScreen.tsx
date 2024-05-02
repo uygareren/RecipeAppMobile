@@ -9,6 +9,7 @@ import { TopHeader } from "../../components/Header";
 import { TextInputComp } from "../../components/Inputs";
 import useI18n from "../../hooks/useI18n";
 import { getAllIngredients } from "../../services/ApiService";
+import { ingredientSaveButtonContainer, ingredientSaveButtonText } from '../../styles/styles';
 import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
 
 export default function SearchScreen({}) {
@@ -145,13 +146,9 @@ export default function SearchScreen({}) {
           title={t("save_ingredient")}
           onPress={() => handleSaveComponents()}
           styleContainer={{
-            marginTop: 15,
-            paddingVertical: 10,
-            paddingHorizontal: 10,
-            borderRadius: 15,
-            backgroundColor: MAIN_COLOR,
+            ...ingredientSaveButtonContainer
           }}
-          styleText={{ fontWeight: "bold", color: "#292828" }}
+          styleText={{...ingredientSaveButtonText}}
         />
       </View>
       

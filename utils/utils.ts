@@ -11,6 +11,8 @@ export const GRAY = "gray";
 export const LIGHT_GRAY = "#e1e3e1";
 export const LIGHT_GRAY_2 = "#faf8f7";
 export const LIGHT_RED = "#f75e73";
+export const TEXT_BLACK = "#292828";
+
 
 
 
