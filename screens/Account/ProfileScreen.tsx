@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
-import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Divider } from "../../components/Divider";
 import { SettingsHeader } from "../../components/Header";
 import { Loading } from "../../components/Loading";
+import { RecipeRenderComponent } from "../../components/Render/RecipeRenderComponent";
 import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { getFollowing, getRecipeByUserId } from "../../services/ApiService";
@@ -18,7 +19,6 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
     const {t} = useI18n("ProfileScreen");
 
     const width = Dimensions.get("screen").width
-    const height = Dimensions.get("screen").height
 
     const navigation = useNavigation<any>();
 
@@ -50,15 +50,7 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
       }
 
       const RenderItem = ({item}:any) => {
-        return(
-            <TouchableOpacity onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{backgroundColor:LIGHT_GRAY,
-                 width:width*0.3,alignItems:"center",
-            marginBottom:20,marginVertical:2, marginHorizontal:2}}>
-                <Image source={{uri: `${API}/recipes/${item?.image}`}} 
-                style={{ width: width*0.3, height: width*0.3, resizeMode:"cover" }} />
-
-            </TouchableOpacity>
-        )
+        
     }
 
     return(
@@ -127,7 +119,7 @@ export default function ProfileScreen({route}: TabAccountScreenProps<"Profile">)
                 <FlatList
                     data={recipe_resp?.data?.data}
                     keyExtractor={(item)=> item._id.toString()}
-                    renderItem={RenderItem}
+                    renderItem={({ item }) => <RecipeRenderComponent item={item} navigation={navigation} />}
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
                 />

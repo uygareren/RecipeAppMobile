@@ -5,6 +5,7 @@ import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { GoBackHeader } from "../../components/Header";
 import { Loading } from "../../components/Loading";
+import { RecipeRenderComponent } from "../../components/Render/RecipeRenderComponent";
 import useI18n from "../../hooks/useI18n";
 import { addFollowed, getFollowing, getRecipeByUserId, getUserDetail, removeFollowed } from "../../services/ApiService";
 import { BLACK_COLOR, LIGHT_GRAY, PINK, WHITE } from "../../utils/utils";
@@ -94,19 +95,6 @@ export default function OtherProfile({route}:any){
 
     }
 
-
-    const RenderItem = ({item}:any) => {
-        return(
-            <TouchableOpacity onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{backgroundColor:LIGHT_GRAY,
-                 width:width*0.3,alignItems:"center",
-            marginBottom:20,marginVertical:2, marginHorizontal:2}}>
-                <Image source={{uri: `${API}/recipes/${item?.image}`}} 
-                style={{ width: width*0.3, height: width*0.3, resizeMode:"cover" }} />
-
-            </TouchableOpacity>
-        )
-    }
-
     // useEffect(() => {
     //   follower_data?.map((item:any) => item?._id == userInfo?.userId ? setIsFollow(true): setIsFollow(false))
     // }, [])
@@ -194,7 +182,7 @@ export default function OtherProfile({route}:any){
                 <FlatList
                     data={recipeResponse?.data?.data}
                     keyExtractor={(item)=> item._id.toString()}
-                    renderItem={RenderItem}
+                    renderItem={({item}) => <RecipeRenderComponent item={item} navigation={navigation}/>}
                     numColumns={3}
                     showsVerticalScrollIndicator={false}
                 />

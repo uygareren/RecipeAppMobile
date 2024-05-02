@@ -1,9 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
-import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Divider } from "../components/Divider";
 import { TopHeader } from "../components/Header";
+import { RecipeRenderComponent } from "../components/Render/RecipeRenderComponent";
 import { getLikedRecipes } from "../services/ApiService";
 import { LIGHT_GRAY, WHITE } from "../utils/utils";
 
@@ -27,24 +28,6 @@ export default function FavoritesScreen(){
 
     console.log("dataa", data);
 
-    const RenderItem = ({ item }: { item: RecipeType }) => {
-
-        console.log("item", item);
-
-        return(
-            <TouchableOpacity onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{backgroundColor:LIGHT_GRAY, borderBottomLeftRadius:12, borderBottomRightRadius:12,
-                 width:width*0.4,alignItems:"center",
-            marginBottom:20,marginHorizontal:width*0.04}}>
-                <Image source={{uri: `${API}/recipes/${item?.image}`}}  
-                style={{ width: width*0.4, height: width*0.35, resizeMode:"cover" }} />
-                <View style={{marginVertical:10, paddingHorizontal:5}}>
-                <Text >{item?.recipeName}</Text>
-
-                </View>
-            </TouchableOpacity>
-        )
-    }
-
     return(
         <ScrollView style={styles.container}>
 
@@ -57,7 +40,7 @@ export default function FavoritesScreen(){
             <FlatList
                     data={data?.data}
                     keyExtractor={(item:RecipeType)=> item._id.toString()}
-                    renderItem={RenderItem}
+                    renderItem={({ item }) => <RecipeRenderComponent item={item} navigation={navigation}/>}
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
                 />
