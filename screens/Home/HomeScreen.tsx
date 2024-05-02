@@ -361,7 +361,7 @@ export default function HomeScreen({ route }: any) {
 
               <View style={{flexDirection:'row', justifyContent:'space-evenly', marginTop:8}}>
 
-                <TouchableOpacity onPress={handleSwitch} style={{width:width*0.5, backgroundColor:"white", alignItems:'center', justifyContent:'center',
+                <TouchableOpacity onPress={handleSwitch} style={{width:width*0.5, backgroundColor:WHITE, alignItems:'center', justifyContent:'center',
               paddingVertical:7}}>
                   <Text style={{fontWeight:'500', fontSize:13}}>Tarifler</Text>
                   {searchSelectVisible == 0 ? (
@@ -369,7 +369,7 @@ export default function HomeScreen({ route }: any) {
                 ): null}
                 </TouchableOpacity>
                 
-                <TouchableOpacity onPress={handleSwitch} style={{width:width*0.5, backgroundColor:"white",alignItems:'center', justifyContent:'center',
+                <TouchableOpacity onPress={handleSwitch} style={{width:width*0.5, backgroundColor:WHITE,alignItems:'center', justifyContent:'center',
               paddingVertical:7}}>
                   <Text style={{fontWeight:'500', fontSize:13}}>Kullanıcılar</Text>
                   {searchSelectVisible == 1 ? (

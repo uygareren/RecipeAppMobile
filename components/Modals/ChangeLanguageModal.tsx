@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useI18n from "../../hooks/useI18n";
 import { userSliceActions } from "../../store/reducer/userSlice";
 import { RootStateType } from "../../store/store";
-import { LANG_STORE, setMomentLanguage } from "../../utils/utils";
+import { BLACK_COLOR, LANG_STORE, setMomentLanguage, WHITE } from "../../utils/utils";
 import { Divider } from "../Divider";
 
 
@@ -45,7 +45,7 @@ export const ChangeLanguage = ({isModalVisible, setIsModalVisible}: ChangeLangua
             <View>
 
                 <TouchableOpacity style={{alignSelf: "flex-end", marginRight: 25, marginTop: 25}} onPress={() => setIsModalVisible(false)}>
-                    <FontAwesome5 name="chevron-down" size={24} color="black" />
+                    <FontAwesome5 name="chevron-down" size={24} color={BLACK_COLOR} />
                 </TouchableOpacity>
 
                 <View style={{marginTop: 20, alignItems: "center"}}>
@@ -70,7 +70,7 @@ export const ChangeLanguage = ({isModalVisible, setIsModalVisible}: ChangeLangua
                                     ) : null}
                                 </View>
                                 <View style={{ width: Dimensions.get("screen").width - 30, 
-                            alignSelf: "center", height: 1, backgroundColor: "#dfdfdf", marginTop: 10 }} />
+                            alignSelf: "center", height: 1, backgroundColor: WHITE, marginTop: 10 }} />
                             </View>  
                         </TouchableOpacity>
                     ))}

@@ -106,7 +106,7 @@ export default function SearchScreen({}) {
       paddingVertical:10, paddingHorizontal:10, borderRadius:10, flexDirection:"row", alignItems:"center"}}>
         <Text style={{fontWeight:"500",}}>{item}</Text>
         <TouchableOpacity onPress={() => handleRemoveItem(item)}>
-          <Ionicons name="close-circle-outline" size={20} color="black" style={{marginLeft:5}}/>
+          <Ionicons name="close-circle-outline" size={20} color={BLACK_COLOR} style={{marginLeft:5}}/>
         </TouchableOpacity>
       </Pressable>
     )
@@ -128,7 +128,7 @@ export default function SearchScreen({}) {
 
         <TouchableOpacity onPress={() => setIsModalVisible(true)} style={{
           borderWidth: 1,
-          borderColor: "black",
+          borderColor: BLACK_COLOR,
           borderRadius: 10,
           paddingVertical: 10,
           paddingHorizontal: 5,
@@ -170,14 +170,14 @@ export default function SearchScreen({}) {
         onPress={() => handleSearchRecipe()}
         styleContainer={{
           borderWidth: 1,
-          borderColor: "black",
+          borderColor: BLACK_COLOR,
           marginTop: 25,
           width: width * 4 / 10,
           alignSelf: "center",
           alignItems: "center",
           paddingVertical: 12,
           borderRadius: 10,
-          backgroundColor: "black",
+          backgroundColor: BLACK_COLOR,
         }}
         styleText={{ color: MAIN_COLOR, fontWeight: "bold", fontSize: 16 }}
       />
@@ -186,7 +186,7 @@ export default function SearchScreen({}) {
           <View style={{}}>
 
               <TouchableOpacity onPress={() => setIsModalVisible(false)}>
-                  <AntDesign name="left" size={26} color="black" style={{marginLeft:10, marginTop:5}}/>
+                  <AntDesign name="left" size={26} color={BLACK_COLOR} style={{marginLeft:10, marginTop:5}}/>
               </TouchableOpacity>
 
               <TextInputComp 

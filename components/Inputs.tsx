@@ -2,6 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { FormControl, useTheme } from "native-base";
 import { useState } from "react";
 import { KeyboardTypeOptions, Pressable, TextInput, TextStyle, View, ViewStyle } from "react-native";
+import { BLACK_COLOR } from '../utils/utils';
 
 type TextInputParams = {
     value: string,
@@ -88,7 +89,7 @@ export const TextInputPassword = ({
                     <TextInput value={value} onChangeText={onchangeValue} placeholder={placeholder} secureTextEntry={isShow} style={{...styleInput}}/>
 
                     <Pressable onPress={() => setisShow(!isShow)} style={{marginLeft: 20, justifyContent: "center"}}>
-                        {isShow ? (<Feather name="eye-off" size={24} color="black" />) : (<Feather name="eye" size={24} color="black" />)}
+                        {isShow ? (<Feather name="eye-off" size={24} color={BLACK_COLOR} />) : (<Feather name="eye" size={24} color={BLACK_COLOR} />)}
                     </Pressable>
                 </View>
                 

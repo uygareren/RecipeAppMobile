@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native";
 import { useSelector } from "react-redux";
 import { RootStateType } from "../store/store";
-import { BLACK_COLOR, WHITE } from "../utils/utils";
+import { BLACK_COLOR, GRAY, WHITE } from "../utils/utils";
 import AddFoodNavigation from "./AddFoodNavigation";
 import HomeNavigation from "./HomeNavigation";
 import ProfileNavigation from "./ProfileNavigation";
@@ -23,7 +23,7 @@ export const TabNavigation = () => {
             <Tab.Navigator
                 screenOptions={{
                     tabBarActiveTintColor: BLACK_COLOR,
-                    tabBarInactiveTintColor: "gray",
+                    tabBarInactiveTintColor: GRAY,
                     tabBarStyle: {
                         backgroundColor: WHITE,
                         paddingVertical: 0,
@@ -45,7 +45,7 @@ export const TabNavigation = () => {
                             <AntDesign
                                 name="home"
                                 size={24}
-                                color={focused ? BLACK_COLOR : "gray"}
+                                color={focused ? BLACK_COLOR : GRAY}
                             />
                         ),
                         headerShown: false,
@@ -58,7 +58,7 @@ export const TabNavigation = () => {
                     component={AddFoodNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
-                            <AntDesign name="plus" size={24} color={focused ? BLACK_COLOR : "gray"} />
+                            <AntDesign name="plus" size={24} color={focused ? BLACK_COLOR : GRAY} />
                         ),
                         headerShown: false,
                         tabBarLabel: "Add Food",
@@ -70,7 +70,7 @@ export const TabNavigation = () => {
                     component={SearchNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
-                            <Feather name="search" size={24} color={focused ? BLACK_COLOR : "gray"} />
+                            <Feather name="search" size={24} color={focused ? BLACK_COLOR : GRAY} />
                         ),
                         headerShown: false,
                         tabBarLabel: "Detail Search",
@@ -85,7 +85,7 @@ export const TabNavigation = () => {
                             <Ionicons
                                 name="person-outline"
                                 size={24}
-                                color={focused ? BLACK_COLOR : "gray"}
+                                color={focused ? BLACK_COLOR : GRAY}
                             />
                         ),
                         headerShown: false,

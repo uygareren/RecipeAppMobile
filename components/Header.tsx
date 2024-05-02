@@ -62,8 +62,9 @@ export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress,
           <Text style={{fontSize:19, fontWeight:"700", marginTop:5}}>Bugün ne pişirmek istersiniz?</Text>
           {
             name.length > 0 ? (
-              <TouchableOpacity onPress={onPress} style={{width:Dimensions.get("screen").width/9, height:Dimensions.get("screen").width/9, borderRadius:180, borderWidth:1,
-              borderColor:"black", alignItems:"center", justifyContent:"center" }}>
+              <TouchableOpacity onPress={onPress} style={{width:Dimensions.get("screen").width/9, 
+              height:Dimensions.get("screen").width/9, borderRadius:180, borderWidth:1,
+              borderColor:BLACK_COLOR, alignItems:"center", justifyContent:"center" }}>
                   {user_image != undefined ? (
                     <Image style={{width:Dimensions.get("screen").width/10, height:Dimensions.get("screen").width/10, borderRadius:180,  }}
                   source={{uri: `${API}/images/${user_image}`}}/>
@@ -85,9 +86,9 @@ export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress,
 
           <View style={styles.searchIcon}>
             {value ? (<TouchableOpacity onPress={() => onChangeValue("")}> 
-                <EvilIcons name="close-o" size={26} color="black" />
+                <EvilIcons name="close-o" size={26} color={BLACK_COLOR} />
             </TouchableOpacity>) : 
-            (<EvilIcons name="search" size={26} color="black" /> )
+            (<EvilIcons name="search" size={26} color={BLACK_COLOR} /> )
             }
             
           </View>
@@ -105,7 +106,7 @@ export const SettingsHeader = () => {
   return(
       <View style={{...styles.topHeaderContainer, marginTop:30}}>
         <TouchableOpacity style={{position: "absolute", top: 20, right: 20}} onPress={() => navigation.navigate("Settings")}>
-          <Ionicons name="settings-outline" size={28} color="black" />
+          <Ionicons name="settings-outline" size={28} color={BLACK_COLOR} />
         </TouchableOpacity>
       </View>
   )
@@ -129,11 +130,11 @@ export const RecipeDetailHeader = ({isLıke}: any) => {
   return(
       <View style={styles.topHeaderContainer}>
         <TouchableOpacity style={{position: "absolute", left:20, top:20}}>
-          <AntDesign name="arrowleft" size={32} color="black" />
+          <AntDesign name="arrowleft" size={32} color={BLACK_COLOR} />
         </TouchableOpacity>
         <Text style={{fontStyle: "italic", fontSize: 28, color: "#7224a3"}}>Foody</Text>
         <TouchableOpacity style={{position: "absolute", top: 20, right: 20}} onPress={() => setIsLike(!isLike)}>
-          {isLike ? (<MaterialIcons name="favorite" size={32} color="black" />) : (<MaterialIcons name="favorite-border" size={32} color="black" />)}
+          {isLike ? (<MaterialIcons name="favorite" size={32} color={BLACK_COLOR} />) : (<MaterialIcons name="favorite-border" size={32} color={BLACK_COLOR} />)}
         </TouchableOpacity>
       </View>
   )
