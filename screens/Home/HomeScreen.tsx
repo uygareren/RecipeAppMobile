@@ -8,11 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Divider } from '../../components/Divider';
 import { SearchHeader } from '../../components/Header';
 import { TextInputComp } from '../../components/Inputs';
+import { HomeRecipeRenderComponent } from '../../components/Render/HomeRecipeRenderComponent';
 import SkeletonComp from '../../components/Skeleton';
 import useI18n from "../../hooks/useI18n";
 import { getCategories, getRecipeByInterests, getRecipeSearch, getUserDetail, getUserSearch } from "../../services/ApiService";
 import { userSliceActions } from "../../store/reducer/userSlice";
-import { BLACK_COLOR, GRAY, handleNavigation, keyGenerator, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, GRAY, keyGenerator, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
 
 export default function HomeScreen({ route }: any) {
 
@@ -280,45 +281,7 @@ export default function HomeScreen({ route }: any) {
       )
     }
 
-    const RenderInterest = ({item}:any) => {
-
-      return(
-          <View style={{ paddingHorizontal:0, marginBottom:20, }}>
-              {/* USER */}
-              <View style={{flexDirection:"row",alignItems:"center", justifyContent:'flex-start', }}>
-              <TouchableOpacity onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userInfo?.userId, id_2: item?.user?.userId})} style={{width:width*0.1, height:width*0.1, borderRadius:180}}>
-                  {item?.user?.image != null ? (
-                    <Image source={{uri: `${API}/images/${item?.user?.image}`}}
-                    style={{width:width*0.1, height:width*0.1, borderRadius:180}}/>
-                  ): (
-                    <Image source={require("../../assets/images/default_profile.jpg")}
-                  style={{width:width*0.1, height:width*0.1, borderRadius:180}}/>
-                  )}
-                  
-                  </TouchableOpacity>
-                  
-                  <Text style={{fontWeight:"500", fontSize:15, marginLeft:10}}>{`${item?.user?.name} ${item?.user?.surname}`}</Text>
-              </View>
-
-              <Pressable onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{width:width-30,}}>
-                  <Image source={{uri: `${API}/recipes/${item?.image}`}}
-                  style={{width:width-50, height:width-50, resizeMode:"contain"}}/>
-              </Pressable>
-              <View style={{alignItems:"center", marginTop:10}}>
-                  <Text style={{fontWeight:"300", fontSize:16, marginBottom:10}}>{item?.recipeName}</Text>
-              </View>
-              <Divider height={1} width={"90%"}/>
-
-          </View>
-          
-
-          
-      )
-  }
-
-    
-
-
+   
     return (
       <ScrollView style={styles.container}>
         <View style={{ marginTop: 50 }}>
@@ -356,12 +319,12 @@ export default function HomeScreen({ route }: any) {
           /> 
         </View>
         {interestMutation?.data?.data.length > 0 ? (
-          <View style={{ marginTop: 50, marginLeft: 20, }}>
-          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10, marginBottom:25 }}>İlgilendiğim Mutfaklar</Text>
+          <View style={{ marginTop: 50, }}>
+          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 30, marginBottom:25 }}>İlgilendiğim Mutfaklar</Text>
             <FlatList
                 data={interestMutation?.data?.data}
                 keyExtractor={(item:any) => item?._id.toString()}
-                renderItem={RenderInterest}
+                renderItem={({item}) => <HomeRecipeRenderComponent navigation={navigation} userId={userInfo?.userId} item={item}/>}
             />
         </View>
         ): (
