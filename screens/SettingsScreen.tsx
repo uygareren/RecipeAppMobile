@@ -9,7 +9,7 @@ import { ChangeLanguage } from "../components/Modals/ChangeLanguageModal";
 import useI18n from "../hooks/useI18n";
 import { userSliceActions } from "../store/reducer/userSlice";
 import { authButtonContainer, authTextButton } from "../styles/styles";
-import { LIGHT_GRAY, LIGHT_WHITE, PINK, WHITE } from "../utils/utils";
+import { LIGHT_GRAY, PINK, WHITE } from "../utils/utils";
 
 
 export default function SettingsScreen(){
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         paddingVertical: 13,
         marginVertical: 13,
         borderRadius: 25,
-        backgroundColor: LIGHT_WHITE
+        backgroundColor: LIGHT_GRAY
     },
     cardText:{
         fontSize: 16,

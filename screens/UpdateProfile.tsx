@@ -1,11 +1,12 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useToast } from 'native-base';
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
+import PhoneInput from 'react-native-phone-number-input';
 import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { ButtonComp } from "../components/Button";
-import { TextInputComp } from "../components/Inputs";
+import { PhoneInputComp, TextInputComp } from "../components/Inputs";
 import { ToastSuccess } from '../components/Toast';
 import useI18n from "../hooks/useI18n";
 import { updateProfileImage, updateUser } from "../services/ApiService";
@@ -32,7 +33,11 @@ export default function UpdateProfileScreen(){
 
     // console.log("userinfo", userInfo);
 
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+
+    const phoneInput = useRef<PhoneInput>(null);
+    const [formattedValue, setFormattedValue] = useState("");
+
     
 
     const [name, setName] = useState(user?.userInfo?.name ?? "");
@@ -171,8 +176,10 @@ export default function UpdateProfileScreen(){
                     styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                 <TextInputComp value={email} onchangeValue={setEmail} label={t("email")} placeholder={t("email")}
                     styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                <TextInputComp value={phone} onchangeValue={setPhone} label={t("phone")} placeholder={t("phone")} 
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                {/* <TextInputComp value={phone} onchangeValue={setPhone} label={t("phone")} placeholder={t("phone")} 
+                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/> */}
+                <PhoneInputComp styleContainer={styles.TextInputComp} label={t("phone")} phoneInput={phoneInput} placeHolder={t("phone")} phone={phone} setPhone={setPhone} 
+                setFormattedValue={setFormattedValue} width={width}/>
                 <TextInputComp value={country} onchangeValue={setCountry} label={t("country")} placeholder={t("country")} 
                     styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
                 <TextInputComp value={city} onchangeValue={setCity} label={t("city")} placeholder={t("city")} 
