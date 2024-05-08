@@ -51,6 +51,7 @@ export const TabNavigation = () => {
                         headerShown: false,
                         tabBarLabel: "Home",
                     }}
+                    
                 />
 
                 <Tab.Screen
@@ -75,6 +76,7 @@ export const TabNavigation = () => {
                         headerShown: false,
                         tabBarLabel: "Detail Search",
                     }}
+                    
                 />
 
                 <Tab.Screen
@@ -93,7 +95,7 @@ export const TabNavigation = () => {
                     }}
                     listeners={{
                         tabPress: (e) => {
-                            navigation.push("ProfileNavigation")
+                            navigation.push("Profile")
 
                         }
                     }}                

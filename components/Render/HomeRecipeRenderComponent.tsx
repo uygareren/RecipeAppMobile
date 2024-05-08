@@ -1,5 +1,5 @@
 import { Dimensions, Image, Pressable, Text, TouchableOpacity, View } from "react-native";
-import { handleNavigation } from "../../utils/utils";
+import { GRAY, handleNavigation } from "../../utils/utils";
 import { Divider } from "../Divider";
 
 interface Props {
@@ -19,13 +19,15 @@ export const HomeRecipeRenderComponent = ({ item, navigation, userId }: Props) =
             {/* USER */}
             <View style={{flexDirection:"row",alignItems:"center", justifyContent:'flex-start',paddingHorizontal:20 }}>
             <TouchableOpacity onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userId, id_2: item?.user?.userId})} 
-            style={{width:width*0.1, height:width*0.1, borderRadius:180,}}>
+            style={{width:width*0.1, height:width*0.1, borderRadius:360, alignItems:"center", justifyContent:"center", borderWidth:1, 
+                borderColor:GRAY
+            }}>
                 {item?.user?.image != null ? (
                   <Image source={{uri: `${API}/images/${item?.user?.image}`}}
-                  style={{width:width*0.1, height:width*0.1, borderRadius:180}}/>
+                  style={{width:width*0.09, height:width*0.09, borderRadius:180}}/>
                 ): (
                   <Image source={require("../../assets/images/default_profile.jpg")}
-                style={{width:width*0.1, height:width*0.1, borderRadius:180}}/>
+                style={{width:width*0.09, height:width*0.09, borderRadius:180}}/>
                 )}
                 
                 </TouchableOpacity>

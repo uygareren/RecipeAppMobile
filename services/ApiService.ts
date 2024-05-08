@@ -99,12 +99,6 @@ export const getRecipeByIngredients = async(payload:any) => {
     return response.data;
 }
 
-export const deleteRecipe = async(recipe_id:string) => {
-    console.log("delete recipe id", recipe_id);
-    const response = await api.post(`${API}/delete-recipe/${recipe_id}`);
-    return response.data;
-}
-
 export const postRecipe = async(payload:any) => {
     const response = await api.post(`${API}/post-recipe`, payload);
     return response.data;
@@ -142,11 +136,16 @@ export const getRecipeSearch = async(value:string) => {
 }
 
 export const getRecipeByInterests = async (payload: any) => {
-    console.log("payload", payload);
     const response = await api.post(`${API}/recipe-by-interests`, payload);
   
     return response.data;
-  };
+};
+
+export const deleteRecipeById = async (recipe_id:string) => {
+    console.log("recipe_id", recipe_id);
+    const response = await api.post(`${API}/delete-recipe/${recipe_id}`);
+    return response.data;
+}
 
 // MEASUREMENT QUERİES
 
@@ -173,6 +172,13 @@ export const removeLike = async(payload:LikeType) => {
 
 export const postComment = async(payload:CommentType) => {
     const response = await api.post(`${API}/post_comment`, payload);
+    return response.data;
+}
+
+export const deleteComment = async(payload:any) => {
+    console.log("payload", payload);
+    console.log("delete debug");
+    const response = await api.post(`${API}/delete_comment`, payload);
     return response.data;
 }
 

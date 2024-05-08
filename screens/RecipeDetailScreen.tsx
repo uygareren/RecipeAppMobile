@@ -1,7 +1,7 @@
-import { AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
+import { AntDesign, Entypo, Feather, FontAwesome } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from "react";
 import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { GRAY, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeFromNow, handleNavigation } from "../utils/utils";
+import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeFromNow, handleNavigation } from "../utils/utils";
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetScrollView } from '@gorhom/bottom-sheet';
@@ -16,7 +16,7 @@ import { Loading } from '../components/Loading';
 import { Ingredients } from "../components/RecipeDetailComponents/Ingredients";
 import { Instructions } from "../components/RecipeDetailComponents/Instructions";
 import useI18n from '../hooks/useI18n';
-import { getAllIngredients, getAllMeasurements, getRecipeById, postComment, postLike, removeLike } from "../services/ApiService";
+import { deleteComment, deleteRecipeById, getAllIngredients, getAllMeasurements, getRecipeById, postComment, postLike, removeLike } from "../services/ApiService";
 
 
 export default function RecipeDetailScreen({route}:any){
@@ -37,6 +37,8 @@ export default function RecipeDetailScreen({route}:any){
     const [isLike, setIsLıke] = useState(false)
     const [likeCount, setLıkeCount] = useState(0);
 
+    const [selectedComment, setSelectedComment] = useState("");
+
     const [comment, setComment] = useState("");
 
     const [isActionVisible, setisActionVisible] = useState<boolean>(false)
@@ -46,11 +48,16 @@ export default function RecipeDetailScreen({route}:any){
     const [index, setIndex] = useState(0);
 
     const snapPoints = ["75%"];
+    const snapPointsDelete = ["10%"];
     
     const bottomSheetRef = useRef<any>(null);
+    const bottomSheetDeleteRef = useRef<any>(null);
   
     const handlePresentModal = () => {
       bottomSheetRef.current?.present();
+    }
+    const handlePresentDeleteModal = () => {
+      bottomSheetDeleteRef.current?.present();
     }
 
 
@@ -104,6 +111,24 @@ export default function RecipeDetailScreen({route}:any){
         }
     });
 
+    const deletePostMutation = useMutation({
+        mutationKey: ["delete-recipe"],
+        mutationFn: deleteRecipeById,
+        onSuccess: () => {
+            console.log("delete başarılı");
+            navigation.navigate("Profile");
+        }
+    });
+
+    const deleteCommentMutation = useMutation({
+        mutationKey: ["delete_comment"],
+        mutationFn: deleteComment,
+        onSuccess: () => {
+            console.log("success delete comment");
+            setSelectedComment("");
+        }
+    })
+
     useEffect(() => {
         if(isSuccess){
             setInitialLike(data?.data?.likeData.filter((item:any) => item?.userId == userInfo.userId )[0]?.isLike ?? false)
@@ -118,7 +143,6 @@ export default function RecipeDetailScreen({route}:any){
     async function handleLıke() {
         setIsLıke(!isLike);
         
-        console.log("islikee", !isLike)
         if(!isLike){
             // post like
             addlikeMutation.mutate({
@@ -136,9 +160,9 @@ export default function RecipeDetailScreen({route}:any){
         }
     } 
 
-    console.log("comments", commentData);
+    // console.log("comments", commentData);
     // console.log("data", data?.data);
-    // console.log("USER", userInfo);
+    console.log("USER", userInfo);
 
     async function handleComment() {
 
@@ -150,15 +174,15 @@ export default function RecipeDetailScreen({route}:any){
             createdAt: formattedDate,
             postId: recipe_id,
             userdata : {
-                userId: userInfo.userId,
-                user_image: null,
-                user_name: userInfo.name,
-                user_surname: userInfo.surname
+                userId: userInfo?.userId,
+                user_image: userInfo?.image,
+                user_name: userInfo?.name,
+                user_surname: userInfo?.surname
 
             }
         }
 
-        console.log("commentdata", comment_data);
+        // console.log("commentdata", comment_data);
 
         setCommentData((prev:any) => [...prev, comment_data]);
 
@@ -171,34 +195,62 @@ export default function RecipeDetailScreen({route}:any){
 
     }
 
+    async function handleSelectedComment(user_id:string, comment_id:string) {
+
+        if(user_id == userInfo?.userId){
+            setSelectedComment(comment_id);
+        }
+    }
+
+    async function handleDeleteComment(comment_id:string) {
+        deleteCommentMutation.mutate({"commentId":comment_id});
+        setCommentData(commentData.filter((item:any) => item?._id != comment_id));
+    }
+
+    const outsidePressHandler = () => {
+        setSelectedComment(""); // setSelectedComment'i sıfırla
+    };
+
+
     const RenderCommentItem = ({item}:any) => {
 
-
         return(
-            <View style={{marginVertical:4, paddingVertical:4, }}>
-                <View style={{flexDirection:"row",alignItems:'center'}}>
-                    <Pressable onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userInfo?.userId, id_2: item?.userdata?.userId})}
-                     style={{flexDirection:'row', 
-                         alignItems:'center', justifyContent:'center',
-                    }}>
-                        <View style={{width:width*0.1, height:width*0.1, borderRadius:360, borderWidth:1, borderColor:GRAY, alignItems:'center', justifyContent:'center'}}>
-                        {item?.userdata?.user_image != null ? (
-                            <Image source={{uri: `${API}/images/${item?.userdata?.user_image}`}} style={{width:width*0.09, 
-                            height:width*0.09, borderRadius:360, resizeMode:'cover'}}/>                            
-                        ): (
-                            <Image source={require("../assets/images/default_profile.jpg")} style={{width:width*0.09, 
-                                height:width*0.09, borderRadius:360, resizeMode:'cover'}}/>     
+            <Pressable onPress={outsidePressHandler} onLongPress={() => handleSelectedComment(item?.userdata?.userId,item?._id)} 
+            style={{marginVertical:4, paddingVertical:4,}}>
+            <View style={{flexDirection:"row",alignItems:'center'}}>
+                <Pressable onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userInfo?.userId, id_2: item?.userdata?.userId})}
+                    style={{flexDirection:'row', 
+                        alignItems:'center', justifyContent:'center',
+                }}>
+                    <View style={{width:width*0.1, height:width*0.1, borderRadius:360, borderWidth:1, borderColor:GRAY, alignItems:'center', justifyContent:'center'}}>
+                    {item?.userdata?.user_image != null ? (
+                        <Image source={{uri: `${API}/images/${item?.userdata?.user_image}`}} style={{width:width*0.09, 
+                        height:width*0.09, borderRadius:360, resizeMode:'cover'}}/>                            
+                    ): (
+                        <Image source={require("../assets/images/default_profile.jpg")} style={{width:width*0.09, 
+                            height:width*0.09, borderRadius:360, resizeMode:'cover'}}/>     
 
-                        )}
-                        </View>
-                        
-                        
-                        <Text style={{fontSize:11, fontWeight:"700", marginLeft:10}}>{item?.userdata?.user_name} {item?.userdata?.user_surname}</Text>
-                    </Pressable>
-                    <Text style={{fontSize:12, color:GRAY, marginLeft:7, fontWeight:"600"}}>{getTimeFromNow(item?.createdAt)}</Text>
-                </View>
-                <Text style={{fontSize:13,marginTop:3, marginLeft:width*0.1+10}}>{item?.comment}</Text>
+                    )}
+                    </View>
+                    
+                    
+                    <Text style={{fontSize:11, fontWeight:"700", marginLeft:10}}>{item?.userdata?.user_name} {item?.userdata?.user_surname}</Text>
+                </Pressable>
+                <Text style={{fontSize:12, color:GRAY, marginLeft:7, fontWeight:"600"}}>{getTimeFromNow(item?.createdAt)}</Text>
             </View>
+            <Text style={{fontSize:13,marginTop:3, marginLeft:width*0.1+10}}>{item?.comment}</Text>
+
+            <TouchableOpacity onPress={() => handleDeleteComment(item?._id)} style={{borderWidth:0, marginLeft:10, marginTop:10, 
+            flexDirection:'row', backgroundColor:WHITE, width:width*0.4, alignItems:'center', paddingHorizontal:10, 
+            paddingVertical:8, borderRadius:8, display: item?._id == selectedComment ? "flex":"none", ...styles.shadow
+            }}>
+                <FontAwesome name="trash" size={24} color={LIGHT_RED} />
+                <Text style={{color:LIGHT_RED, fontSize:16, fontWeight:'400', marginLeft:10}}>Gönderiyi Sil</Text>
+            </TouchableOpacity>
+
+            </Pressable>
+            
+            
         )
     }
 
@@ -262,37 +314,66 @@ export default function RecipeDetailScreen({route}:any){
 
 
                 <ScrollView style={styles.container} >
+            <Pressable onPress={outsidePressHandler}>
+
+
 
                     <View style={{ marginTop: 40 }}>
+
+                        <TouchableOpacity onPress={() => navigation.goBack()} 
+                        style={{marginVertical:20}}>
+                            <Feather name="arrow-left" size={28} color={BLACK_COLOR} />
+                        </TouchableOpacity>
+
+                        
+                        <View style={{flexDirection:"row",alignItems:"center", justifyContent:'space-between',}}>
+                            <View style={{flexDirection:'row', alignItems:'center'}}>
+                                <TouchableOpacity onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userInfo?.userId, id_2: data?.data?.recipe?.user?.userId})} 
+                                style={{width:width*0.1, height:width*0.1, borderRadius:360, borderWidth:1, borderColor:GRAY, alignItems:'center', justifyContent:'center'}}>
+                                {data?.data?.recipe?.user?.image != null ? (
+                                <Image source={{uri: `${API}/images/${data?.data?.recipe?.user?.image}`}}
+                                style={{width:width*0.09, height:width*0.09, borderRadius:180}}/>
+                                ): (
+                                <Image source={require("../assets/images/default_profile.jpg")}
+                                style={{width:width*0.09, height:width*0.09, borderRadius:180}}/>
+                                )}
+                                
+                                </TouchableOpacity>
+                            
+                                <Text style={{fontWeight:"500", fontSize:15, marginLeft:10}}>{`${data?.data?.recipe?.user?.name} ${data?.data?.recipe?.user?.surname}`}</Text>
+                                
+                            </View>
+
+                            <TouchableOpacity onPress={() => handlePresentDeleteModal()}>
+                                <Entypo name="dots-three-vertical" size={16} color={BLACK_COLOR} />
+                            </TouchableOpacity>
+                        </View>
                         <Image source={{uri:`${API}/recipes/${data?.data?.recipe?.image}`}} style={{ width: "100%", height: height * 4 / 10, resizeMode: "contain" }} />
-                        <Pressable style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, flexDirection:"row",justifyContent: 'space-between', 
-                        alignItems: 'flex-start', paddingHorizontal: 16 }}>
-                            <TouchableOpacity onPress={() => navigation.goBack()} style={{backgroundColor:LIGHT_GRAY_2, marginTop:10, borderRadius:180, paddingHorizontal:4, paddingVertical:4}}>
-                                <Feather name="arrow-left" size={20} color={GRAY} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => handleLıke()} style={{backgroundColor:LIGHT_GRAY_2, marginTop:10, 
-                                borderRadius:180, paddingHorizontal:4, paddingVertical:4,alignItems:"center", justifyContent:"center"}}>
-                                {isLike ? <AntDesign name="heart" size={20} color={LIGHT_RED} /> 
-                                : 
-                                <AntDesign name="hearto" size={20} color={LIGHT_RED}/>}
-                            </TouchableOpacity>
-
-                        </Pressable>
+                        
                     </View>
 
                     {/* WHITE CARD */}
 
                     <View style={{marginTop:-40,width:width*8/10, borderRadius:15,alignSelf:"center", backgroundColor:WHITE, paddingHorizontal:15,
                 paddingVertical:10, ...styles.shadow }}>
-                        <Text style={{fontSize:20, fontWeight:"600"}}>{data?.data?.recipe?.recipeName}</Text>
-                        <View style={{marginVertical:6, flexDirection:"row", alignItems:"center",}}>
-                            <AntDesign name="heart" size={12} color={LIGHT_RED} />
+                        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}> 
+                            <Text style={{fontSize:20, fontWeight:"600"}}>{data?.data?.recipe?.recipeName}</Text>
+
+                            <View style={{ flexDirection:"row", alignItems:"center",}}>
+                            <TouchableOpacity onPress={() => handleLıke()} style={{backgroundColor:LIGHT_GRAY_2,
+                                borderRadius:180, paddingHorizontal:4, paddingVertical:4,alignItems:"center", justifyContent:"center"}}>
+                                {isLike ? <AntDesign name="heart" size={20} color={LIGHT_RED} /> 
+                                : 
+                                <AntDesign name="hearto" size={20} color={LIGHT_RED}/>}
+                            </TouchableOpacity>
                             <Text style={{ marginLeft: 6, fontSize: 12, fontWeight: "300" }}>
                                 {likeCount?.toString()} {likeCount === 1 || likeCount === 0 ? t("like") : t("likes")}
                             </Text>
 
                         </View>
+                            
+                        </View>
+                        
                         <View style={{backgroundColor:LIGHT_GRAY, height:1, width:"100%", alignSelf:"center", marginTop:8}}/>
 
                         <View style={{flexDirection:"row", justifyContent:"space-around",paddingHorizontal:5, paddingVertical:10}}>
@@ -400,7 +481,7 @@ export default function RecipeDetailScreen({route}:any){
                         
             
                 <BottomSheetModal  ref={bottomSheetRef} index={0} snapPoints={snapPoints}>
-                    <View style={{backgroundColor:WHITE, }}>
+                    <Pressable onPress={outsidePressHandler} style={{backgroundColor:WHITE, }}>
 
                         <View style={{height:height*0.05, borderWidth:0, alignItems:'center', justifyContent:'center'}}>
                             <Text style={{fontWeight:'600', fontSize:16,marginBottom:10}}>Yorumlar</Text>
@@ -448,8 +529,21 @@ export default function RecipeDetailScreen({route}:any){
                             
                         </View> 
 
+                    </Pressable>
+                </BottomSheetModal>
+
+                <BottomSheetModal ref={bottomSheetDeleteRef} index={0} snapPoints={snapPointsDelete}>
+                    <View style={{backgroundColor:WHITE, paddingHorizontal:20}}>
+                        <TouchableOpacity onPress={() => (
+                            deletePostMutation.mutate(data?.data?.recipe?._id)
+                        )} style={{flexDirection:'row', alignItems:'center'}}>
+                            <FontAwesome name="trash" size={24} color={LIGHT_RED} />
+                            <Text style={{color:LIGHT_RED, fontSize:18, fontWeight:'400', marginLeft:10}}>Gönderiyi Sil</Text>
+                        </TouchableOpacity>
+
                     </View>
                 </BottomSheetModal>
+                </Pressable>
 
                 </ScrollView>
             </BottomSheetModalProvider>
