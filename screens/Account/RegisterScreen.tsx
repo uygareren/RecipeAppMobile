@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useToast } from "native-base";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -9,7 +10,7 @@ import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { register } from "../../services/AuthServices";
 import { authButtonContainer, authTextButton } from "../../styles/styles";
-import { BLACK_COLOR, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, LANG_STORE, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 
 
 export default function RegisterScreen({navigation, route}: TabAccountScreenProps<"Register">){
@@ -24,7 +25,16 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
     const [password_1, setPassword1] = useState("Uygareren111ue.")
     const [password_2, setPassword2] = useState("Uygareren111ue.")
 
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+
+    let lang_data: string | null;
+
+    async function fetchData() {
+        lang_data = await AsyncStorage.getItem(LANG_STORE);
+        console.log("lang", lang_data);
+    }
+
+    fetchData();
 
     const registerMutation = useMutation({
         mutationKey: ["register"],
@@ -34,8 +44,14 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
                 navigation.navigate("Login");
             }
         },
-        onError: () => {
-            toast.show(ToastError("Hata!"));
+        onError: async(error: any) => {
+            console.log("error", error?.response?.data);
+            if (lang_data) {
+                toast.show(ToastError(error?.response?.data[`message_${lang_data}`]));
+            } else {
+                toast.show(ToastError("An error occurred"));
+            }
+
             setLoading(false);
         }
     })

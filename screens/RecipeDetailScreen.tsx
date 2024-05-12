@@ -6,7 +6,6 @@ import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeF
 import { MaterialIcons } from '@expo/vector-icons';
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useNavigation } from "@react-navigation/native";
-import "react-native-gesture-handler";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";

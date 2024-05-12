@@ -19,6 +19,8 @@ export default function OtherProfile({route}:any){
 
     const id = route.params.id;
 
+    console.log("id", id);
+
     const navigation = useNavigation<any>()
 
     const {width} = Dimensions.get("screen");
@@ -35,6 +37,8 @@ export default function OtherProfile({route}:any){
         ['get_user_detail', id],
         () => getUserDetail(id),
     );
+
+    console.log("user detail", user_detail);
 
     const recipeResponse = useQuery(
         {queryKey:["get_recipe_by_userid"],

@@ -13,7 +13,7 @@ import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { login } from "../../services/AuthServices";
 import { userSliceActions } from "../../store/reducer/userSlice";
 import { authButtonContainer, authTextButton } from "../../styles/styles";
-import { keyGenerator, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
+import { keyGenerator, LANG_STORE, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
 
 
 export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
@@ -28,20 +28,35 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
     const [loading, setLoading] = useState(false)
 
     const dispatch = useDispatch();
-    const navigation = useNavigation<any>()
+    const navigation = useNavigation<any>();
 
-    const loginMutation = useMutation({
-        mutationKey:["login"],
-        mutationFn: login,
-        onSuccess: async (data) => {
-            dispatch(userSliceActions.setUser(data?.data?.data));
-            await handleNavigate(data?.data?.data?.userId);
-            console.log("data",data);
-        },
-        onError: () => {
-            toast.show(ToastError("E-mail veya Parola Hatalı!"));
+    let lang_data: string | null;
+
+    async function fetchData() {
+        lang_data = await AsyncStorage.getItem(LANG_STORE);
+        console.log("lang", lang_data);
+    }
+
+    fetchData();
+
+const loginMutation = useMutation({
+    mutationKey:["login"],
+    mutationFn: login,
+    onSuccess: async (data) => {
+        dispatch(userSliceActions.setUser(data?.data?.data));
+        await handleNavigate(data?.data?.data?.userId);
+        console.log("data",data);
+    },
+    onError: async(error: any) => {
+        console.log("error", error?.response?.data);
+        if (lang_data) {
+            toast.show(ToastError(error?.response?.data[`message_${lang_data}`]));
+        } else {
+            toast.show(ToastError("An error occurred"));
         }
-    })
+    }
+});
+
 
     const handleLogin = async () => {
         setLoading(true)

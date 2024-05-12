@@ -1,4 +1,4 @@
-import { AntDesign, Feather, Ionicons } from '@expo/vector-icons';
+import { AntDesign, Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native";
@@ -7,6 +7,7 @@ import { RootStateType } from "../store/store";
 import { BLACK_COLOR, GRAY, WHITE } from "../utils/utils";
 import AddFoodNavigation from "./AddFoodNavigation";
 import HomeNavigation from "./HomeNavigation";
+import InterestedCuisinesNavigation from './InterestedCuisinesNavigation';
 import ProfileNavigation from "./ProfileNavigation";
 import SearchNavigation from "./SearchNavigation";
 
@@ -50,6 +51,22 @@ export const TabNavigation = () => {
                         ),
                         headerShown: false,
                         tabBarLabel: "Home",
+                    }}
+                    
+                />
+                <Tab.Screen
+                    name="InterestedCuisinesNavigation"
+                    component={InterestedCuisinesNavigation}
+                    options={{
+                        tabBarIcon: ({ focused, color, size }) => (
+                            <MaterialCommunityIcons 
+                            name="food-takeout-box-outline" 
+                            size={24} 
+                            color={focused ? BLACK_COLOR : GRAY}
+                        />
+                        ),
+                        headerShown: false,
+                        tabBarLabel: "Interested Cuisines",
                     }}
                     
                 />

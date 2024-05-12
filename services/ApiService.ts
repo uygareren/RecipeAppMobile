@@ -128,6 +128,8 @@ export const getRecipeById = async(id:String) => {
     return response.data;
 }
 
+
+
 export const getRecipeSearch = async(value:string) => {
     console.log(`${API}/recipe-search?searchQuery=${value}`);
     const response = await api.get(`${API}/recipe-search?searchQuery=${value}`);
@@ -138,6 +140,19 @@ export const getRecipeSearch = async(value:string) => {
 export const getRecipeByInterests = async (payload: any) => {
     const response = await api.post(`${API}/recipe-by-interests`, payload);
   
+    return response.data;
+};
+
+export const getRecipeByInterestId = async (payload: any) => {
+    console.log("payload, ", payload);
+    const response = await api.post(`${API}/recipe-by-interest`, payload);
+    console.log("response", response);
+    return response.data;
+};
+
+
+export const getFollowerRecipe = async (payload: any) => {
+    const response = await api.post(`${API}/recipe-by-follower`, payload);
     return response.data;
 };
 

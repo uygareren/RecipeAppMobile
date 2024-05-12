@@ -11,7 +11,7 @@ import { TextInputComp } from '../../components/Inputs';
 import { HomeRecipeRenderComponent } from '../../components/Render/HomeRecipeRenderComponent';
 import SkeletonComp from '../../components/Skeleton';
 import useI18n from "../../hooks/useI18n";
-import { getCategories, getRecipeByInterests, getRecipeSearch, getUserDetail, getUserSearch } from "../../services/ApiService";
+import { getCategories, getFollowerRecipe, getRecipeSearch, getUserDetail, getUserSearch } from "../../services/ApiService";
 import { userSliceActions } from "../../store/reducer/userSlice";
 import { BLACK_COLOR, GRAY, keyGenerator, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
 
@@ -57,19 +57,18 @@ export default function HomeScreen({ route }: any) {
       queryFn: getCategories
     })
 
-    const interestMutation = useMutation({
-      mutationKey:["recipe-by-interests"],
-      mutationFn: getRecipeByInterests,
-      onSuccess(data, variables, context) {
-      },
-    }
-      
-    );
-
+   
     const user_detail = useQuery(
       ['get_user_detail', userId],
       () => getUserDetail(userId),
     );
+
+    const recipeDataMutation = useMutation({
+      mutationKey:["recipe-by-follower"],
+      mutationFn: getFollowerRecipe,
+      onSuccess(data, variables, context) {
+      },
+    });
 
     if(user_detail.isSuccess){
       dispatch(userSliceActions.setUser(user_detail?.data?.user))
@@ -93,6 +92,8 @@ export default function HomeScreen({ route }: any) {
 
     async function handleNavigate(item:any){
 
+      console.log("item", item);
+
       if(searchSelectVisible==0){
 
         handleSaveValues(item?.recipeName);
@@ -101,10 +102,10 @@ export default function HomeScreen({ route }: any) {
         const value = `${item?.name} ${item?.surname}`;
         handleSaveValues(value);
 
-        if(item?._id == userId){
+        if(item?.id == userId){
           navigation.push("Profile")
         }else{
-          navigation.push("OtherProfile",{id:item?._id})
+          navigation.navigate("OtherProfile",{id:item?.id})
 
         }
       }
@@ -169,6 +170,17 @@ export default function HomeScreen({ route }: any) {
     // }, [backPressCount]);
 
     useEffect(() => {
+      if(userInfo?.userId){
+        const payload = {user_id:userInfo?.userId};
+        recipeDataMutation.mutate(payload);
+
+      }
+
+    }, [userInfo]);
+
+    // console.log("recipe data", recipeDataMutation?.data?.data);
+
+    useEffect(() => {
       const timer = setTimeout(() => {
           setIsLoading(false); // After 4 seconds, set loading state to false
       }, 4000);
@@ -206,20 +218,7 @@ export default function HomeScreen({ route }: any) {
       }
     }, [searchValue]);
     
-
- 
-
-    useEffect(() => {
-      if (userInfo?.interests != null) {
-        const payload = {
-          interests_data_by_user: [...userInfo?.interests]
-        };
-        interestMutation.mutate(payload);
-      }
-    }, [userInfo]);
     
-    
-
     useEffect(() => {
 
       const key = keyGenerator("interest",userInfo?.userId)
@@ -230,10 +229,18 @@ export default function HomeScreen({ route }: any) {
       
     }, []);
 
+    if(data == undefined){
+      return(
+        <View style={{flex:1, alignItems:'center', justifyContent:'center', backgroundColor:WHITE}}>
+          <Text style={{fontSize:22, fontWeight:'500'}}>Sunucuya Bağlanılamadı!</Text>
+        </View>
+      )
+    }
+
     if (isLoading) {
       // Render SkeletonComp for the first 4 seconds
       return <SkeletonComp />;
-  }
+    }
 
 
   
@@ -248,15 +255,17 @@ export default function HomeScreen({ route }: any) {
     };
 
     const RenderSearchItem = ({item}: any) => {
+
+      console.log("itemmm", item);
       return (
         <TouchableOpacity onPress={() => handleNavigate(item)} style={{flexDirection:'row', marginVertical:7, paddingHorizontal:15, paddingVertical:7, alignItems:'center'}}>
-          <View style={{width:50, height:50, borderRadius:180}}>
+          <View style={{width:width*0.1, height:width*0.1, borderRadius:360, justifyContent:'center', alignItems:'center', borderWidth:1}}>
             {searchSelectVisible === 0 ? (
               // If searching for recipes, render recipe image
-              <Image style={{width: 50, height:50, borderRadius:180, resizeMode:'cover'}} source={{uri: `${API}/recipes/${item?.image}`}}/>
+              <Image style={{width:width*0.1, height:width*0.1, borderRadius:180, resizeMode:'cover'}} source={{uri: `${API}/recipes/${item?.image}`}}/>
             ) : (
               // If searching for users, render profile image
-              <Image style={{width: 50, height:50, borderRadius:180, resizeMode:'cover'}} source={item?.image ? {uri: `${API}/images/${item?.image}`} : require("../../assets/images/default_profile.jpg")}/>
+              <Image style={{width:width*0.09, height:width*0.09, borderRadius:360, resizeMode:'cover'}} source={item?.image ? {uri: `${API}/images/${item?.image}`} : require("../../assets/images/default_profile.jpg")}/>
             )}
           </View>
           <Text style={{marginLeft:15, fontWeight:'500', fontSize:15}}>
@@ -306,33 +315,20 @@ export default function HomeScreen({ route }: any) {
           
         </View>
 
-        <View style={{ marginTop: 50, marginLeft: 20, }}>
-          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>{t("popular_foods")}</Text>
-
-          {/* CARD */}
-           <FlatList
-            data={data?.data}
-            keyExtractor={(item) => item._id.toString()}
-            renderItem={Card}
-            horizontal
-            showsHorizontalScrollIndicator={false} 
-          /> 
-        </View>
-        {interestMutation?.data?.data.length > 0 ? (
-          <View style={{ marginTop: 50, }}>
-          <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 30, marginBottom:25 }}>İlgilendiğim Mutfaklar</Text>
-            <FlatList
-                data={interestMutation?.data?.data}
-                keyExtractor={(item:any) => item?._id.toString()}
-                renderItem={({item}) => <HomeRecipeRenderComponent navigation={navigation} userId={userInfo?.userId} item={item}/>}
-            />
-        </View>
-        ): (
-          null
-        )}
-
         
 
+        {recipeDataMutation?.data?.data.length > 0 ? (
+            <View style={{ marginTop: 50, }}>
+                <FlatList
+                    data={recipeDataMutation?.data?.data}
+                    keyExtractor={(item:any) => item?._id.toString()}
+                    renderItem={({item}) => <HomeRecipeRenderComponent navigation={navigation} userId={userInfo?.userId} item={item}/>}
+                />
+            </View>
+            ): (
+            null
+            )}
+       
         <Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)} >
             <View style={{flex:1, backgroundColor:WHITE}}>
 
