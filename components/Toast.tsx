@@ -1,17 +1,17 @@
 import { Feather } from '@expo/vector-icons';
 import { IToastProps, useTheme } from "native-base";
 import { Dimensions, Text, View } from "react-native";
-import { GREEN, LIGHT_RED } from '../utils/utils';
+import { TOAST_COLOR } from '../utils/utils';
 
 const ToastErrorRender = ({ message="" }: any) => {
     const width = Dimensions.get("screen").width;
     const theme = useTheme();
 
     return (
-        <View style={{ backgroundColor: LIGHT_RED, width, top: 0, paddingVertical:50}}>
+        <View style={{ backgroundColor: TOAST_COLOR, width:width*0.8, bottom: 0, paddingVertical:15, borderRadius:8}}>
             <View style={{ flexDirection: "row", width: '100%', alignSelf: "center", alignItems:"center", justifyContent:"center" }}>
                 <Feather name="info" color={"#fff"} size={20} />
-                <Text style={{ color: "#fff", marginLeft: 15, textAlign: "center" }}>{message}</Text>
+                <Text style={{ color: "#fff", marginLeft: 15, textAlign: "center", fontWeight:'500' }}>{message}</Text>
             </View>
         </View>
     )
@@ -22,10 +22,10 @@ const ToastSuccessRender = ({ message="" }: any) => {
     const theme = useTheme();
 
     return (
-        <View style={{ backgroundColor: GREEN, width, top: 0, paddingVertical:50 }}>
+        <View style={{ backgroundColor: TOAST_COLOR, width, bottom: 0, paddingVertical:15, borderRadius:8 }}>
             <View style={{ flexDirection: "row", width: '100%', alignSelf: "center", alignItems:"center", justifyContent:"center" }}>
                 <Feather name="info" color={"#fff"} size={20} />
-                <Text style={{ color: "#fff", marginLeft: 15, textAlign: "center" }}>{message}</Text>
+                <Text style={{ color: "#fff", marginLeft: 15, textAlign: "center",fontWeight:'500' }}>{message}</Text>
             </View>
         </View>
     )
@@ -33,13 +33,13 @@ const ToastSuccessRender = ({ message="" }: any) => {
 
 export function ToastError(message: string): IToastProps {
     return {
-        placement: "top",
+        placement: "bottom",
         render: () => <ToastErrorRender message={message} />
     }
 }
 export function ToastSuccess(message: string): IToastProps {
     return {
-        placement: "top",
+        placement: "bottom",
         render: () => <ToastSuccessRender message={message} />
     }
 }
