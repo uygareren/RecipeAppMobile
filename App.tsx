@@ -12,6 +12,7 @@ import MakeRecipeProvider from './context/MakeRecipeContext';
 import { TabNavigation } from './navigations/Tab';
 import ProtectProvider from './provider/ProtectProvider';
 import OtherProfile from './screens/Account/OtherProfile';
+import AccountScreen from './screens/AccountScreen';
 import AddFoodScreenTwo from './screens/AddFodd/AddFoodScreenTwo';
 import CategoryDetail from './screens/CategoryDetail';
 import CategoryScreen from './screens/CategoryScreen';
@@ -58,7 +59,8 @@ type StackParamList = {
     id: string,
   },
   MissingIngredients:undefined,
-  FinishSelectIngredients:undefined
+  FinishSelectIngredients:undefined,
+  Account:undefined
   
 }
 
@@ -98,6 +100,7 @@ export default function App() {
                     <Stack.Screen component={FinishSelectIngredients} name='FinishSelectIngredients' options={{headerShown: false}}/>
                     <Stack.Screen component={MissingIngredients} name='MissingIngredients' options={{headerShown: false}}/>
                     <Stack.Screen component={SettingsScreen} name='Settings' options={{headerShown: false}}/>
+                    <Stack.Screen component={AccountScreen} name='Account' options={{headerShown: false}}/>
                     <Stack.Screen component={UpdatePasswordScreen} name='UpdatePassword' options={{headerShown:false}}/>
                     <Stack.Screen component={FavoritesScreen} name='Favorites'/>
                     <Stack.Screen component={CategoryDetail} name='CategoryDetail' options={{headerShown:false}}/>

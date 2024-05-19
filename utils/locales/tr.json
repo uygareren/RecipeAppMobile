@@ -1,13 +1,24 @@
 {
     "SettingsScreen": {
-    "settings":"Ayarlar",
-    "favorite":"Beğendiklerim",
-    "password_update_btn_txt": "Parola Güncelle",
-    "profile_update_btn_txt": "Profil Güncelle",
-    "done_meals":"Yaptığım Tarifler",
-    "change_language_btn_txt": "Dil Değiştirme",
+    "settings":"Ayarlar",    
     "logout_btn_txt": "Çıkış Yap",
-    "cancel":"Vazgeç"
+    "cancel":"Vazgeç",
+
+    "account": "Hesabım",
+    "account_info": "Hesap ayarlarını değiştirebilirsin",
+    "change_language_btn_txt": "Dil Değiştirme",
+    "change_language_info": "Dili değiştirebilirsin",
+    "like":"Beğendiklerim",
+    "like_info":"Beğendiğin tarifleri görebilirsin",
+    "done_meals":"Yaptığım Tarifler",
+    "done_meals_info":"Tamamladığın tarifleri görebilirsin",
+    "profile_update_btn_txt": "Profil Güncelle",
+    "profile_update_info": "Profilini güncelleyebilirsin",
+    "password_update_btn_txt": "Parola Güncelle",
+    "password_update_info": "Şifreni güncelleyebilirsin",
+    "close_account":"Hesabımı Kapat",
+    "close_account_info":"Hesabını kolayca kapatabilirsin"
+
     },
     "LoginScreen":{
         "sign_in":"Giriş Yap",
