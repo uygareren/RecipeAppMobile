@@ -18,7 +18,7 @@ export const GREEN = "#3d8c35";
 
 // NEW COLORS
 export const MAIN_COLOR_2 = "#f5c62a";
-export const LIGHT_BLUE_2 = "#e6572c";
+export const LIGHT_RED_2 = "#e6572c";
 
 // PADDİNG HORİZONTAL
 

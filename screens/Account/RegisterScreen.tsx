@@ -1,7 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Checkbox from "expo-checkbox";
 import { useToast } from "native-base";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/Button";
 import { TextInputComp, TextInputPassword } from "../../components/Inputs";
@@ -10,12 +11,14 @@ import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { register } from "../../services/AuthServices";
 import { authButtonContainer, authTextButton } from "../../styles/styles";
-import { BLACK_COLOR, LANG_STORE, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, CONTAİNER_HORİZONTAL, LANG_STORE, LIGHT_GRAY, LIGHT_RED_2, MAIN_COLOR_2, PINK, WHITE } from "../../utils/utils";
 
 
 export default function RegisterScreen({navigation, route}: TabAccountScreenProps<"Register">){
 
     const {t} = useI18n("RegisterScreen");
+
+    const {width, height} = Dimensions.get("screen");
 
     const toast = useToast();
 
@@ -24,6 +27,7 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
     const [email, setEmail] = useState("uygarerenx@gmail.com")
     const [password_1, setPassword1] = useState("Uygareren111ue.")
     const [password_2, setPassword2] = useState("Uygareren111ue.")
+    const [checkBox, setCheckBox] = useState<boolean>(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -57,51 +61,77 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
 
     const handleRegister = async () => {
         setLoading(true);
-
-        const registerResp = await registerMutation.mutateAsync({name, surname, email, password_1, password_2});        
+        if(checkBox == true){
+            await registerMutation.mutateAsync({name, surname, email, password_1, password_2});        
+        }else{
+            toast.show(ToastError("Sözleşmeyi onaylamanız Gerekiyor!"))
+        }
 
         setLoading(false);
     }
 
     return(
         <ScrollView style={styles.container}>
-            <View style={styles.body_container}>
 
                 {/* <View style={{alignItems: "center", position:"absolute", top: 0, justifyContent: "center"}}>
                     <Text style={{fontStyle: "italic", fontSize: 28, color: "#7224a3"}}>Foody</Text>
                 </View> */}
 
-                <View>
-                    <Text style={{fontSize: 25, fontWeight:"500", alignSelf:"center", marginTop: 100}}>{t("sign_up")}</Text>
-                </View>
-
-                <View>
-                    <TextInputComp value={name} onchangeValue={setName} label={t("name")} placeholder={t("name_placeholder")}
-                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                    <TextInputComp value={surname} onchangeValue={setSurname} label={t("surname")} placeholder={t("surname_placeholder")}
-                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                    <TextInputComp value={email} onchangeValue={setEmail} label={t("email")} placeholder={t("email_placeholder")}
-                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                    <TextInputPassword value={password_1} onchangeValue={setPassword1} label={t("password")} placeholder={t("password_placeholder")}
-                    styleContainer={styles.TextInputPassword} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                    <TextInputPassword value={password_2} onchangeValue={setPassword2} label={t("confirm_password")} placeholder={t("confirm_password_placeholder")} 
-                    styleContainer={styles.TextInputPassword} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                </View>
-
-                <View style={{marginBottom: 70}}>
-                    <ButtonComp loading={loading} title={t("register_btn")} onPress={() => handleRegister()} styleContainer={{...authButtonContainer}}
-                    styleText={{...authTextButton}}/>
-
-                    <View style={{marginTop: 30, flexDirection: "row", 
-                        justifyContent: "center", alignItems: "center"}}>
-                        <Text style={{fontWeight:"500", color:BLACK_COLOR,marginRight: 5}}>{t("already_have_account")}</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                            <Text style={{fontWeight:"600", fontSize:17, color:PINK,marginRight: 10}}>{t("sign_in")}</Text>
-                        </TouchableOpacity>
+                <View style={{ marginTop:95}}>
+                    <Text style={{fontSize: 22, fontWeight:"500", }}>Create an account</Text>
+                    <View style={{width:width*0.6, marginTop:5}}>
+                        <Text style={{color:BLACK_COLOR, fontSize:13, fontWeight:"300"}}>Open your account now and start using</Text>
                     </View>
                 </View>
+
+                <View>
+                    <TextInputComp value={name} onchangeValue={setName} label={t("name")} placeholder={t("name_placeholder")} 
+                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:5}} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}} 
+                    styleInput={styles.TextInput}/>
+                    <TextInputComp value={surname} onchangeValue={setSurname} label={t("surname")} placeholder={t("surname_placeholder")} 
+                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:5}} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}} 
+                    styleInput={styles.TextInput}/>
+                    <TextInputComp value={name} onchangeValue={setName} label={t("email")} placeholder={t("email_placeholder")} 
+                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:5}} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}} 
+                    styleInput={styles.TextInput}/>
+                    <TextInputPassword value={password_1} onchangeValue={setPassword1} label={t("password")} placeholder={t("password_placeholder")}
+                    styleContainer={styles.TextInputPassword} styleLabel={{marginLeft:5}} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}} 
+                    styleInput={styles.TextInput}/>
+                    <TextInputPassword value={password_2} onchangeValue={setPassword2} label={t("confirm_password")} placeholder={t("confirm_password_placeholder")} 
+                    styleContainer={styles.TextInputPassword} styleLabel={{marginLeft:5}} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}} 
+                    styleInput={styles.TextInput}/>
+                </View>
+
+                <View style={{marginTop:12, flexDirection:"row", alignItems:"center", paddingHorizontal:5}}>
+                    <Checkbox 
+                        value={checkBox}
+                        onValueChange={() => setCheckBox(!checkBox)}
+                        color={LIGHT_RED_2}
+                    />
+
+                    <Text style={{marginLeft:10, fontSize:13, fontWeight:"500", color:LIGHT_RED_2}}>Accept Terms</Text>
+                </View>
+
+                <View style={{marginTop:12}}>
+                    <ButtonComp loading={loading} title={t("register_btn")} onPress={() => handleRegister()} 
+                    styleContainer={{...authButtonContainer, borderRadius:10, width:"100%", paddingVertical:18, backgroundColor:MAIN_COLOR_2}}
+                    styleText={{...authTextButton, fontWeight:"700", fontSize:18}}/>
+                </View>
+
+                <View style={{marginTop:15, marginBottom:40,flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
+                <Text style={{fontSize:13, fontWeight:"600"}}>{t("already_have_account")}</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                    <Text style={{fontSize:13, fontWeight:"600", marginLeft:4, color:LIGHT_RED_2}}>{t("sign_in")}</Text>
+                </TouchableOpacity>
+
             </View>
 
+                
         </ScrollView>
     )
 
@@ -111,30 +141,22 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         backgroundColor: WHITE,
+        paddingHorizontal:CONTAİNER_HORİZONTAL
     },
-    body_container:{
-        height: "90%",
-        justifyContent: "center",
-        backgroundColor: MAIN_COLOR,
-        marginTop: 50,
-        borderBottomLeftRadius: 40,
-        borderBottomRightRadius: 40
-    },
+   
     TextInputComp:{
-        paddingHorizontal:20,
         marginVertical:10,
         marginTop: 20
     },
     InputContainer:{
         flexDirection: "row",
         backgroundColor: WHITE,
-        width: "90%",
+        width: "100%",
         alignSelf: "center",
         borderRadius: 19
 
     },
     TextInputPassword:{
-        paddingHorizontal:20,
         marginVertical:10,
         marginTop: 20,
     },
