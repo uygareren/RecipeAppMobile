@@ -8,15 +8,21 @@ import { AppRegistry, Platform, StyleSheet } from 'react-native';
 import "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
+import MakeRecipeProvider from './context/MakeRecipeContext';
 import { TabNavigation } from './navigations/Tab';
 import ProtectProvider from './provider/ProtectProvider';
 import OtherProfile from './screens/Account/OtherProfile';
 import AddFoodScreenTwo from './screens/AddFodd/AddFoodScreenTwo';
 import CategoryDetail from './screens/CategoryDetail';
 import CategoryScreen from './screens/CategoryScreen';
+import DoneMealsScreen from './screens/DoneMealsScreen';
+import FinishSelectIngredients from './screens/FinishSelectIngredients';
 import FollowScreen from './screens/FollowScreen';
 import InterestSelectionScreen from './screens/InterestSelectionScreen';
 import FavoritesScreen from './screens/LikedScreen';
+import MadeMealsDetail from './screens/MadeMealsDetail';
+import MakeRecipeScreen from './screens/MakeRecipeScreen';
+import MissingIngredients from './screens/MissingIngredients';
 import RecipeDetailScreen from './screens/RecipeDetailScreen';
 import SearchResultScreen from './screens/SearchResultScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -45,7 +51,14 @@ type StackParamList = {
   AddFoodScreenTwo:undefined,
   SearchResult:{
     selectedComponentIds:any
-  }
+  },
+  MakeRecipe:undefined,
+  DoneMeals: undefined,
+  MadeMeals: {
+    id: string,
+  },
+  MissingIngredients:undefined,
+  FinishSelectIngredients:undefined
   
 }
 
@@ -64,6 +77,8 @@ export default function App() {
       <I18nextProvider i18n={i18n} defaultNS={"translation"}>
         <NativeBaseProvider theme={theme}>
           <ProtectProvider>
+            <MakeRecipeProvider>
+
             <NavigationContainer>
                 <Stack.Navigator>
                 <Stack.Screen component={TabNavigation} name="Tab" options={{headerShown: false}}/>
@@ -77,6 +92,11 @@ export default function App() {
 
 
                   <Stack.Group screenOptions={{headerShown: false}}>
+                    <Stack.Screen component={MakeRecipeScreen} name='MakeRecipe' options={{headerShown: false}}/>
+                    <Stack.Screen component={DoneMealsScreen} name='DoneMeals' options={{headerShown: false}}/>
+                    <Stack.Screen component={MadeMealsDetail} name='MadeMeals' options={{headerShown: false}}/>
+                    <Stack.Screen component={FinishSelectIngredients} name='FinishSelectIngredients' options={{headerShown: false}}/>
+                    <Stack.Screen component={MissingIngredients} name='MissingIngredients' options={{headerShown: false}}/>
                     <Stack.Screen component={SettingsScreen} name='Settings' options={{headerShown: false}}/>
                     <Stack.Screen component={UpdatePasswordScreen} name='UpdatePassword' options={{headerShown:false}}/>
                     <Stack.Screen component={FavoritesScreen} name='Favorites'/>
@@ -91,6 +111,8 @@ export default function App() {
                   
                 </Stack.Navigator>
             </NavigationContainer>
+            </MakeRecipeProvider>
+
           </ProtectProvider>
         </NativeBaseProvider>
       </I18nextProvider>

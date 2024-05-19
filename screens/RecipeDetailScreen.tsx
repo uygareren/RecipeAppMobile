@@ -1,33 +1,40 @@
 import { AntDesign, Entypo, Feather, FontAwesome } from '@expo/vector-icons';
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeFromNow, handleNavigation } from "../utils/utils";
+import { BLACK_COLOR, GRAY, LANG_STORE, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeFromNow, handleNavigation } from "../utils/utils";
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
+import { useToast } from 'native-base';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { ButtonComp } from '../components/Button';
 import { Divider } from '../components/Divider';
 import { TextInputComp } from '../components/Inputs';
 import { Loading } from '../components/Loading';
 import { Ingredients } from "../components/RecipeDetailComponents/Ingredients";
 import { Instructions } from "../components/RecipeDetailComponents/Instructions";
+import { MakeRecipeContext } from '../context/MakeRecipeContext';
 import useI18n from '../hooks/useI18n';
-import { deleteComment, deleteRecipeById, getAllIngredients, getAllMeasurements, getRecipeById, postComment, postLike, removeLike } from "../services/ApiService";
+import { deleteComment, deleteRecipeById, getAllIngredients, getAllMeasurements, getRecipeById, lengthMadeMeals, postComment, postLike, removeLike } from "../services/ApiService";
+import { authButtonContainer, authTextButton } from '../styles/styles';
 
 
 export default function RecipeDetailScreen({route}:any){
 
     const API = process.env.API;
+    const recipe_id = route?.params?.id
+
+    const toast = useToast();
 
     const {t} = useI18n("RecipeDetailScreen");
 
     const navigation = useNavigation<any>(); 
+    const {width, height} = Dimensions.get("screen");
 
-
-    const recipe_id = route?.params?.id
     const userInfo = useSelector((state:any) => state.user.userInfo)
 
     const [commentData, setCommentData] = useState<CommentData[]>([]); 
@@ -40,9 +47,9 @@ export default function RecipeDetailScreen({route}:any){
 
     const [comment, setComment] = useState("");
 
-    const [isActionVisible, setisActionVisible] = useState<boolean>(false)
+    const [loading, setLoading] = useState(false);
 
-    const {width, height} = Dimensions.get("screen");
+    const {recipe, setRecipe} = useContext(MakeRecipeContext)
     
     const [index, setIndex] = useState(0);
 
@@ -59,15 +66,24 @@ export default function RecipeDetailScreen({route}:any){
       bottomSheetDeleteRef.current?.present();
     }
 
+    let lang_data: string | null;
+
+    async function fetchData() {
+        lang_data = await AsyncStorage.getItem(LANG_STORE);
+    }
+
+    fetchData();
+
 
     const {data, isLoading, isSuccess} = useQuery(
         ["recipe-detail"],
         () => getRecipeById(recipe_id),
         {onSuccess(data){
-            console.log("data",data)
             setCommentData(data?.data?.commentData);
         }}
     );
+
+    console.log("data", data);
 
 
     
@@ -87,7 +103,6 @@ export default function RecipeDetailScreen({route}:any){
         mutationFn: postLike, 
         onSuccess:()=>{
             setLıkeCount(likeCount+1)
-            console.log("liked")
             setIsLıke(true)
         }
     })
@@ -97,7 +112,6 @@ export default function RecipeDetailScreen({route}:any){
         mutationFn: removeLike, 
         onSuccess:()=>{
             setLıkeCount(likeCount-1)
-            console.log("removed")
             setIsLıke(false)
         }
     })
@@ -114,7 +128,6 @@ export default function RecipeDetailScreen({route}:any){
         mutationKey: ["delete-recipe"],
         mutationFn: deleteRecipeById,
         onSuccess: () => {
-            console.log("delete başarılı");
             navigation.navigate("Profile");
         }
     });
@@ -123,10 +136,32 @@ export default function RecipeDetailScreen({route}:any){
         mutationKey: ["delete_comment"],
         mutationFn: deleteComment,
         onSuccess: () => {
-            console.log("success delete comment");
             setSelectedComment("");
         }
-    })
+    });
+
+    // const postMadeMealsMutation = useMutation({
+    //     mutationKey: ["post-made-meals-by-user"],
+    //     mutationFn: postMadeMeals,
+    //     onSuccess(data, variables, context) {
+    //         toast.show(ToastSuccess("Tarifi Yapmaya Başladınız!"));
+    //         navigation.navigate("Home");
+    //         setLoading(false);
+    //     },
+    //     onError: async(error: any) => {
+    //         toast.show(ToastError(error?.response?.data[`message_${lang_data}`]))
+    //         setLoading(false);
+
+    //     }
+    // });
+
+    const lengthofMadeMeals:any = useQuery(
+        ["get-length-made-meals"],
+        () => lengthMadeMeals(recipe_id),
+    );
+
+
+
 
     useEffect(() => {
         if(isSuccess){
@@ -161,7 +196,7 @@ export default function RecipeDetailScreen({route}:any){
 
     // console.log("comments", commentData);
     // console.log("data", data?.data);
-    console.log("USER", userInfo);
+    // console.log("USER", userInfo);
 
     async function handleComment() {
 
@@ -193,6 +228,34 @@ export default function RecipeDetailScreen({route}:any){
         setComment("");
 
     }
+
+    // async function handleMakeRecipe(){
+    //     setLoading(true);
+    //     const payload = {
+    //         userId:userInfo?.userId,
+    //         userName:userInfo?.name,
+    //         userSurname:userInfo?.surname,
+    //         userImage:userInfo?.image,
+    //         recipeId: data?.data?.recipe?._id,
+    //         recipeName: data?.data?.recipe?.recipeName,
+    //         recipeImage: data?.data?.recipe?.image,
+    //         status: 0
+    //     }
+
+    //     postMadeMealsMutation.mutate(payload);
+
+    //      // Verilen _id ile aynı olan yemek tarifini bulma
+    //     const existingRecipe = recipe.find((recipeItem: any) => recipeItem?.recipeId === payload.recipeId);
+    //     console.log("existingRecipe",existingRecipe)
+
+    //     // Eğer böyle bir tarif yoksa, yeni tarifi ekleyin
+    //     if (!existingRecipe) {
+    //         setRecipe((prev: any) => [...prev, payload]);
+    //     }
+
+
+    //     setLoading(false);
+    // }
 
     async function handleSelectedComment(user_id:string, comment_id:string) {
 
@@ -307,6 +370,9 @@ export default function RecipeDetailScreen({route}:any){
         )
     }
 
+    console.log("lengthofMadeMeals?.data?.data.length",lengthofMadeMeals?.data?.data.length)
+
+
     return(
         <GestureHandlerRootView style={{flex:1, }}>
             <BottomSheetModalProvider>
@@ -347,7 +413,11 @@ export default function RecipeDetailScreen({route}:any){
                                 <Entypo name="dots-three-vertical" size={16} color={BLACK_COLOR} />
                             </TouchableOpacity>
                         </View>
-                        <Image source={{uri:`${API}/recipes/${data?.data?.recipe?.image}`}} style={{ width: "100%", height: height * 4 / 10, resizeMode: "contain" }} />
+                        <View style={{ marginTop:20}}>
+                            <Image source={{uri:`${API}/recipes/${data?.data?.recipe?.image}`}} 
+                            style={{ width: "100%", height: height * 4 / 10, resizeMode: "contain", borderRadius:15 }} />
+                        </View>
+                        
                         
                     </View>
 
@@ -355,21 +425,35 @@ export default function RecipeDetailScreen({route}:any){
 
                     <View style={{marginTop:-40,width:width*8/10, borderRadius:15,alignSelf:"center", backgroundColor:WHITE, paddingHorizontal:15,
                 paddingVertical:10, ...styles.shadow }}>
-                        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}> 
-                            <Text style={{fontSize:20, fontWeight:"600"}}>{data?.data?.recipe?.recipeName}</Text>
+                        <View style={{flexDirection:'row', alignItems:'flex-start', justifyContent:'space-between'}}> 
+                            <View style={{maxWidth:width*0.4, }}>
+                                <Text style={{fontSize:20, fontWeight:"600"}}>{data?.data?.recipe?.recipeName}</Text>
+                            </View>
+                            
+                            <View style={{}}>
+                                <Pressable onPress={() => navigation.push("MadeMeals", {id:recipe_id})} style={{flexDirection:'row', alignItems:'center', paddingHorizontal:3, borderRadius:8, paddingVertical:4,
+                                    backgroundColor:LIGHT_GRAY_2
+                                    }}>
+                                    <Text style={{fontWeight:'300', fontSize:13}}>{lengthofMadeMeals?.data?.data}</Text>
+                                    <Text style={{fontWeight:'300', fontSize:13}}> Kişi Bu Tarifi Yaptı</Text>
+                                </Pressable>
+                                    
+                                
 
-                            <View style={{ flexDirection:"row", alignItems:"center",}}>
-                            <TouchableOpacity onPress={() => handleLıke()} style={{backgroundColor:LIGHT_GRAY_2,
-                                borderRadius:180, paddingHorizontal:4, paddingVertical:4,alignItems:"center", justifyContent:"center"}}>
-                                {isLike ? <AntDesign name="heart" size={20} color={LIGHT_RED} /> 
-                                : 
-                                <AntDesign name="hearto" size={20} color={LIGHT_RED}/>}
-                            </TouchableOpacity>
-                            <Text style={{ marginLeft: 6, fontSize: 12, fontWeight: "300" }}>
-                                {likeCount?.toString()} {likeCount === 1 || likeCount === 0 ? t("like") : t("likes")}
-                            </Text>
+                                <View style={{ flexDirection:"row", alignItems:"center",justifyContent:'flex-end', marginTop:5,}}>
+                                <TouchableOpacity onPress={() => handleLıke()} style={{
+                                    borderRadius:180, paddingHorizontal:4, paddingVertical:4,alignItems:"center", justifyContent:"center"}}>
+                                    {isLike ? <AntDesign name="heart" size={20} color={LIGHT_RED} /> 
+                                    : 
+                                    <AntDesign name="hearto" size={20} color={LIGHT_RED}/>}
+                                </TouchableOpacity>
+                                <Text style={{ marginLeft: 6, fontSize: 12, fontWeight: "300" }}>
+                                    {likeCount?.toString()} {likeCount === 1 || likeCount === 0 ? t("like") : t("likes")}
+                                </Text>
 
-                        </View>
+                                </View>
+                            </View>
+
                             
                         </View>
                         
@@ -424,61 +508,7 @@ export default function RecipeDetailScreen({route}:any){
                         
 
                     </View>
-
-                {/* <Actionsheet isOpen={isActionVisible} onClose={() => setisActionVisible(false)} >
-                    <Actionsheet.Content style={{height:height*0.7}}> 
-                        
-                        <View style={{height:height*0.05, }}>
-                            <Text style={{fontWeight:'600', fontSize:16,marginBottom:10}}>Yorumlar</Text>
-                            <Divider height={1} width="90%"/>
-                        </View>
-
-                        <View style={{width:"100%", paddingHorizontal:20, height:height*0.5}}>
-                            <View style={{marginBottom:0,marginTop:0,height:"100%" }}>
-
-                                <FlatList
-                                    data={commentData}
-                                    keyExtractor={(_, index) => index.toString()}
-                                    renderItem={RenderCommentItem}
-                                    showsVerticalScrollIndicator={false}
-                                />
-                            </View>
-
-                        </View>
-
-                        <View style={{flexDirection: "row", alignItems:"center", marginBottom:20,marginTop:10, height:height*0.07, }}>
-                            <TextInputComp
-                                isTextArea={true}
-                                value={comment}
-                                onchangeValue={setComment}
-                                placeholder={t("add_comment")}
-                                styleContainer={{width: Dimensions.get("screen").width * 7.8 / 10,}}
-                                styleInputContainer={{ borderRadius: 15, }}
-                                styleInput={{
-                                    borderWidth:1,
-                                    borderColor:LIGHT_GRAY,
-                                    minHeight:50,
-                                    width: Dimensions.get("screen").width * 7.8 / 10,
-                                    paddingVertical: 13,
-                                    paddingHorizontal: 7,
-                                    backgroundColor: LIGHT_GRAY_2,
-                                    borderRadius: 15,
-                                }}
-                            />
-                            {comment.length > 0 ? (
-                                <TouchableOpacity onPress={() => handleComment()} style={{marginLeft:10}}>
-                                    <FontAwesome name="send" size={24} color="black" />
-                                </TouchableOpacity>
-                            ): null}
-                            
-                        </View> 
-                        
-                    </Actionsheet.Content>
-
-                </Actionsheet> */}
-
-                        
-            
+                    
                 <BottomSheetModal  ref={bottomSheetRef} index={0} snapPoints={snapPoints}>
                     <Pressable onPress={outsidePressHandler} style={{backgroundColor:WHITE, }}>
 
@@ -545,6 +575,13 @@ export default function RecipeDetailScreen({route}:any){
                 </Pressable>
 
                 </ScrollView>
+                <View style={{borderWidth:0, backgroundColor:"white", alignItems:'center', justifyContent:'center', paddingVertical:10}}>
+                    <ButtonComp loading={loading} onPress={() => navigation.push("MissingIngredients", {id:recipe_id})} 
+                    styleContainer={{...authButtonContainer, borderRadius:8}}
+                    styleText={{...authTextButton}}
+                    title='Tarifi Yap'/>
+                    
+                </View>
             </BottomSheetModalProvider>
 
         </GestureHandlerRootView>

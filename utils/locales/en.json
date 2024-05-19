@@ -1,9 +1,10 @@
 {
     "SettingsScreen": {
         "settings": "Settings",
-        "favorite": "Favorites",
+        "favorite": "Likes",
         "password_update_btn_txt": "Update Password",
         "profile_update_btn_txt": "Update Profile",
+        "done_meals":"Done Recipes",
         "change_language_btn_txt": "Change Language",
         "logout_btn_txt": "Logout",
         "cancel": "Cancel"

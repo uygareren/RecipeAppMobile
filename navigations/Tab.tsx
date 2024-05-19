@@ -50,7 +50,7 @@ export const TabNavigation = () => {
                             />
                         ),
                         headerShown: false,
-                        tabBarLabel: "Home",
+                        tabBarLabel: "",
                     }}
                     
                 />
@@ -66,7 +66,7 @@ export const TabNavigation = () => {
                         />
                         ),
                         headerShown: false,
-                        tabBarLabel: "Interested Cuisines",
+                        tabBarLabel: "",
                     }}
                     
                 />
@@ -79,7 +79,7 @@ export const TabNavigation = () => {
                             <AntDesign name="plus" size={24} color={focused ? BLACK_COLOR : GRAY} />
                         ),
                         headerShown: false,
-                        tabBarLabel: "Add Food",
+                        tabBarLabel: "",
                     }}
                     
                 />
@@ -91,7 +91,7 @@ export const TabNavigation = () => {
                             <Feather name="search" size={24} color={focused ? BLACK_COLOR : GRAY} />
                         ),
                         headerShown: false,
-                        tabBarLabel: "Detail Search",
+                        tabBarLabel: "",
                     }}
                     
                 />
@@ -108,7 +108,7 @@ export const TabNavigation = () => {
                             />
                         ),
                         headerShown: false,
-                        tabBarLabel: "Profile",
+                        tabBarLabel: "",
                     }}
                     listeners={{
                         tabPress: (e) => {

@@ -5,6 +5,7 @@ export const MAIN_COLOR = "#f0c654";
 export const TAB_INACTIVE_COLOR = "black";
 export const TAB_ACTIVE_COLOR = "black";
 export const BLACK_COLOR = "#111";
+export const TOAST_COLOR = "#303030";
 export const WHITE = "white";
 export const LIGHT_WHITE = "##e0e0e0";
 export const PINK = "#f75e73";
@@ -15,8 +16,12 @@ export const LIGHT_RED = "#F24822";
 export const TEXT_BLACK = "#292828";
 export const GREEN = "#3d8c35";
 
+// PADDİNG HORİZONTAL
 
+export const CONTAİNER_HORİZONTAL = 20;
 
+// BORDER RADIUS
+export const BORDER_RADIUS_1 = 10;
 
 // KEYS
 
@@ -52,7 +57,6 @@ moment.updateLocale("tr", {
 })
 
 export function setMomentLanguage(lang: string) {
-    console.log("lang", lang);
     moment.locale(lang);
 }
 

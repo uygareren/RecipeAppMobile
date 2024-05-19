@@ -45,3 +45,14 @@ interface CommentType{
     recipeId: String,
     comment: String
 }
+
+interface IPostMadeMeals {
+    userId?: string;
+    userName?: string;
+    userSurname?: string;
+    userImage?: string;
+    recipeId?: string;
+    recipeName?: string;
+    recipeImage?: string;
+    status: number;
+};

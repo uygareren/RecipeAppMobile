@@ -35,7 +35,6 @@ export default function FollowScreen({route}:any){
         () => getFollowing(selectedUserId)
     );
 
-    console.log("data", data);
 
     const RenderItem = ({item}:any) => {
         return(

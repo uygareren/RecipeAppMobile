@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from 'react-redux';
 import { RootStateType } from '../store/store';
-import { BLACK_COLOR, LIGHT_GRAY_2 } from "../utils/utils";
+import { BLACK_COLOR, GRAY, LIGHT_GRAY_2 } from "../utils/utils";
 import { Divider } from './Divider';
 
 type TopHeaderParams={
@@ -53,7 +53,7 @@ export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress,
     return (
       <View style={{ ...styles.topHeaderContainer}}>
         {id != null ? (
-          <Text>{`Merhaba, ${name}`}</Text>
+          <Text style={{color:GRAY}}>{`Merhaba, ${name}`}</Text>
 
         ): (
           null

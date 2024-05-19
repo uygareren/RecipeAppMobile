@@ -1,7 +1,7 @@
 import { AntDesign, Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMutation, useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import { SearchHeader } from '../../components/Header';
 import { TextInputComp } from '../../components/Inputs';
 import { HomeRecipeRenderComponent } from '../../components/Render/HomeRecipeRenderComponent';
 import SkeletonComp from '../../components/Skeleton';
+import { MakeRecipeContext } from '../../context/MakeRecipeContext';
 import useI18n from "../../hooks/useI18n";
 import { getCategories, getFollowerRecipe, getRecipeSearch, getUserDetail, getUserSearch } from "../../services/ApiService";
 import { userSliceActions } from "../../store/reducer/userSlice";
@@ -18,6 +19,11 @@ import { BLACK_COLOR, GRAY, keyGenerator, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from
 export default function HomeScreen({ route }: any) {
 
     const API = process.env.API;
+
+    const {recipe, setRecipe} = useContext(MakeRecipeContext);
+
+    console.log("recipeee", recipe);
+
 
     const {t} = useI18n("HomeScreen");
 
@@ -134,41 +140,6 @@ export default function HomeScreen({ route }: any) {
             
     }
 
-    // useEffect(() => {
-    //   const backAction = () => {
-    //     if (backPressCount === 1) {
-    //       Alert.alert(
-    //         'Çıkış',
-    //         'Çıkış Yapmak İstediğinizden Emin misiniz?',
-    //         [
-    //           {
-    //             text: 'Cancel',
-    //             onPress: () => null,
-    //             style: 'cancel',
-    //           },
-    //           {
-    //             text: 'Leave',
-    //             onPress: () => BackHandler.exitApp(),
-    //           },
-    //         ],
-    //       );
-    //       setBackPressCount(0); 
-    //       return true; 
-    //     } else {
-    //       setBackPressCount(1);
-    //       setTimeout(() => setBackPressCount(0), DOUBLE_PRESS_INTERVAL);
-    //       return true; 
-    //     }
-    //   };
-  
-    //   const backHandler = BackHandler.addEventListener(
-    //     'hardwareBackPress',
-    //     backAction,
-    //   );
-  
-    //   return () => backHandler.remove(); 
-    // }, [backPressCount]);
-
     useEffect(() => {
       if(userInfo?.userId){
         const payload = {user_id:userInfo?.userId};
@@ -229,14 +200,7 @@ export default function HomeScreen({ route }: any) {
       
     }, []);
 
-    if(data == undefined){
-      return(
-        <View style={{flex:1, alignItems:'center', justifyContent:'center', backgroundColor:WHITE}}>
-          <Text style={{fontSize:22, fontWeight:'500'}}>Sunucuya Bağlanılamadı!</Text>
-        </View>
-      )
-    }
-
+   
     if (isLoading) {
       // Render SkeletonComp for the first 4 seconds
       return <SkeletonComp />;
@@ -297,6 +261,18 @@ export default function HomeScreen({ route }: any) {
           <SearchHeader openModal={openModal} value={text} onChangeValue={setText} placeholder="Search Recipes..." name={userInfo.name ?? ""}
           onPress={() => navigation.navigate("Profile")} id={userId} greeting={t("greeting")} title={t("title")}/>
         </View>
+
+        {
+          recipe.length > 0 ? (
+            <Pressable onPress={() => navigation.push("MakeRecipe")} style={{ width:width-40, backgroundColor:LIGHT_GRAY_2, marginTop:20, alignSelf:'center', borderRadius:10, paddingVertical:8,
+                paddingHorizontal:12, alignItems:'center', 
+              }}>
+               <Text style={{fontWeight:'500'}}>Tarifler Yapılıyor...</Text>
+            </Pressable>
+          ):
+          null
+        }
+        
 
         <View style={{ marginTop: 20, marginLeft: 20, paddingVertical:10}}>
           <Text style={{ fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>{t("categories")}</Text>

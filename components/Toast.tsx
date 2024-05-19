@@ -22,7 +22,7 @@ const ToastSuccessRender = ({ message="" }: any) => {
     const theme = useTheme();
 
     return (
-        <View style={{ backgroundColor: TOAST_COLOR, width, bottom: 0, paddingVertical:15, borderRadius:8 }}>
+        <View style={{ backgroundColor: TOAST_COLOR, width:width*0.8, bottom: 0, paddingVertical:15, borderRadius:8 }}>
             <View style={{ flexDirection: "row", width: '100%', alignSelf: "center", alignItems:"center", justifyContent:"center" }}>
                 <Feather name="info" color={"#fff"} size={20} />
                 <Text style={{ color: "#fff", marginLeft: 15, textAlign: "center",fontWeight:'500' }}>{message}</Text>

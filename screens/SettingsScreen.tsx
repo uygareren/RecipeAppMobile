@@ -64,6 +64,10 @@ export default function SettingsScreen(){
                 <Text style={styles.cardText}>{t("favorite")}</Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity style={styles.cardStyle} onPress={() => navigation.push("DoneMeals")}>
+                <Text style={styles.cardText}>{t("done_meals")}</Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.cardStyle} onPress={() => navigation.navigate("UpdatePassword")}>
                 <Text style={styles.cardText}>{t("password_update_btn_txt")}</Text>
                 </TouchableOpacity>

@@ -37,7 +37,7 @@ export const HomeRecipeRenderComponent = ({ item, navigation, userId }: Props) =
 
             <Pressable onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{width:width-30, alignSelf:"center"}}>
                 <Image source={{uri: `${API}/recipes/${item?.image}`}}
-                style={{width:width-50, height:width-50, resizeMode:"contain"}}/>
+                style={{width:width-50, height:width-50, resizeMode:"contain", borderRadius:8}}/>
             </Pressable>
             <View style={{alignItems:"center", marginTop:10}}>
                 <Text style={{fontWeight:"300", fontSize:16, marginBottom:10}}>{item?.recipeName}</Text>

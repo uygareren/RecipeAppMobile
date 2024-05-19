@@ -215,3 +215,36 @@ export const getLikedRecipes = async(user_id:string) => {
 }
 
 
+// MADE MEALS
+
+export const getMadeMeals = async(userId:String) => {
+    const response = await api.get(`${API}/get-made-meals-by-user/${userId}`);
+    return response.data;
+}
+export const postMadeMeals = async(payload:IPostMadeMeals) => {
+    const response = await api.post(`${API}/post-made-meals-by-user`, payload);
+    return response.data;
+}
+
+export const deleteMadeMeals = async(payload:any) => {
+    const response = await api.post(`${API}/delete-made-meals-by-user`, payload);
+    return response.data;
+}
+
+export const doneMadeMeals = async(payload:any) => {
+    const response = await api.post(`${API}/post-done-made-meals`, payload);
+    return response.data;
+}
+
+export const lengthMadeMeals = async(recipe_id:string) => {
+    const response = await api.get(`${API}/get-length-made-meals/${recipe_id}`);
+    return response.data;
+}
+
+export const getMadeMealsDetail = async(recipe_id:string) => {
+    const response = await api.get(`${API}/get-made-meals/${recipe_id}`);
+    return response.data;
+}
+
+
+

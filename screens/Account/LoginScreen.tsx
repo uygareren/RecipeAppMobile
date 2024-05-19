@@ -34,7 +34,6 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
 
     async function fetchData() {
         lang_data = await AsyncStorage.getItem(LANG_STORE);
-        console.log("lang", lang_data);
     }
 
     fetchData();

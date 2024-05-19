@@ -15,7 +15,7 @@ export const RecipeRenderComponent = ({ navigation, item }: { navigation: any; i
              width:width*0.3,alignItems:"center",
         marginBottom:20,marginVertical:2, marginHorizontal:2}}>
             <Image source={{uri: `${API}/recipes/${item?.image}`}} 
-            style={{ width: width*0.3, height: width*0.3, resizeMode:"cover" }} />
+            style={{ width: width*0.3, height: width*0.3, resizeMode:"cover", borderRadius:8 }} />
 
         </TouchableOpacity>
     )

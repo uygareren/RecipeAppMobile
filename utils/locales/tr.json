@@ -1,9 +1,10 @@
 {
     "SettingsScreen": {
     "settings":"Ayarlar",
-    "favorite":"Favoriler",
+    "favorite":"Beğendiklerim",
     "password_update_btn_txt": "Parola Güncelle",
     "profile_update_btn_txt": "Profil Güncelle",
+    "done_meals":"Yaptığım Tarifler",
     "change_language_btn_txt": "Dil Değiştirme",
     "logout_btn_txt": "Çıkış Yap",
     "cancel":"Vazgeç"
