@@ -5,6 +5,7 @@ import { BLACK_COLOR, MAIN_COLOR, PINK, TEXT_BLACK, WHITE } from "../utils/utils
 export const authButtonContainer:ViewStyle = {
     alignSelf: "center",
     alignItems: "center",
+    justifyContent:"center",
     marginTop: 20,
     backgroundColor: PINK, 
     borderRadius: 25,

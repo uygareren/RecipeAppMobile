@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { FormControl, useTheme } from "native-base";
 import { useState } from "react";
-import { Dimensions, KeyboardTypeOptions, Pressable, TextInput, TextStyle, View, ViewStyle } from "react-native";
+import { Dimensions, KeyboardTypeOptions, Pressable, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
 import PhoneInput from "react-native-phone-number-input";
 import { BLACK_COLOR, LIGHT_GRAY_2, TEXT_BLACK } from '../utils/utils';
 
@@ -42,7 +42,11 @@ export const TextInputComp = ({ value, onchangeValue, requiredError = false, lab
     return (
         <FormControl style={{ ...styleContainer }}>
             
-            <FormControl.Label style={{...styleLabel}}>{label}</FormControl.Label>
+            <FormControl.Label style={{...styleLabel,}}>
+            <Text style={{fontSize:15, fontWeight:'300'}}>
+                    {label}
+                </Text>
+            </FormControl.Label>
             
             <View style={{ ...styleInputContainer }}>
                 {isTextArea ? (
@@ -86,7 +90,11 @@ export const TextInputPassword = ({
 
         return(
             <FormControl style={{...styleContainer}}>
-                <FormControl.Label style={{...styleLabel}}>{label}</FormControl.Label>
+                <FormControl.Label style={{...styleLabel,}}>
+                <Text style={{fontSize:15, fontWeight:'300'}}>
+                    {label}
+                </Text>
+            </FormControl.Label>
                 <View style={{...styleInputContainer}}>
                     <TextInput value={value} onChangeText={onchangeValue} placeholder={placeholder} secureTextEntry={isShow} style={{...styleInput}}/>
 

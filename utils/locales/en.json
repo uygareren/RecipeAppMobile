@@ -16,7 +16,7 @@
         "btn_title": "Sign In",
         "email_placeholder": "Enter E-Mail",
         "password_placeholder": "Enter Password",
-        "no_account": "Don't Have an Account",
+        "no_account": "Don't You Have any Account?",
         "get_register": "Register"
     },
     "RegisterScreen": {

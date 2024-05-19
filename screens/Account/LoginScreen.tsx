@@ -13,7 +13,7 @@ import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { login } from "../../services/AuthServices";
 import { userSliceActions } from "../../store/reducer/userSlice";
 import { authButtonContainer, authTextButton } from "../../styles/styles";
-import { keyGenerator, LANG_STORE, MAIN_COLOR, PINK, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, CONTAİNER_HORİZONTAL, keyGenerator, LANG_STORE, LIGHT_BLUE_2, LIGHT_GRAY, MAIN_COLOR, MAIN_COLOR_2, PINK, WHITE } from "../../utils/utils";
 
 
 export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
@@ -80,39 +80,47 @@ const loginMutation = useMutation({
 
 
     return(
-        <SafeAreaView style={styles.container}>
-            <View style={styles.body_container}>
+       <SafeAreaView style={styles.container}>
+            <View style={{ marginTop:95}}>
 
-                <View style={{alignItems: "center", position:"absolute", top: 0, justifyContent: "center"}}>
-                </View>
+                <Text style={{color:BLACK_COLOR, fontSize:23, fontWeight:"700"}}>
+                    Hello, 
+                </Text>
+                <Text style={{color:BLACK_COLOR, fontSize:23, fontWeight:"300"}}>
+                    Welcome Back! 
+                </Text>
+            </View>
 
-                <View>
-                    <Text style={{fontSize: 25, fontWeight:"500", alignSelf:"center"}}>{t("sign_in")}</Text>
-                </View>
-
-                <View>
+            <View style={{marginTop:55}}>
                     <TextInputComp value={email} onchangeValue={setEmail} label={t("email")} placeholder={t("email_placeholder")} 
-                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} styleLabel={{marginLeft:5}} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}} 
+                    styleInput={styles.TextInput}/>
                     <TextInputPassword value={password} onchangeValue={setPassword} label={t("password")} placeholder={t("password_placeholder")}
-                    styleContainer={styles.TextInputPassword} styleLabel={{marginLeft:20}} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                </View>
+                    styleContainer={styles.TextInputPassword} styleLabel={{marginLeft:5}} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}} 
+                    styleInput={styles.TextInput}/>
+            </View>
 
-                <View>
-                    <ButtonComp loading={loading} title={t("btn_title")} onPress={() => handleLogin()} styleContainer={{...authButtonContainer}}
-                    styleText={{...authTextButton}}/>
-                </View>
+            <View style={{marginTop:15, marginLeft:10}}>
+                <Text style={{fontSize:12, fontWeight:"700", color:LIGHT_BLUE_2}}>Şifremi Unuttum?</Text>
+            </View>
 
-                <View style={{marginTop: 30, flexDirection: "row", 
-                justifyContent: "flex-end", alignItems: "center", paddingRight: 40}}>
-                    <Text style={{fontWeight:"500", color:WHITE,marginRight: 5}}>{t("no_account")}</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-                        <Text style={{fontWeight:"600", fontSize:16, color:PINK,marginRight: 10}}>{t("get_register")}</Text>
-                    </TouchableOpacity>
-                </View>
+            <View>
+                <ButtonComp loading={loading} title={t("btn_title")} onPress={() => handleLogin()} 
+                styleContainer={{...authButtonContainer, borderRadius:10, width:"100%", paddingVertical:18, backgroundColor:MAIN_COLOR_2}}
+                styleText={{...authTextButton, fontWeight:"700", fontSize:18}}/>
+            </View>
+
+            <View style={{marginTop:50, flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
+                <Text style={{fontSize:13, fontWeight:"600"}}>{t("no_account")}</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+                    <Text style={{fontSize:13, fontWeight:"600", marginLeft:4, color:LIGHT_BLUE_2}}>{t("get_register")}</Text>
+                </TouchableOpacity>
 
             </View>
-       
-        </SafeAreaView>
+
+       </SafeAreaView>
     )
 }
 
@@ -120,6 +128,7 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         backgroundColor: WHITE,
+        paddingHorizontal:CONTAİNER_HORİZONTAL
     },
     body_container:{
         justifyContent: "center",
@@ -131,11 +140,9 @@ const styles = StyleSheet.create({
     },
     TextInputComp:{
         marginVertical:10,
-        paddingHorizontal:20,
         marginTop: 20
     },
     TextInputPassword:{
-        paddingHorizontal:20,
         marginVertical:10,
         marginTop: 20,
     },

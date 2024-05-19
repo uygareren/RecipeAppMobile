@@ -16,7 +16,7 @@
         "btn_title":"Giriş Yap",
         "email_placeholder":"E-Mail Girin",
         "password_placeholder":"Parola Girin",
-        "no_account":"Hesabım Yok",
+        "no_account":"Hesabın Yok Mu?",
         "get_register":"Kayıt Ol"
     },
     "RegisterScreen":{
