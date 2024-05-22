@@ -11,8 +11,8 @@ import { ToastSuccess } from '../components/Toast';
 import useI18n from "../hooks/useI18n";
 import { updateProfileImage, updateUser } from "../services/ApiService";
 import { userSliceActions } from "../store/reducer/userSlice";
-import { ingredientPostButtonContainer, ingredientPostButtonText, ingredientSaveButtonContainer, ingredientSaveButtonText } from '../styles/styles';
-import { LIGHT_GRAY_2, WHITE } from "../utils/utils";
+import { authButtonContainer, authTextButton, ingredientSaveButtonContainer, ingredientSaveButtonText } from '../styles/styles';
+import { BORDER_RADIUS_1, CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_2, WHITE } from "../utils/utils";
 
 
 
@@ -164,32 +164,44 @@ export default function UpdateProfileScreen(){
                     <Image source={require("../assets/images/default_profile.jpg")} style={{width:150, height:150, borderRadius:15}}/>
 
                 )}
-                <ButtonComp title="Update Photo" onPress={updatePhoto} styleContainer={{...ingredientSaveButtonContainer}} 
-                styleText={{...ingredientSaveButtonText, fontWeight:'500'}}/>
+                <ButtonComp title="Update Photo" onPress={updatePhoto} 
+                styleContainer={{...ingredientSaveButtonContainer, borderRadius:BORDER_RADIUS_1}} 
+                styleText={{...ingredientSaveButtonText, fontWeight:'600'}}/>
             </View>
 
-            <View style={{paddingHorizontal:20, marginTop:70, alignItems:"center"}}>
+            <View style={{paddingHorizontal:CONTAİNER_HORİZONTAL, marginTop:70, alignItems:"center",}}>
                 
                 <TextInputComp value={name} onchangeValue={setName} label={t("name")} placeholder={t("name")} 
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}}
+                     styleInput={styles.TextInput}/>
                 <TextInputComp value={surname} onchangeValue={setSurname} label={t("surname")} placeholder={t("surname")}
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}}
+                    styleInput={styles.TextInput}/>
                 <TextInputComp value={email} onchangeValue={setEmail} label={t("email")} placeholder={t("email")}
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}}
+                    styleInput={styles.TextInput}/>
                 {/* <TextInputComp value={phone} onchangeValue={setPhone} label={t("phone")} placeholder={t("phone")} 
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/> */}
-                <PhoneInputComp styleContainer={styles.TextInputComp} label={t("phone")} phoneInput={phoneInput} placeHolder={t("phone")} phone={phone} setPhone={setPhone} 
+                    styleContainer={styles.TextInputComp} styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}}
+                    styleInput={styles.TextInput}/> */}
+                <PhoneInputComp styleContainer={styles.TextInputComp} label={t("phone")} 
+                phoneInput={phoneInput} placeHolder={t("phone")} phone={phone} setPhone={setPhone} 
                 setFormattedValue={setFormattedValue} width={width}/>
                 <TextInputComp value={country} onchangeValue={setCountry} label={t("country")} placeholder={t("country")} 
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}}
+                    styleInput={styles.TextInput}/>
                 <TextInputComp value={city} onchangeValue={setCity} label={t("city")} placeholder={t("city")} 
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}}
+                    styleInput={styles.TextInput}/>
                 <TextInputComp isTextArea={true} value={biography} onchangeValue={setBiography} label={t("biography")} placeholder={t("biography")} 
-                    styleContainer={styles.TextInputComp} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    styleContainer={styles.TextInputComp} styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}}
+                    styleInput={styles.TextInput}/>
                 
                 <ButtonComp title={t("save")} isActive={isActive} loading={loading} onPress={() => handleSave()} 
-                styleContainer={{...ingredientPostButtonContainer}}
-                styleText={{...ingredientPostButtonText}}
+                styleContainer={{...authButtonContainer, borderRadius:10, width:"100%", paddingVertical:18, backgroundColor:MAIN_COLOR_2, 
+                    marginBottom:25
+                }}
+                styleText={{...authTextButton, fontWeight:"700", fontSize:18}}
                 />
                 
                 
@@ -205,7 +217,6 @@ const styles = StyleSheet.create({
         
     },
     TextInputComp:{
-        paddingHorizontal:10,
         marginVertical:10,
         marginTop: 20,
     },
@@ -220,8 +231,8 @@ const styles = StyleSheet.create({
     TextInput:{
         paddingVertical: 10,
         paddingHorizontal: 10,
-        width: "100%",
-        backgroundColor: LIGHT_GRAY_2,
+        width: "83%",
+        backgroundColor: "white",
         borderRadius: 18
     },
 })

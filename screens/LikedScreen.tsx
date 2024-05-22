@@ -6,8 +6,8 @@ import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Divider } from "../components/Divider";
 import { TopHeader } from "../components/Header";
-import { getLikedRecipes } from "../services/ApiService";
-import { BORDER_RADIUS_1, CONTAİNER_HORİZONTAL, LIGHT_GRAY, WHITE } from "../utils/utils";
+import { getInterestedData, getLikedRecipes } from "../services/ApiService";
+import { BLACK_COLOR, BORDER_RADIUS_1, BORDER_RADIUS_2, CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_2, WHITE } from "../utils/utils";
 
 export default function FavoritesScreen() {
     const API = process.env.API;
@@ -21,8 +21,24 @@ export default function FavoritesScreen() {
         () => getLikedRecipes(userInfo.userId)
     );
 
+    const {data:worldCuisinesData} = useQuery({
+        queryKey : ["get-all-world-cuisines"],
+        queryFn: getInterestedData
+    });
+
+    console.log("world data", worldCuisinesData?.data[0]?.cuisines_name);
+
+    function getWorldCuisinesTag(worldCuisinesId:string) {
+        const worldCuisinesName = worldCuisinesData?.data[0]?.cuisines_name.filter((item:any) => item?._id == worldCuisinesId)[0]?.type;
+        return worldCuisinesName;
+
+    }
+
     const RenderItem = ({ navigation, item }: { navigation: any; item: RecipeItem | any }) => {
-        console.log("itemmm", item);
+
+        const worldCuisinesName = getWorldCuisinesTag(item?.worldCuisinesTagId);
+        console.log("worldCuisinesName",worldCuisinesName)
+       
         return (
             <Pressable onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{ marginBottom: 20, borderRadius: BORDER_RADIUS_1, overflow: 'hidden' }}>
                 <View style={{ position: 'relative', height: 150 }}>
@@ -39,10 +55,18 @@ export default function FavoritesScreen() {
                             <Text style={styles.title}>{item?.recipeName}</Text>
                             <Text style={{...styles.subtitle, marginTop:5}}>By Chef {item?.user?.name} {item?.user?.surname}</Text>
                         </View>
-                        <View style={{flexDirection:'row',justifyContent:'center', alignItems:'center'}}>
-                            <Feather name="clock" size={20} color="white" />
-                            <Text style={{...styles.duration, marginLeft:5}}>{item?.cooking_time} min</Text>
+                        <View>
+                            <View style={{ marginBottom:8, backgroundColor:MAIN_COLOR_2, paddingHorizontal:2, paddingVertical:2,
+                                borderRadius:BORDER_RADIUS_2, alignItems:'center', justifyContent:'center'
+                            }}>
+                                <Text style={{fontSize:9, fontWeight:'700', color:BLACK_COLOR}}>{worldCuisinesName}</Text>
+                            </View>
+                            <View style={{flexDirection:'row',justifyContent:'center', alignItems:'center'}}>
+                                <Feather name="clock" size={20} color="white" />
+                                <Text style={{...styles.duration, marginLeft:5}}>{item?.cooking_time} min</Text>
+                            </View>
                         </View>
+                        
                     </View>
                 </View>
             </Pressable>

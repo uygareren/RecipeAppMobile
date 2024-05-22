@@ -57,7 +57,7 @@ export const ChangeLanguage = ({isModalVisible, setIsModalVisible}: ChangeLangua
                 <View style={{marginTop:20}}>
                 {languages.map((v, i) => (
                         <TouchableOpacity key={i} onPress={() => handleChangeLanguage(v.value)}>
-                            <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
+                            <View style={{ paddingHorizontal: 30, paddingVertical: 10 }}>
                                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                                     <Image source={v.image} />
                                     <Text style={{ fontSize: 17.5, fontWeight: "300", marginLeft: 10 }}>

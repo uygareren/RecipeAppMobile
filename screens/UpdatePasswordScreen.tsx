@@ -9,7 +9,7 @@ import { TextInputPassword } from "../components/Inputs";
 import useI18n from "../hooks/useI18n";
 import { AuthServices } from "../services/AuthServices";
 import { authButtonContainer, authTextButton } from "../styles/styles";
-import { PINK, WHITE } from "../utils/utils";
+import { CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_2, PINK, WHITE } from "../utils/utils";
 
 
 export default function UpdatePasswordScreen({}){
@@ -64,17 +64,28 @@ export default function UpdatePasswordScreen({}){
 
                 <View>
                     <TextInputPassword value={currentPassword} onchangeValue={setCurrentPassword} placeholder={t("enter_current_password_placeholder")}
-                    label={t("enter_current_password")}  styleContainer={styles.TextInputPassword} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                    <TextInputPassword value={password} onchangeValue={setPassword} placeholder={t("enter_new_password_placeholder")} label={t("enter_new_password")}
-                    styleContainer={styles.TextInputPassword} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
-                    <TextInputPassword value={password2} onchangeValue={setPassword2} placeholder={t("enter_new_confirm_password_placeholder")}
-                    label={t("enter_new_confirm_password")}  styleContainer={styles.TextInputPassword} styleInputContainer={styles.InputContainer} styleInput={styles.TextInput}/>
+                    label={t("enter_current_password")}  
+                    styleContainer={styles.TextInputPassword} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}} 
+                    styleInput={styles.TextInput}/>
+                    <TextInputPassword value={password} onchangeValue={setPassword} placeholder={t("enter_new_password_placeholder")} 
+                    label={t("enter_new_password")}
+                    styleContainer={styles.TextInputPassword} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}} 
+                    styleInput={styles.TextInput}/>
+                    <TextInputPassword value={password2} onchangeValue={setPassword2} 
+                    placeholder={t("enter_new_confirm_password_placeholder")}
+                    label={t("enter_new_confirm_password")}  
+                    styleContainer={styles.TextInputPassword} 
+                    styleInputContainer={{...styles.InputContainer, borderWidth:2, borderRadius:10, borderColor:LIGHT_GRAY}} 
+                    styleInput={styles.TextInput}/>
                 </View>
             </View>
 
             <View>
-                <ButtonComp loading={loading} title={t("update_btn")} onPress={() => handleUpdatePassord()} styleContainer={{...authButtonContainer}}
-                styleText={{...authTextButton}}/>
+                <ButtonComp loading={loading} title={t("update_btn")} onPress={() => handleUpdatePassord()} 
+                styleContainer={{...authButtonContainer, borderRadius:10, width:"100%", paddingVertical:18, backgroundColor:MAIN_COLOR_2}}
+                styleText={{...authTextButton, fontWeight:"700", fontSize:18}}/>
             </View>
             
         </View>
@@ -84,7 +95,8 @@ export default function UpdatePasswordScreen({}){
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:WHITE
+        backgroundColor:WHITE,
+        paddingHorizontal:CONTAİNER_HORİZONTAL
     },
     InputContainer:{
         flexDirection: "row",
@@ -95,7 +107,6 @@ const styles = StyleSheet.create({
 
     },
     TextInputPassword:{
-        paddingHorizontal:20,
         marginVertical:10,
         marginTop: 20,
     },
@@ -103,7 +114,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 10,
         width: "83%",
-        backgroundColor: "#faf8f7",
         borderRadius: 18
     },
     buttonContainer:{
