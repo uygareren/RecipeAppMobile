@@ -9,6 +9,11 @@
         "logout_btn_txt": "Logout",
         "cancel": "Cancel"
     },
+    
+    "AuthProvider":{
+        "login":"Login!",
+        "message": "You Need to Log In!"
+    },
     "LoginScreen": {
         "sign_in": "Sign In",
         "email": "E-Mail",
@@ -86,7 +91,7 @@
         "search_recipe_title": "Search Recipe",
         "select_ingredient": "Select Ingredient",
         "save_ingredient": "Save Ingredient",
-        "search": "Search"
+        "search": "Search Recipes"
 
     },
     "CategoryDetail": {

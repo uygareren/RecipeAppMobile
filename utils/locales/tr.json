@@ -20,6 +20,10 @@
     "close_account_info":"Hesabını kolayca kapatabilirsin"
 
     },
+    "AuthProvider":{
+        "login":"Giriş Yap!",
+        "message": "Oturum Açmanız Gerekmektedir!"
+    },
     "LoginScreen":{
         "sign_in":"Giriş Yap",
         "email":"E-Mail",
@@ -98,7 +102,7 @@
         "search_recipe_title":"Tarif Ara",
         "select_ingredient":"Malzeme Seç",
         "save_ingredient":"Malzeme Kaydet!",
-        "search":"Ara"
+        "search":"Tarifleri Ara"
 
     },
     "CategoryDetail":{
