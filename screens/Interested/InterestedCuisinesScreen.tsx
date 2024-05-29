@@ -60,12 +60,9 @@ export default function InterestedCuisinesScreen(){
         mutationKey: ["recipe-by-interest"],
         mutationFn: getRecipeByInterestId,
         onSuccess(data, variables, context) {
-            console.log("dataaaaa", data);
         },
     });
     
-    console.log("interestMutation", interestMutationData);
-    console.log("interestRecipeByIdMutation", interestRecipeByIdMutationData);
     
     useEffect(() => {
         if (userInfo?.interests != null) {
