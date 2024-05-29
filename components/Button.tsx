@@ -1,4 +1,5 @@
 import { ActivityIndicator, Text, TextStyle, TouchableOpacity, ViewStyle } from "react-native";
+import { WHITE } from "../utils/utils";
 
 type ButtonCompParams = {
     loading?: boolean, 
@@ -13,9 +14,8 @@ export const ButtonComp = ({loading, title, onPress, styleContainer, styleText, 
     return (
         <TouchableOpacity disabled={!isActive} onPress={onPress} style={{...styleContainer, opacity: isActive ? 1 : 0.7}}>
             {
-                loading ? (<ActivityIndicator/>) : (<Text style={{...styleText}}>{title}</Text>)
+                loading ? (<ActivityIndicator color={WHITE}/>) : (<Text style={{...styleText}}>{title}</Text>)
             }
-            
         </TouchableOpacity>
     );
 };
