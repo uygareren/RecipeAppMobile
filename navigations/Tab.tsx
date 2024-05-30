@@ -1,10 +1,10 @@
 import { AntDesign, Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import { useSelector } from "react-redux";
 import { RootStateType } from "../store/store";
-import { BLACK_COLOR, GRAY, WHITE } from "../utils/utils";
+import { BLACK_COLOR, GRAY, MAIN_COLOR_GREEN, WHITE } from "../utils/utils";
 import AddFoodNavigation from "./AddFoodNavigation";
 import HomeNavigation from "./HomeNavigation";
 import InterestedCuisinesNavigation from './InterestedCuisinesNavigation';
@@ -28,9 +28,7 @@ export const TabNavigation = () => {
                     tabBarStyle: {
                         backgroundColor: WHITE,
                         paddingVertical: 0,
-                        height: 70,
-                        borderTopLeftRadius: 30,
-                        borderTopRightRadius: 30,
+                        height: 80,
                     },
                     tabBarLabelStyle: { marginBottom: 10, fontWeight:"600" },
                     tabBarIconStyle: { marginTop: 10, marginBottom: 0},
@@ -43,14 +41,24 @@ export const TabNavigation = () => {
                     component={HomeNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
+                            <View style={{backgroundColor: focused ? MAIN_COLOR_GREEN: WHITE, padding:8, borderRadius:8}}>
+
                             <AntDesign
                                 name="home"
-                                size={24}
-                                color={focused ? BLACK_COLOR : GRAY}
+                                size={28}
+                                color={focused ? WHITE : GRAY}
                             />
+                            </View>
+
                         ),
                         headerShown: false,
                         tabBarLabel: "",
+                    }}
+                    listeners={{
+                        tabPress: () => {
+                            navigation.push("Home");
+
+                        }
                     }}
                     
                 />
@@ -59,11 +67,17 @@ export const TabNavigation = () => {
                     component={InterestedCuisinesNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
-                            <MaterialCommunityIcons 
-                            name="food-takeout-box-outline" 
-                            size={24} 
-                            color={focused ? BLACK_COLOR : GRAY}
-                        />
+                            <View style={{backgroundColor: focused ? MAIN_COLOR_GREEN: WHITE, padding:8, borderRadius:8}}>
+                                <MaterialCommunityIcons 
+                                name="food-takeout-box-outline" 
+                                size={28} 
+                                color={focused ? WHITE : GRAY}
+                                />
+                                {/* {focused ? (
+                                    <View style={{borderWidth:1,marginTop:5, borderRadius:360, height:2, width:2, backgroundColor:MAIN_COLOR_GREEN}}/>
+                                ):null} */}
+                            </View>
+                           
                         ),
                         headerShown: false,
                         tabBarLabel: "",
@@ -76,7 +90,10 @@ export const TabNavigation = () => {
                     component={AddFoodNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
-                            <AntDesign name="plus" size={24} color={focused ? BLACK_COLOR : GRAY} />
+                            <View style={{backgroundColor: focused ? MAIN_COLOR_GREEN: WHITE, padding:8, borderRadius:8}}>
+                                <AntDesign name="plus"size={28} color={focused ? WHITE : GRAY} />
+                                 
+                            </View>
                         ),
                         headerShown: false,
                         tabBarLabel: "",
@@ -88,7 +105,9 @@ export const TabNavigation = () => {
                     component={SearchNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
-                            <Feather name="search" size={24} color={focused ? BLACK_COLOR : GRAY} />
+                            <View style={{backgroundColor: focused ? MAIN_COLOR_GREEN: WHITE, padding:8, borderRadius:8}}>
+                               <Feather name="search" size={28} color={focused ? WHITE : GRAY} />
+                            </View>
                         ),
                         headerShown: false,
                         tabBarLabel: "",
@@ -101,21 +120,25 @@ export const TabNavigation = () => {
                     component={ProfileNavigation}
                     options={{
                         tabBarIcon: ({ focused, color, size }) => (
+                            <View style={{backgroundColor: focused ? MAIN_COLOR_GREEN: WHITE, padding:8, borderRadius:8}}>
                             <Ionicons
                                 name="person-outline"
-                                size={24}
-                                color={focused ? BLACK_COLOR : GRAY}
+                                size={28}
+                                color={focused ? WHITE : GRAY}
                             />
+                            </View>
+                            
                         ),
                         headerShown: false,
                         tabBarLabel: "",
                     }}
-                    listeners={{
-                        tabPress: (e) => {
-                            navigation.push("Profile")
+                    // listeners={{
+                    //     tabPress: (e) => {
+                    //         e.preventDefault();
+                    //         navigation.push("Profile")
 
-                        }
-                    }}                
+                    //     }
+                    // }}                
                     />
             </Tab.Navigator>
         </SafeAreaView>

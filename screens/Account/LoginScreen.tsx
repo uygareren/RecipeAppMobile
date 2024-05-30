@@ -13,7 +13,7 @@ import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { login } from "../../services/AuthServices";
 import { userSliceActions } from "../../store/reducer/userSlice";
 import { authButtonContainer, authTextButton } from "../../styles/styles";
-import { BLACK_COLOR, CONTAİNER_HORİZONTAL, keyGenerator, LANG_STORE, LIGHT_GRAY, LIGHT_RED_2, MAIN_COLOR, MAIN_COLOR_2, PINK, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, CONTAİNER_HORİZONTAL, keyGenerator, LANG_STORE, LIGHT_GRAY, MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, PINK, WHITE } from "../../utils/utils";
 
 
 export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
@@ -38,7 +38,7 @@ export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
 
     fetchData();
 
-const loginMutation = useMutation({
+const {mutate:loginMutation, isLoading} = useMutation({
     mutationKey:["login"],
     mutationFn: login,
     onSuccess: async (data) => {
@@ -59,7 +59,7 @@ const loginMutation = useMutation({
 
     const handleLogin = async () => {
         setLoading(true)
-        loginMutation.mutate({email,password});
+        loginMutation({email,password});
         setLoading(false)
 
     };
@@ -102,20 +102,22 @@ const loginMutation = useMutation({
                     styleInput={styles.TextInput}/>
             </View>
 
-            <View style={{marginTop:15, marginLeft:10}}>
-                <Text style={{fontSize:12, fontWeight:"700", color:LIGHT_RED_2}}>Şifremi Unuttum?</Text>
-            </View>
+            <TouchableOpacity 
+            onPress={() => navigation.navigate("EmailConfirm")}
+            style={{marginTop:15, marginLeft:10}}>
+                <Text style={{fontSize:12, fontWeight:"700", color:MAIN_COLOR_2}}>Şifremi Unuttum?</Text>
+            </TouchableOpacity>
 
             <View>
-                <ButtonComp loading={loading} title={t("btn_title")} onPress={() => handleLogin()} 
-                styleContainer={{...authButtonContainer, borderRadius:10, width:"100%", paddingVertical:18, backgroundColor:MAIN_COLOR_2}}
+                <ButtonComp loading={isLoading} title={t("btn_title")} onPress={() => handleLogin()} 
+                styleContainer={{...authButtonContainer, borderRadius:10, width:"100%", paddingVertical:18, backgroundColor:MAIN_COLOR_GREEN}}
                 styleText={{...authTextButton, fontWeight:"700", fontSize:18}}/>
             </View>
 
             <View style={{marginTop:50, flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
                 <Text style={{fontSize:13, fontWeight:"600"}}>{t("no_account")}</Text>
                 <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-                    <Text style={{fontSize:13, fontWeight:"600", marginLeft:4, color:LIGHT_RED_2}}>{t("get_register")}</Text>
+                    <Text style={{fontSize:13, fontWeight:"600", marginLeft:4, color:MAIN_COLOR_2}}>{t("get_register")}</Text>
                 </TouchableOpacity>
 
             </View>

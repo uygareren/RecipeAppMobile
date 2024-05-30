@@ -16,7 +16,7 @@ export default function EmailConfirmScreen(){
 
     const {t} = useI18n("LoginScreen");
 
-    const [email, setEmail] = useState("uygarerenx@gmail.com");
+    const [email, setEmail] = useState("");
 
     const navigation = useNavigation<any>();
 

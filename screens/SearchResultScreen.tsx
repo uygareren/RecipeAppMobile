@@ -10,7 +10,7 @@ import { HomeRecipeRenderComponent } from "../components/Render/HomeRecipeRender
 import useI18n from "../hooks/useI18n";
 import { getRecipeByIngredients } from "../services/ApiService";
 import { RootStateType } from "../store/store";
-import { WHITE } from "../utils/utils";
+import { CONTAİNER_HORİZONTAL, WHITE } from "../utils/utils";
 
 
 export default function SearchResultScreen({route}:any){
@@ -75,5 +75,6 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: WHITE,
+      paddingHorizontal:CONTAİNER_HORİZONTAL
     }
 })

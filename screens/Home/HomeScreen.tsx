@@ -1,29 +1,20 @@
-import { AntDesign, Feather } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useMutation, useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import { Divider } from '../../components/Divider';
 import { SearchHeader } from '../../components/Header';
-import { TextInputComp } from '../../components/Inputs';
-import { HomeRecipeRenderComponent } from '../../components/Render/HomeRecipeRenderComponent';
-import SkeletonComp from '../../components/Skeleton';
 import { MakeRecipeContext } from '../../context/MakeRecipeContext';
 import useI18n from "../../hooks/useI18n";
-import { getCategories, getFollowerRecipe, getRecipeSearch, getUserDetail, getUserSearch } from "../../services/ApiService";
+import { getCategories, getContinuousMeals, getFollowerRecipe, getMadeMeals, getUserDetail } from "../../services/ApiService";
 import { userSliceActions } from "../../store/reducer/userSlice";
-import { BLACK_COLOR, GRAY, keyGenerator, LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
+import { LIGHT_GRAY, LIGHT_GRAY_2, WHITE } from "../../utils/utils";
 
 export default function HomeScreen({ route }: any) {
 
     const API = process.env.API;
 
     const {recipe, setRecipe} = useContext(MakeRecipeContext);
-
-    console.log("recipeee", recipe);
-
 
     const {t} = useI18n("HomeScreen");
 
@@ -37,27 +28,9 @@ export default function HomeScreen({ route }: any) {
     const userInfo = useSelector((state:any) => state.user.userInfo);
     const userId = userInfo?.userId;
 
-    const key = keyGenerator("searched_values", userId);
-
-    const [backPressCount, setBackPressCount] = useState(0);
-
     const [isLoading, setIsLoading] = useState(true); // State to track loading state
 
 
-    const [searchValue, setSearchValue] = useState("");
-    const [modalVisible, setModalVisible] = useState(false);
-    const [searchSelectVisible, setSearchSelectVisible] = useState<number>(0)
-
-    const [searchData, setSearchData] = useState<any[]>([]);
-
-    const [recipeData, setRecipeData] = useState<any[]>([]);
-
-    const [previusSearchedData, setPreviusSearchedData] = useState<any>([]);
-    // const [searchUserData, setSearchUserData] = useState<any[]>([]);
-
-    const [searchLoading, setSearchLoading] = useState(false)
-
-  
     const {data} = useQuery({
       queryKey: ["categories"],
       queryFn: getCategories
@@ -69,6 +42,26 @@ export default function HomeScreen({ route }: any) {
       () => getUserDetail(userId),
     );
 
+    const { data:madeMeals, isLoading:isMadeMeals } = useQuery(
+      ["get-made-meals-by-user"],
+      () => getMadeMeals(userInfo?.userId),
+      {
+          onSuccess(data) {
+              // Optional: You can set initial recipe data here if needed.
+              console.log("data",data);
+          },
+      }
+  );
+  
+  const { data:continuousMeals, error, isLoading:isContinuous } = useQuery(
+    ["get-continuous-made-meals", userId, recipe],
+    () => getContinuousMeals(userId),
+    {
+      enabled: !!recipe, // The query will not execute until the recipe is truthy
+    }
+  );
+
+    
     const recipeDataMutation = useMutation({
       mutationKey:["recipe-by-follower"],
       mutationFn: getFollowerRecipe,
@@ -76,69 +69,18 @@ export default function HomeScreen({ route }: any) {
       },
     });
 
+
     if(user_detail.isSuccess){
       dispatch(userSliceActions.setUser(user_detail?.data?.user))
 
     }
 
-    function openModal(){
-      setModalVisible(!modalVisible);
+    function openSearchScreen(){
+      // setModalVisible(!modalVisible);
+      navigation.navigate("SearchIngredientsOrUser");
+      
     }
 
-    function handleSwitch(){
-      if(searchSelectVisible == 0){
-        setSearchSelectVisible(1);
-      }else if(searchSelectVisible == 1){
-        setSearchSelectVisible(0)
-      }
-
-      setSearchValue("");
-    }
-
-
-    async function handleNavigate(item:any){
-
-      console.log("item", item);
-
-      if(searchSelectVisible==0){
-
-        handleSaveValues(item?.recipeName);
-        navigation.push("RecipeDetail", {id:item?.id})
-      }else if(searchSelectVisible == 1){
-        const value = `${item?.name} ${item?.surname}`;
-        handleSaveValues(value);
-
-        if(item?.id == userId){
-          navigation.push("Profile")
-        }else{
-          navigation.navigate("OtherProfile",{id:item?.id})
-
-        }
-      }
-
-      setModalVisible(false);
-      setSearchValue("");
-
-    }
-
-    function handleSaveValues(value:string){
-
-      let index = previusSearchedData.indexOf(value);
-
-      if(index != -1){
-        previusSearchedData.splice(index,1);
-        setPreviusSearchedData((prev:any) => [value, ...prev])
-      }else{
-        if(previusSearchedData.length < 5){
-          setPreviusSearchedData((prev:any) =>  [value, ...prev])
-        }else if(previusSearchedData.length == 5){
-          previusSearchedData.pop();
-          setPreviusSearchedData((prev:any) => [value, ...prev])
-        }
-      }
-      AsyncStorage.setItem(key, JSON.stringify(previusSearchedData));
-            
-    }
 
     useEffect(() => {
       if(userInfo?.userId){
@@ -151,63 +93,30 @@ export default function HomeScreen({ route }: any) {
 
     // console.log("recipe data", recipeDataMutation?.data?.data);
 
+    // useEffect(() => {
+      
+    //   const timer = setTimeout(() => {
+    //       setIsLoading(false); // After 4 seconds, set loading state to false
+    //   }, 4000);
+
+    //   return () => clearTimeout(timer); // Clear the timer on unmount
+    // }, []);
+
+  
     useEffect(() => {
-      const timer = setTimeout(() => {
-          setIsLoading(false); // After 4 seconds, set loading state to false
-      }, 4000);
-
-      return () => clearTimeout(timer); // Clear the timer on unmount
-    }, []);
-
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-
-          if(searchSelectVisible == 0){
-
-            const result = await getRecipeSearch(searchValue);
-
-            console.log("result", result?.data);
-            setSearchData(result?.data);
-          }else if(searchSelectVisible == 1){
-            
-            const result = await getUserSearch(searchValue);
-
-            console.log("result", result?.data);
-            setSearchData(result?.data);
-          }
-
-    
-        } catch (error) {
-          console.error("Error fetching recipe data:", error);
-        }
-      };
-    
-      // searchValue değiştiğinde fetchData fonksiyonunu çağır
-      if (searchValue) {
-        fetchData();
+      if (data) {
+        console.log("continuousMeals", data?.data?.length);
       }
-    }, [searchValue]);
-    
-    
-    useEffect(() => {
+    }, [continuousMeals]);
 
-      const key = keyGenerator("interest",userInfo?.userId)
-      let value :any;
-      AsyncStorage.getItem(key).then((storedValue) => value = storedValue);
-
-      
-      
-    }, []);
-
+   
    
     if (isLoading) {
       // Render SkeletonComp for the first 4 seconds
-      return <SkeletonComp />;
+      // return <SkeletonComp />;
     }
 
 
-  
     const Card = ({ item }: any) => {
       return (
         <Pressable onPress={() => navigation.navigate("CategoryDetail", { id: item?._id, name: item?.categoryName })}
@@ -218,53 +127,19 @@ export default function HomeScreen({ route }: any) {
       );
     };
 
-    const RenderSearchItem = ({item}: any) => {
-
-      console.log("itemmm", item);
-      return (
-        <TouchableOpacity onPress={() => handleNavigate(item)} style={{flexDirection:'row', marginVertical:7, paddingHorizontal:15, paddingVertical:7, alignItems:'center'}}>
-          <View style={{width:width*0.1, height:width*0.1, borderRadius:360, justifyContent:'center', alignItems:'center', borderWidth:1}}>
-            {searchSelectVisible === 0 ? (
-              // If searching for recipes, render recipe image
-              <Image style={{width:width*0.1, height:width*0.1, borderRadius:180, resizeMode:'cover'}} source={{uri: `${API}/recipes/${item?.image}`}}/>
-            ) : (
-              // If searching for users, render profile image
-              <Image style={{width:width*0.09, height:width*0.09, borderRadius:360, resizeMode:'cover'}} source={item?.image ? {uri: `${API}/images/${item?.image}`} : require("../../assets/images/default_profile.jpg")}/>
-            )}
-          </View>
-          <Text style={{marginLeft:15, fontWeight:'500', fontSize:15}}>
-            {searchSelectVisible === 0 ? item?.recipeName : `${item?.name} ${item?.surname}`}
-          </Text>
-        </TouchableOpacity>
-      );
-    };
-    
-
-    const RenderPreviusSearchData = ({item}:any) => {
-
-
-      return(
-        <View style={{flexDirection:"row", justifyContent:'space-between', paddingHorizontal:30, paddingVertical:7,
-          alignItems:'center'}}>
-            <Text>{item}</Text>
-            <TouchableOpacity onPress={() => setSearchValue(item)}>
-              <Feather name="arrow-up-left" size={24} color={GRAY} />
-            </TouchableOpacity>
-        </View>
-      )
-    }
 
    
     return (
       <ScrollView style={styles.container}>
         <View style={{ marginTop: 50 }}>
-          <SearchHeader openModal={openModal} value={text} onChangeValue={setText} placeholder="Search Recipes..." name={userInfo.name ?? ""}
+          <SearchHeader openModal={openSearchScreen} value={text} onChangeValue={setText} placeholder="Search Recipes..." name={userInfo.name ?? ""}
           onPress={() => navigation.navigate("Profile")} id={userId} greeting={t("greeting")} title={t("title")}/>
         </View>
 
         {
-          recipe.length > 0 ? (
-            <Pressable onPress={() => navigation.push("MakeRecipe")} style={{ width:width-40, backgroundColor:LIGHT_GRAY_2, marginTop:20, alignSelf:'center', borderRadius:10, paddingVertical:8,
+          true  ? (
+            <Pressable onPress={() => navigation.push("MakeRecipe")} 
+            style={{ width:width-40, backgroundColor:LIGHT_GRAY_2, marginTop:20, alignSelf:'center', borderRadius:10, paddingVertical:8,
                 paddingHorizontal:12, alignItems:'center', 
               }}>
                <Text style={{fontWeight:'500'}}>Tarifler Yapılıyor...</Text>
@@ -293,7 +168,7 @@ export default function HomeScreen({ route }: any) {
 
         
 
-        {recipeDataMutation?.data?.data.length > 0 ? (
+        {/* {recipeDataMutation?.data?.data.length > 0 ? (
             <View style={{ marginTop: 50, }}>
                 <FlatList
                     data={recipeDataMutation?.data?.data}
@@ -303,9 +178,9 @@ export default function HomeScreen({ route }: any) {
             </View>
             ): (
             null
-            )}
+            )} */}
        
-        <Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)} >
+          {/* <Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)} >
             <View style={{flex:1, backgroundColor:WHITE}}>
 
               <View style={{flexDirection:"row",alignItems:'center', paddingHorizontal:20, paddingVertical:15,}}>
@@ -373,7 +248,7 @@ export default function HomeScreen({ route }: any) {
 
               </ScrollView>
             </View >
-          </Modal>
+          </Modal> */}
       </ScrollView>
     );
 

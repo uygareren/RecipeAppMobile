@@ -14,7 +14,7 @@ import useI18n from "../../hooks/useI18n";
 import { getAllIngredients, getAllMeasurements, getCategories, getInterestedData, postRecipe } from "../../services/ApiService";
 import { RootStateType } from "../../store/store";
 import { ingredientPostButtonContainer, ingredientPostButtonText } from '../../styles/styles';
-import { LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
+import { CONTAİNER_HORİZONTAL, LIGHT_GRAY_2, MAIN_COLOR } from "../../utils/utils";
 
  
 
@@ -380,5 +380,6 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:"white",
+        paddingHorizontal:CONTAİNER_HORİZONTAL
     }
 })

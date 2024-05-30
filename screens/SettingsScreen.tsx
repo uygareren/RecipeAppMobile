@@ -12,7 +12,7 @@ import useI18n from "../hooks/useI18n";
 import { userSliceActions } from "../store/reducer/userSlice";
 import { RootStateType } from '../store/store';
 import { authButtonContainer, authTextButton } from "../styles/styles";
-import { BORDER_RADIUS_1, CONTAİNER_HORİZONTAL, GRAY, LIGHT_GRAY_2, LIGHT_RED_2, PINK, WHITE } from "../utils/utils";
+import { BORDER_RADIUS_1, CONTAİNER_HORİZONTAL, LIGHT_GRAY_2, LIGHT_RED_2, PINK, SOFT_BLUE, WHITE } from "../utils/utils";
 
 export default function SettingsScreen(){
 
@@ -57,8 +57,8 @@ export default function SettingsScreen(){
             </View>
 
             <View style={{flexDirection:"row", marginTop:20, paddingVertical:10, paddingHorizontal:12, 
-            borderRadius:BORDER_RADIUS_1, backgroundColor:"#f0f4fa" }}>
-                <View style={{width:width*0.25, height:width*0.25, borderWidth:2, borderColor:GRAY, 
+            borderRadius:BORDER_RADIUS_1, backgroundColor:SOFT_BLUE }}>
+                <View style={{width:width*0.25, height:width*0.25, 
                     borderRadius:360, alignItems:"center", justifyContent:"center"}}>
                     {userInfo?.image ? (
                         <Image source={{uri: `${API}/images/${userInfo.image}`}} 

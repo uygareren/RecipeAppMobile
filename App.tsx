@@ -16,7 +16,9 @@ import AccountScreen from './screens/AccountScreen';
 import AddFoodScreenTwo from './screens/AddFodd/AddFoodScreenTwo';
 import CategoryDetail from './screens/CategoryDetail';
 import CategoryScreen from './screens/CategoryScreen';
+import CodeConfirmationScreen from './screens/CodeConfirmationScreen';
 import DoneMealsScreen from './screens/DoneMealsScreen';
+import EmailConfirmScreen from './screens/EmailConfirmScreen';
 import FinishSelectIngredients from './screens/FinishSelectIngredients';
 import FollowScreen from './screens/FollowScreen';
 import InterestSelectionScreen from './screens/InterestSelectionScreen';
@@ -25,6 +27,8 @@ import MadeMealsDetail from './screens/MadeMealsDetail';
 import MakeRecipeScreen from './screens/MakeRecipeScreen';
 import MissingIngredients from './screens/MissingIngredients';
 import RecipeDetailScreen from './screens/RecipeDetailScreen';
+import ResetPasswordScreen from './screens/ResetPasswordScreen';
+import SearchIngredientsOrUserScreen from './screens/SearchIngredientsOrUserScreen';
 import SearchResultScreen from './screens/SearchResultScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import UpdatePasswordScreen from './screens/UpdatePasswordScreen';
@@ -60,7 +64,11 @@ type StackParamList = {
   },
   MissingIngredients:undefined,
   FinishSelectIngredients:undefined,
-  Account:undefined
+  Account:undefined,
+  EmailConfirm:undefined,
+  CodeConfirmation:undefined,
+  ResetPassword:undefined,
+  SearchIngredientsOrUser:undefined
   
 }
 
@@ -109,6 +117,10 @@ export default function App() {
                     <Stack.Screen component={UpdateProfileScreen} name='UpdateProfile' options={{headerShown:false}}/>
                     <Stack.Screen component={SearchResultScreen} name='SearchResult' options={{headerShown:false}}/>
                     <Stack.Screen component={AddFoodScreenTwo} name="AddFoodScreenTwo" options={{headerShown: false}}/>
+                    <Stack.Screen component={EmailConfirmScreen} name="EmailConfirm" options={{headerShown: false}}/>
+                    <Stack.Screen component={CodeConfirmationScreen} name="CodeConfirmation" options={{headerShown: false}}/>
+                    <Stack.Screen component={ResetPasswordScreen} name="ResetPassword" options={{headerShown: false}}/>
+                    <Stack.Screen component={SearchIngredientsOrUserScreen} name="SearchIngredientsOrUser" options={{headerShown: false}}/>
 
                   </Stack.Group>
                   

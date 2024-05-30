@@ -5,7 +5,7 @@ import { WHITE } from "../utils/utils"
 export const Loading = () => {
     return(
         <View style={styles.container}>
-            <ActivityIndicator size={32}/>
+            <ActivityIndicator size={48}/>
         </View>
     )
 }

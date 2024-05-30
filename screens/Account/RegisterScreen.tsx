@@ -11,7 +11,7 @@ import useI18n from "../../hooks/useI18n";
 import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { register } from "../../services/AuthServices";
 import { authButtonContainer, authTextButton } from "../../styles/styles";
-import { BLACK_COLOR, CONTAİNER_HORİZONTAL, LANG_STORE, LIGHT_GRAY, LIGHT_RED_2, MAIN_COLOR_2, PINK, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, CONTAİNER_HORİZONTAL, LANG_STORE, LIGHT_GRAY, MAIN_COLOR_2, MAIN_COLOR_GREEN, PINK, WHITE } from "../../utils/utils";
 
 
 export default function RegisterScreen({navigation, route}: TabAccountScreenProps<"Register">){
@@ -111,22 +111,22 @@ export default function RegisterScreen({navigation, route}: TabAccountScreenProp
                     <Checkbox 
                         value={checkBox}
                         onValueChange={() => setCheckBox(!checkBox)}
-                        color={LIGHT_RED_2}
+                        color={MAIN_COLOR_2}
                     />
 
-                    <Text style={{marginLeft:10, fontSize:13, fontWeight:"500", color:LIGHT_RED_2}}>Accept Terms</Text>
+                    <Text style={{marginLeft:10, fontSize:13, fontWeight:"500", color:MAIN_COLOR_2}}>Accept Terms</Text>
                 </View>
 
                 <View style={{marginTop:12}}>
                     <ButtonComp loading={loading} title={t("register_btn")} onPress={() => handleRegister()} 
-                    styleContainer={{...authButtonContainer, borderRadius:10, width:"100%", paddingVertical:18, backgroundColor:MAIN_COLOR_2}}
+                    styleContainer={{...authButtonContainer, borderRadius:10, width:"100%", paddingVertical:18, backgroundColor:MAIN_COLOR_GREEN}}
                     styleText={{...authTextButton, fontWeight:"700", fontSize:18}}/>
                 </View>
 
                 <View style={{marginTop:15, marginBottom:40,flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
                 <Text style={{fontSize:13, fontWeight:"600"}}>{t("already_have_account")}</Text>
                 <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                    <Text style={{fontSize:13, fontWeight:"600", marginLeft:4, color:LIGHT_RED_2}}>{t("sign_in")}</Text>
+                    <Text style={{fontSize:13, fontWeight:"600", marginLeft:4, color:MAIN_COLOR_2}}>{t("sign_in")}</Text>
                 </TouchableOpacity>
 
             </View>

@@ -1,14 +1,14 @@
-import { AntDesign, EvilIcons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, EvilIcons, Feather, FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from 'react-redux';
 import { RootStateType } from '../store/store';
-import { BLACK_COLOR, GRAY, LIGHT_GRAY_2 } from "../utils/utils";
+import { BLACK_COLOR, BORDER_RADIUS_2, GRAY, GRAY_2, SOFT_BLUE } from "../utils/utils";
 import { Divider } from './Divider';
 
 type TopHeaderParams={
-    title: string
+    title: string,
 }
 
 type SearchHeaderParams={
@@ -38,10 +38,22 @@ type GoBackHeaderParams={
 const API = process.env.API;
 
 
-export const TopHeader = ({title}:any) => {
+export const TopHeader:React.FC<TopHeaderParams> = ({title}) => {
+
+  const navigation = useNavigation<any>();
+
     return(
-        <View style={{...styles.topHeaderContainer, alignItems:"center"}}>
-            <Text style={{fontSize:18, fontWeight:"300"}}>{title}</Text>
+        <View style={{...styles.topHeaderContainer, alignItems:"center", minHeight:50,
+          flexDirection:'row'
+        }}>
+
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{position:'absolute', left:0}}>
+        <FontAwesome5 name="chevron-left" size={24} color="black" />
+        </TouchableOpacity>
+
+          <View style={{flex:0, maxWidth:"85%", alignItems:'center'}}>
+            <Text style={{fontSize:20, fontWeight:"700", color:BLACK_COLOR}}>{title}</Text>
+          </View>
         </View>
     )
 }
@@ -53,7 +65,11 @@ export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress,
     return (
       <View style={{ ...styles.topHeaderContainer}}>
         {id != null ? (
-          <Text style={{color:GRAY}}>{`Merhaba, ${name}`}</Text>
+          <View style={{flexDirection:"row", alignItems:'center'}}>
+            <Text style={{color:GRAY}}>{`Merhaba, `}</Text>
+            <Text style={{color:BLACK_COLOR, fontWeight:'700'}}>{name}</Text>
+          </View>
+          
 
         ): (
           null
@@ -63,7 +79,7 @@ export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress,
           {
             name.length > 0 ? (
               <TouchableOpacity onPress={onPress} style={{width:Dimensions.get("screen").width/9, 
-              height:Dimensions.get("screen").width/9, borderRadius:180, borderWidth:1,
+              height:Dimensions.get("screen").width/9, borderRadius:180,
               borderColor:BLACK_COLOR, alignItems:"center", justifyContent:"center" }}>
                   {user_image != undefined ? (
                     <Image style={{width:Dimensions.get("screen").width/10, height:Dimensions.get("screen").width/10, borderRadius:180,  }}
@@ -81,14 +97,14 @@ export const SearchHeader = ({ value, onChangeValue, placeholder, name, onPress,
   
         <View style={styles.searchContainer}>
           <TouchableOpacity style={styles.textInput} onPress={openModal}>
-            <Text style={{fontWeight:'300' }}>{placeholder}</Text>
+            <Text style={{fontWeight:'300', fontSize:14, color:GRAY_2, marginLeft:8 }}>{placeholder}</Text>
           </TouchableOpacity>
 
           <View style={styles.searchIcon}>
             {value ? (<TouchableOpacity onPress={() => onChangeValue("")}> 
-                <EvilIcons name="close-o" size={26} color={BLACK_COLOR} />
+                <EvilIcons name="close-o" size={26} color={GRAY_2} />
             </TouchableOpacity>) : 
-            (<EvilIcons name="search" size={26} color={BLACK_COLOR} /> )
+            (<EvilIcons name="search" size={26} color={GRAY_2} /> )
             }
             
           </View>
@@ -158,8 +174,7 @@ export const GoBackHeader = ({goBackPress}:GoBackHeaderParams) => {
       width:"100%", 
       paddingHorizontal:20, 
       justifyContent:"center",
-      // borderWidth:1,
-      // borderColor:"black"
+     
       
     },
     searchContainer: {
@@ -174,13 +189,14 @@ export const GoBackHeader = ({goBackPress}:GoBackHeaderParams) => {
       flex: 1,
       paddingVertical: 13,
       paddingHorizontal: 7,
-      backgroundColor: LIGHT_GRAY_2,
-      borderRadius: 15,
+      backgroundColor: SOFT_BLUE,
+      borderRadius: BORDER_RADIUS_2,
       
     },
     searchIcon: {
       position: "absolute",
       right: 10,
+      alignSelf:'center'
     },
     titleText:{
       fontSize:24,

@@ -246,5 +246,27 @@ export const getMadeMealsDetail = async(recipe_id:string) => {
     return response.data;
 }
 
+export const getContinuousMeals = async(user_id:string) => {
+    const response = await api.get(`${API}/get-continuous-made-meals/${user_id}`);
+    return response.data;
+}
+
+export const postEmailConfirmation = async(payload:any) => {
+    const response = await api.post(`${API}/email-confirmation`, payload);
+    return response.data;
+}
+
+export const postCodeConfirmation = async(payload:any) => {
+    const response = await api.post(`${API}/code-confirmation`, payload);
+    return response.data;
+}
+
+export const postResetPassword = async(payload:any) => {
+    const response = await api.post(`${API}/reset-password`, payload);
+    return response.data;
+}
+
+
+
 
 

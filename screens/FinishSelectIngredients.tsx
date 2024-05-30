@@ -1,14 +1,15 @@
+import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useContext, useState } from "react";
-import { Dimensions, Pressable, Text, View } from "react-native";
+import { Dimensions, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { useMutation } from "react-query";
 import { useSelector } from "react-redux";
 import { ToastError, ToastSuccess } from "../components/Toast";
 import { MakeRecipeContext } from "../context/MakeRecipeContext";
 import { postMadeMeals } from "../services/ApiService";
-import { LANG_STORE, WHITE } from "../utils/utils";
+import { BLACK_COLOR, BORDER_RADIUS_1, BORDER_RADIUS_2, CONTAİNER_HORİZONTAL, LANG_STORE, MAIN_COLOR_2, MAIN_COLOR_GREEN, WHITE } from "../utils/utils";
 
 export default function FinishSelectIngredients({route}:any){
 
@@ -92,8 +93,17 @@ export default function FinishSelectIngredients({route}:any){
     }
 
     return(
-        <View style={{flex:1, backgroundColor:WHITE, paddingHorizontal:20}}>
+        <View style={{flex:1, backgroundColor:WHITE, paddingHorizontal:CONTAİNER_HORİZONTAL}}>
             <View style={{marginTop:50}}>
+            <TouchableOpacity
+                onPress={() => navigation.goBack()} 
+                style={{alignSelf:"flex-start", width:35, height:35, alignItems:"center", justifyContent:"center",
+                    borderRadius:BORDER_RADIUS_2, backgroundColor:MAIN_COLOR_GREEN
+                }}>
+                    <FontAwesome5 name="chevron-left" size={24} color={WHITE} />
+                </TouchableOpacity>
+            </View>
+            <View style={{marginTop:20}}>
                 <Text style={{fontWeight:"500", fontSize:15}}>Eksik Malzemelerini Aşağıdaki Marketlerden Hızlıca Alabilirsin</Text>
             </View>
             <View style={{height:height*0.7,}}>
@@ -107,8 +117,10 @@ export default function FinishSelectIngredients({route}:any){
                     <Text style={{fontWeight:"500", fontSize:15}}>Market 3</Text>
                 </View>
             </View>
-            <Pressable onPress={handleDoneMeals} style={{marginTop:20, alignItems:"center"}}>
-                <Text style={{fontWeight:"600", fontSize:13}}>Hayır, Teşekkürler</Text>
+            <Pressable onPress={handleDoneMeals} style={{marginTop:20, alignItems:"center", alignSelf:"center", paddingVertical:12, 
+            paddingHorizontal:40, borderRadius:BORDER_RADIUS_1, backgroundColor:MAIN_COLOR_2
+            }}>
+                <Text style={{fontWeight:"700", fontSize:15, color:BLACK_COLOR}}>Hayır, Teşekkürler</Text>
             </Pressable>
         </View>
     )

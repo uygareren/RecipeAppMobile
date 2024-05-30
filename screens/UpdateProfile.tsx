@@ -12,7 +12,7 @@ import useI18n from "../hooks/useI18n";
 import { updateProfileImage, updateUser } from "../services/ApiService";
 import { userSliceActions } from "../store/reducer/userSlice";
 import { authButtonContainer, authTextButton, ingredientSaveButtonContainer, ingredientSaveButtonText } from '../styles/styles';
-import { BORDER_RADIUS_1, CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_2, WHITE } from "../utils/utils";
+import { BORDER_RADIUS_1, CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_2, MAIN_COLOR_GREEN, WHITE } from "../utils/utils";
 
 
 
@@ -165,8 +165,8 @@ export default function UpdateProfileScreen(){
 
                 )}
                 <ButtonComp title="Update Photo" onPress={updatePhoto} 
-                styleContainer={{...ingredientSaveButtonContainer, borderRadius:BORDER_RADIUS_1}} 
-                styleText={{...ingredientSaveButtonText, fontWeight:'600'}}/>
+                styleContainer={{...ingredientSaveButtonContainer, borderRadius:BORDER_RADIUS_1, backgroundColor:MAIN_COLOR_GREEN}} 
+                styleText={{...ingredientSaveButtonText, fontWeight:'600', color:WHITE}}/>
             </View>
 
             <View style={{paddingHorizontal:CONTAİNER_HORİZONTAL, marginTop:70, alignItems:"center",}}>

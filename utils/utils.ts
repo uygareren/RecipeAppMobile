@@ -4,7 +4,7 @@ import moment from "moment";
 export const MAIN_COLOR = "#f0c654";
 export const TAB_INACTIVE_COLOR = "black";
 export const TAB_ACTIVE_COLOR = "black";
-export const BLACK_COLOR = "1E1E1E";
+export const BLACK_COLOR = "#1E1E1E";
 export const TOAST_COLOR = "#303030";
 export const WHITE = "white";
 export const LIGHT_WHITE = "##e0e0e0";
@@ -18,6 +18,11 @@ export const GREEN = "#3d8c35";
 
 // NEW COLORS
 export const MAIN_COLOR_2 = "#f5c62a";
+export const MAIN_COLOR_GREEN = "#0c9a61";
+export const SOFT_BLUE = "#f0f4fa";
+export const GRAY_2 = "#494a4a";
+
+export const LIGHT_PINK_2 = "#fa4185";
 export const LIGHT_RED_2 = "#F24822";
 
 // PADDİNG HORİZONTAL
@@ -26,6 +31,8 @@ export const CONTAİNER_HORİZONTAL = 20;
 
 // BORDER RADIUS
 export const BORDER_RADIUS_1 = 10;
+export const BORDER_RADIUS_2 = 8;
+export const BORDER_RADIUS_3 = 6;
 
 // KEYS
 

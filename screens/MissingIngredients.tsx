@@ -1,17 +1,16 @@
+import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useContext, useState } from "react";
-import { Dimensions, FlatList, Pressable, ScrollView, Text, View } from "react-native";
+import { Dimensions, FlatList, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
-import { ButtonComp } from "../components/Button";
 import { ToastError, ToastSuccess } from "../components/Toast";
 import { MakeRecipeContext } from "../context/MakeRecipeContext";
 import { getAllIngredients, getRecipeById, postMadeMeals } from "../services/ApiService";
 import { RootStateType } from "../store/store";
-import { authButtonContainer, authTextButton } from "../styles/styles";
-import { LANG_STORE, LIGHT_GRAY_2, MAIN_COLOR, WHITE } from "../utils/utils";
+import { BORDER_RADIUS_2, BORDER_RADIUS_3, CONTAİNER_HORİZONTAL, GRAY_2, LANG_STORE, LIGHT_GRAY_2, MAIN_COLOR, MAIN_COLOR_GREEN, WHITE } from "../utils/utils";
 
 export default function MissingIngredients({route}:any){
 
@@ -131,20 +130,31 @@ export default function MissingIngredients({route}:any){
         return(
             
             <Pressable onPress={() => handleSelectIngredient(item?.ingredients_id)} 
-            style={{paddingVertical:10, paddingHorizontal:10, marginVertical:5, 
-                backgroundColor:isChecked == true ? MAIN_COLOR : LIGHT_GRAY_2, borderRadius:8, flexDirection:"row", width:width*0.4,
-                alignItems:"center", justifyContent:"center"}}>
-                <Text style={{marginHorizontal:2, fontWeight:"700", fontSize:14}}>{name}</Text>
+            style={{backgroundColor:isChecked == true ? MAIN_COLOR : LIGHT_GRAY_2, width:width*0.8, borderWidth:2, borderColor:LIGHT_GRAY_2,
+                marginHorizontal:10,marginVertical:10, 
+                paddingVertical:16, paddingHorizontal:12, borderRadius:10, flexDirection:"row", alignItems:"center", justifyContent:'center'}}>
+                <Text style={{marginHorizontal:2, fontWeight:"700", fontSize:15}}>{name}</Text>
             </Pressable>
         )
     }
 
+    
+
     return(
-        <ScrollView style={{flex:1, backgroundColor:WHITE, paddingHorizontal:20}}>
-            <View style={{marginTop:50}}>
-                <Text style={{fontWeight:"500", fontSize:15}}>Eksik malzemelerin var mı?</Text>
+        <ScrollView style={{flex:1, backgroundColor:WHITE, paddingHorizontal:CONTAİNER_HORİZONTAL}}>
+            <View style={{ marginTop:50}}>
+                <TouchableOpacity 
+                onPress={() => navigation.goBack()} 
+                style={{alignSelf:"flex-start", width:35, height:35, alignItems:"center", justifyContent:"center",
+                    borderRadius:BORDER_RADIUS_2, backgroundColor:MAIN_COLOR_GREEN
+                }}>
+                    <FontAwesome5 name="chevron-left" size={24} color={WHITE} />
+                </TouchableOpacity>
             </View>
-            <View style={{alignItems:"center", marginTop:30, height: height*0.7, maxHeight:height*0.7}}>
+            <View style={{marginTop:20}}>
+                <Text style={{fontWeight:"500", fontSize:15, color:GRAY_2}}>Eksik malzemelerin var mı?</Text>
+            </View>
+            <View style={{alignItems:"center", marginTop:30, height: height*0.65, maxHeight:height*0.7}}>
                 <FlatList
                     data={data?.data?.recipe?.ingredients_with_measurements}
                     keyExtractor={(item) => item?._id}
@@ -152,12 +162,27 @@ export default function MissingIngredients({route}:any){
                 />
             </View>
             <View style={{marginTop: 20, alignItems: "center"}}>
-                <ButtonComp 
-                    title={missinIngredientsData.length === 0 ? "Tarife Başla" : "İlerle"} 
+                <TouchableOpacity 
                     onPress={handleDoneMeals} 
-                    styleContainer={{...authButtonContainer, borderRadius: 8}}
-                    styleText={{...authTextButton}}
-                />
+
+                    style={{ alignSelf: "center",
+                    alignItems: "center",
+                    justifyContent:"center",
+                    marginTop: 20,
+                    backgroundColor: MAIN_COLOR_GREEN, 
+                    borderRadius: BORDER_RADIUS_3,
+                    paddingVertical: 12,
+                    width: width*0.8,}}>
+                        <Text
+                        style={{
+                            fontSize: 16,
+                            fontWeight: "500",
+                            color: WHITE}}
+                        >{missinIngredientsData.length === 0 ? "Tarife Başla" : "İlerle"} 
+                        </Text>
+
+                </TouchableOpacity>
+                
             </View>
 
         </ScrollView>

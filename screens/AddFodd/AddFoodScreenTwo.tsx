@@ -5,7 +5,7 @@ import { Alert, Dimensions, Image, SafeAreaView, Text, TouchableOpacity, View } 
 import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/Button";
 import useI18n from "../../hooks/useI18n";
-import { deleteRecipe, postRecipeImage } from "../../services/ApiService";
+import { deleteRecipeById, postRecipeImage } from "../../services/ApiService";
 import { ingredientPostButtonContainer, ingredientPostButtonText, ingredientSaveButtonContainer, ingredientSaveButtonText } from "../../styles/styles";
 import { LIGHT_GRAY, WHITE } from "../../utils/utils";
 
@@ -47,7 +47,7 @@ export default function AddFoodScreenTwo({route}:any){
 
     const removeRecipeMutation = useMutation(
       ["delete-recipe"],
-      (id:string) => deleteRecipe(id),
+      (id:string) => deleteRecipeById(id),
       {onSuccess(data) {
         console.log("dataa", data);
 
@@ -64,7 +64,7 @@ export default function AddFoodScreenTwo({route}:any){
           mediaTypes: ImagePicker.MediaTypeOptions.All,
           base64:true,
           allowsEditing: true,
-          aspect: [4, 3],
+          aspect: [4, 5],
           quality: 1,
       });
     
@@ -139,7 +139,7 @@ export default function AddFoodScreenTwo({route}:any){
                 <Image source={{uri: image}} style={{width:width*0.7, height:width*0.7, borderRadius:15}}/>
 
               ): (
-                <Image source={require("../../assets/images/default_profile.jpg")} style={{width:width*0.7, height:width*0.7, borderRadius:15}}/>
+                <Image source={require("../../assets/images/default_recipe.jpeg")} style={{width:width*0.7, height:width*0.7, borderRadius:15}}/>
 
               )}
 

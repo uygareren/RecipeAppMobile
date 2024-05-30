@@ -1,26 +1,21 @@
-import { AntDesign, Entypo, Feather, FontAwesome } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useContext, useEffect, useRef, useState } from "react";
-import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BLACK_COLOR, GRAY, LANG_STORE, LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, WHITE, getTimeFromNow, handleNavigation } from "../utils/utils";
+import { Dimensions, FlatList, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { BLACK_COLOR, BORDER_RADIUS_2, BORDER_RADIUS_3, CONTAİNER_HORİZONTAL, GRAY, GRAY_2, GREEN, LANG_STORE, LIGHT_PINK_2, LIGHT_RED, LIGHT_RED_2, MAIN_COLOR_2, MAIN_COLOR_GREEN, WHITE, getTimeFromNow, handleNavigation } from "../utils/utils";
 
-import { MaterialIcons } from '@expo/vector-icons';
-import { BottomSheetModal, BottomSheetModalProvider, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from 'expo-linear-gradient';
 import { useToast } from 'native-base';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
-import { ButtonComp } from '../components/Button';
-import { Divider } from '../components/Divider';
-import { TextInputComp } from '../components/Inputs';
 import { Loading } from '../components/Loading';
-import { Ingredients } from "../components/RecipeDetailComponents/Ingredients";
-import { Instructions } from "../components/RecipeDetailComponents/Instructions";
+import { Ingredients } from '../components/RecipeDetailComponents/Ingredients';
 import { MakeRecipeContext } from '../context/MakeRecipeContext';
 import useI18n from '../hooks/useI18n';
 import { deleteComment, deleteRecipeById, getAllIngredients, getAllMeasurements, getRecipeById, lengthMadeMeals, postComment, postLike, removeLike } from "../services/ApiService";
-import { authButtonContainer, authTextButton } from '../styles/styles';
 
 
 export default function RecipeDetailScreen({route}:any){
@@ -39,25 +34,34 @@ export default function RecipeDetailScreen({route}:any){
 
     const [commentData, setCommentData] = useState<CommentData[]>([]); 
 
+    const [isExpanded, setIsExpanded] = useState(false);
+
     const [initialLike, setInitialLike] = useState(false)
     const [isLike, setIsLıke] = useState(false)
     const [likeCount, setLıkeCount] = useState(0);
+    
 
     const [selectedComment, setSelectedComment] = useState("");
 
     const [comment, setComment] = useState("");
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const {recipe, setRecipe} = useContext(MakeRecipeContext)
     
     const [index, setIndex] = useState(0);
+
+    const [visibleModalComment, setVisibleModalComment] = useState<boolean>(false);
 
     const snapPoints = ["75%"];
     const snapPointsDelete = ["10%"];
     
     const bottomSheetRef = useRef<any>(null);
     const bottomSheetDeleteRef = useRef<any>(null);
+
+    function handleOpenCloseCommentModal(){
+        setVisibleModalComment(!visibleModalComment);
+    }
   
     const handlePresentModal = () => {
       bottomSheetRef.current?.present();
@@ -74,17 +78,28 @@ export default function RecipeDetailScreen({route}:any){
 
     fetchData();
 
+    const handlePress = () => {
+        setIsExpanded(!isExpanded);
+    };
 
-    const {data, isLoading, isSuccess} = useQuery(
+    useEffect(() => {
+      
+      const timer = setTimeout(() => {
+          setLoading(false); // After 4 seconds, set loading state to false
+      }, 3000);
+
+      return () => clearTimeout(timer); // Clear the timer on unmount
+    }, []);
+    
+
+
+    const {data, isLoading:isLoadingDetail, isSuccess} = useQuery(
         ["recipe-detail"],
         () => getRecipeById(recipe_id),
         {onSuccess(data){
             setCommentData(data?.data?.commentData);
         }}
     );
-
-    console.log("data", data);
-
 
     
     const ingredientsData = useQuery({
@@ -159,6 +174,8 @@ export default function RecipeDetailScreen({route}:any){
         ["get-length-made-meals"],
         () => lengthMadeMeals(recipe_id),
     );
+
+    console.log("length", lengthofMadeMeals?.data?.data);
 
 
 
@@ -278,11 +295,11 @@ export default function RecipeDetailScreen({route}:any){
 
         return(
             <Pressable onPress={outsidePressHandler} onLongPress={() => handleSelectedComment(item?.userdata?.userId,item?._id)} 
-            style={{marginVertical:4, paddingVertical:4,}}>
-            <View style={{flexDirection:"row",alignItems:'center'}}>
+            style={{marginVertical:8, paddingVertical:4,}}>
+            <View style={{flexDirection:"row",alignItems:'flex-start',}}>
                 <Pressable onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userInfo?.userId, id_2: item?.userdata?.userId})}
                     style={{flexDirection:'row', 
-                        alignItems:'center', justifyContent:'center',
+                        alignItems:'flex-start', justifyContent:'center',
                 }}>
                     <View style={{width:width*0.1, height:width*0.1, borderRadius:360, borderWidth:1, borderColor:GRAY, alignItems:'center', justifyContent:'center'}}>
                     {item?.userdata?.user_image != null ? (
@@ -294,15 +311,23 @@ export default function RecipeDetailScreen({route}:any){
 
                     )}
                     </View>
-                    
-                    
-                    <Text style={{fontSize:11, fontWeight:"700", marginLeft:10}}>{item?.userdata?.user_name} {item?.userdata?.user_surname}</Text>
-                </Pressable>
-                <Text style={{fontSize:12, color:GRAY, marginLeft:7, fontWeight:"600"}}>{getTimeFromNow(item?.createdAt)}</Text>
-            </View>
-            <Text style={{fontSize:13,marginTop:3, marginLeft:width*0.1+10}}>{item?.comment}</Text>
 
-            <TouchableOpacity onPress={() => handleDeleteComment(item?._id)} style={{borderWidth:0, marginLeft:10, marginTop:10, 
+                    <View>
+                        <View style={{flexDirection:'row', alignItems:'center'}}>
+                            <Text style={{fontSize:11, fontWeight:"700", marginLeft:10}}>{item?.userdata?.user_name} {item?.userdata?.user_surname}</Text>
+                            <Text style={{fontSize:12, color:GRAY, marginLeft:7, fontWeight:"600"}}>{getTimeFromNow(item?.createdAt)}</Text>
+                        </View>
+                        <View style={{ marginLeft:10, justifyContent:'center'}}>
+                            <Text style={{fontSize:13,marginTop:3, }}>{item?.comment}</Text>
+                        </View>
+
+                    </View>
+                    
+
+                </Pressable>
+            </View>
+
+            <TouchableOpacity onPress={() => handleDeleteComment(item?._id)} style={{ marginLeft:10, marginTop:10, 
             flexDirection:'row', backgroundColor:WHITE, width:width*0.4, alignItems:'center', paddingHorizontal:10, 
             paddingVertical:8, borderRadius:8, display: item?._id == selectedComment ? "flex":"none", ...styles.shadow
             }}>
@@ -316,82 +341,25 @@ export default function RecipeDetailScreen({route}:any){
         )
     }
 
-    const Comments = () => {
+    console.log("islaoding",loading)
+
+    if(loading){
         return(
-            <View style={{width:"100%", paddingVertical:10 }}>
-                <FlatList
-                    data={commentData.slice(0,3)}
-                    keyExtractor={(_, index) => index.toString()}
-                    renderItem={RenderCommentItem}
-                />
-
-                
-                <TouchableOpacity style={{marginTop:10}} onPress={handlePresentModal}>
-                    {commentData.length == 0 ? (
-                        <Text style={{fontWeight:'600', fontSize:13, color:GRAY}}>Hiç Yorum Yok</Text>
-
-                    ) : (
-                        <Text style={{fontWeight:'600', fontSize:13, color:GRAY}}>{`${commentData.length} Yorumun Hepsini Gör`}</Text>
-
-                    )}
-                </TouchableOpacity>
-    
-                {/* <View style={{marginTop: 10,flexDirection: "row", alignItems:"center", }}>
-                    <TextInputComp
-                        isTextArea={true}
-                        value={comment}
-                        onchangeValue={setComment}
-                        placeholder={t("add_comment")}
-                        styleContainer={{width: Dimensions.get("screen").width * 7.8 / 10,}}
-                        styleInputContainer={{ borderRadius: 15, }}
-                        styleInput={{
-                            minHeight:50,
-                            width: Dimensions.get("screen").width * 7.8 / 10,
-                            paddingVertical: 13,
-                            paddingHorizontal: 7,
-                            backgroundColor: LIGHT_GRAY_2,
-                            borderRadius: 15,
-                        }}
-                    />
-                    <TouchableOpacity onPress={() => handleComment()} style={{marginLeft:10}}>
-                        <FontAwesome name="send" size={24} color="black" />
-                    </TouchableOpacity>
-                </View> */}
-
-               
-    
+            <View style={{flex:1, backgroundColor:WHITE}}>
+                <Loading/>
             </View>
         )
     }
-
-    if(isLoading){
-        return(
-           <Loading/>
-        )
-    }
-
-    console.log("lengthofMadeMeals?.data?.data.length",lengthofMadeMeals?.data?.data.length)
 
 
     return(
         <GestureHandlerRootView style={{flex:1, }}>
             <BottomSheetModalProvider>
-
-
                 <ScrollView style={styles.container} >
-            <Pressable onPress={outsidePressHandler}>
-
-
-
-                    <View style={{ marginTop: 40 }}>
-
-                        <TouchableOpacity onPress={() => navigation.goBack()} 
-                        style={{marginVertical:20}}>
-                            <Feather name="arrow-left" size={28} color={BLACK_COLOR} />
-                        </TouchableOpacity>
-
-                        
-                        <View style={{flexDirection:"row",alignItems:"center", justifyContent:'space-between',}}>
+                <Pressable onPress={outsidePressHandler}>
+                    <View style={{marginBottom:30}}>
+                    
+                        {/* <View style={{flexDirection:"row",alignItems:"center", justifyContent:'space-between',}}>
                             <View style={{flexDirection:'row', alignItems:'center'}}>
                                 <TouchableOpacity onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userInfo?.userId, id_2: data?.data?.recipe?.user?.userId})} 
                                 style={{width:width*0.1, height:width*0.1, borderRadius:360, borderWidth:1, borderColor:GRAY, alignItems:'center', justifyContent:'center'}}>
@@ -412,34 +380,86 @@ export default function RecipeDetailScreen({route}:any){
                             <TouchableOpacity onPress={() => handlePresentDeleteModal()}>
                                 <Entypo name="dots-three-vertical" size={16} color={BLACK_COLOR} />
                             </TouchableOpacity>
-                        </View>
-                        <View style={{ marginTop:20}}>
-                            <Image source={{uri:`${API}/recipes/${data?.data?.recipe?.image}`}} 
-                            style={{ width: "100%", height: height * 4 / 10, resizeMode: "contain", borderRadius:15 }} />
-                        </View>
+                        </View> */}
                         
-                        
-                    </View>
+                       <View style={{ position: 'relative', width: '100%', height: height * 4 / 10 }}>
+                        <Image 
+                            source={{ uri: `${API}/recipes/${data?.data?.recipe?.image}` }} 
+                            style={{ width: "100%", height: "100%", resizeMode: "cover" }} 
+                        />
+                        <LinearGradient
+                            colors={['rgba(0,0,0,0)', 'rgba(255, 255, 255, 1)']}
+                            style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            height: '25%',
+                            width: '100%',
+                            }}
+                        />
+                        <View style={{flexDirection:'row', width:width-35,alignItems:'center', justifyContent:'space-between',position:'absolute', bottom:10, left:20}}>
+                            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center',}}>
+                                <TouchableOpacity onPress={() => handleNavigation({navigation, routeString: "OtherProfile", id_1: userInfo?.userId, id_2: data?.data?.recipe?.user?.userId})} 
+                                    style={{width:width*0.06, height:width*0.06, borderRadius:360, borderWidth:1, borderColor:GRAY, alignItems:'center', justifyContent:'center'}}>
+                                    {data?.data?.recipe?.user?.image != null ? (
+                                    <Image source={{uri: `${API}/images/${data?.data?.recipe?.user?.image}`}}
+                                    style={{width:width*0.07, height:width*0.07, borderRadius:180}}/>
+                                    ): (
+                                    <Image source={require("../assets/images/default_profile.jpg")}
+                                    style={{width:width*0.07, height:width*0.07, borderRadius:180}}/>
+                                    )}
+                                    
+                                </TouchableOpacity>
+                            
+                                <Text style={{fontWeight:"700", fontSize:12, marginLeft:10, color:GRAY_2}}>{`${data?.data?.recipe?.user?.name} ${data?.data?.recipe?.user?.surname}`}</Text>
+                            </View>
 
-                    {/* WHITE CARD */}
-
-                    <View style={{marginTop:-40,width:width*8/10, borderRadius:15,alignSelf:"center", backgroundColor:WHITE, paddingHorizontal:15,
-                paddingVertical:10, ...styles.shadow }}>
-                        <View style={{flexDirection:'row', alignItems:'flex-start', justifyContent:'space-between'}}> 
-                            <View style={{maxWidth:width*0.4, }}>
-                                <Text style={{fontSize:20, fontWeight:"600"}}>{data?.data?.recipe?.recipeName}</Text>
+                            <View>
+                                <TouchableOpacity onPress={() => navigation.push("MissingIngredients", {id:recipe_id})}
+                                    style={{paddingVertical:4, paddingHorizontal:20, borderRadius:BORDER_RADIUS_3, 
+                                        backgroundColor:LIGHT_PINK_2, flexDirection:'row',alignItems:'center', justifyContent:'center', ...styles.shadow}}
+                                >
+                                    <Text style={{color:WHITE, fontWeight:'700', fontSize:13}}>Tarifi Yap</Text>
+                                    <AntDesign name="caretright" size={12} color="white" style={{marginLeft:5}} />
+                                </TouchableOpacity>
+                                
                             </View>
                             
-                            <View style={{}}>
-                                <Pressable onPress={() => navigation.push("MadeMeals", {id:recipe_id})} style={{flexDirection:'row', alignItems:'center', paddingHorizontal:3, borderRadius:8, paddingVertical:4,
-                                    backgroundColor:LIGHT_GRAY_2
-                                    }}>
-                                    <Text style={{fontWeight:'300', fontSize:13}}>{lengthofMadeMeals?.data?.data}</Text>
-                                    <Text style={{fontWeight:'300', fontSize:13}}> Kişi Bu Tarifi Yaptı</Text>
-                                </Pressable>
-                                    
+                            {/* <View style={{borderWidth:0, backgroundColor:"white", alignItems:'center', justifyContent:'center', paddingVertical:10}}>
+                                <ButtonComp loading={loading} onPress={() => navigation.push("MissingIngredients", {id:recipe_id})} 
+                                styleContainer={{...authButtonContainer, borderRadius:8}}
+                                styleText={{...authTextButton}}
+                                title='Tarifi Yap'/>
                                 
+                            </View> */}
+                                
+                        </View>
 
+                        <TouchableOpacity onPress={() => navigation.goBack()}
+                        style={{position:'absolute', top:50, left:20, padding:2, borderRadius:BORDER_RADIUS_2,
+                            backgroundColor:MAIN_COLOR_GREEN
+                        }}>
+                            <AntDesign name="left" size={24} color={WHITE} />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={{position:'absolute', top:50, right:20, borderRadius:4,
+                            backgroundColor:MAIN_COLOR_GREEN, paddingVertical:2, paddingHorizontal:6
+                        }}>
+                            {lengthofMadeMeals?.data?.data > 0 ? (
+                                <Text style={{fontSize:12, fontWeight:400, color:WHITE}}>{lengthofMadeMeals?.data?.data} Kişi bu tarifi yaptı!</Text>
+                            ): 
+                            <Text style={{fontSize:12, fontWeight:400, color:WHITE}}>Tarifi İlk Sen Dene!</Text>
+                            }
+                        </TouchableOpacity>
+
+                        </View>
+
+
+                        <View style={{ paddingHorizontal:CONTAİNER_HORİZONTAL}}>
+                            
+                            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+                                <Text style={{fontSize:22, fontWeight:'600'}}>{data?.data?.recipe?.recipeName}</Text>
                                 <View style={{ flexDirection:"row", alignItems:"center",justifyContent:'flex-end', marginTop:5,}}>
                                 <TouchableOpacity onPress={() => handleLıke()} style={{
                                     borderRadius:180, paddingHorizontal:4, paddingVertical:4,alignItems:"center", justifyContent:"center"}}>
@@ -447,59 +467,88 @@ export default function RecipeDetailScreen({route}:any){
                                     : 
                                     <AntDesign name="hearto" size={20} color={LIGHT_RED}/>}
                                 </TouchableOpacity>
-                                <Text style={{ marginLeft: 6, fontSize: 12, fontWeight: "300" }}>
+                                <Text style={{ marginLeft: 2, fontSize: 11, fontWeight: "400" }}>
                                     {likeCount?.toString()} {likeCount === 1 || likeCount === 0 ? t("like") : t("likes")}
                                 </Text>
 
                                 </View>
                             </View>
+                            <View style={{marginTop:8,flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
+                                <View style={{flexDirection:'row', alignItems:'center'}}>
+                                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+                                        <MaterialCommunityIcons name="clock-time-eight" size={18} color={MAIN_COLOR_GREEN} />
+                                        <Text style={{fontWeight:'400', color:GRAY, fontSize:13.5}}> {data?.data?.recipe?.cooking_time} mins</Text>
+                                    </View>
+                                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', marginLeft:8}}>
+                                        <FontAwesome5 name="burn" size={18} color={MAIN_COLOR_2} />
+                                        <Text style={{fontWeight:'400', color:GRAY, fontSize:13.5}}> {data?.data?.recipe?.calory} kcal</Text>
+                                    </View>
+                                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', marginLeft:8}}>
+                                        <Ionicons name="cellular-outline" size={18} color={BLACK_COLOR} />
+                                        <Text style={{fontWeight:'400', color:GRAY, fontSize:13.5}}> {data?.data?.recipe?.level}</Text>
+                                    </View>
+                                </View>
+                                <TouchableOpacity onPress={handleOpenCloseCommentModal}>
+                                    <Text style={{fontWeight:'600', fontSize:12, color:GRAY_2}}>Yorumları gör</Text>
+                                </TouchableOpacity>
 
+                            </View>
+                            
+                            <View style={{marginTop:20}}>
+                            <Text style={{ fontSize: 18, fontWeight: '600', color: 'black' }}>Ingredients</Text>
+                            <Ingredients item={data?.data?.recipe?.ingredients_with_measurements}
+                        ingredients_data={ingredientsData?.data?.data[0].Ingredients_id}
+                        measurementData={measurementData?.data?.measurements_data[0].measurement_names}/>
+                            </View>
+
+
+                            <View style={{ marginTop: 20 }}>
+                                <Text style={{ fontSize: 18, fontWeight: '600', color: 'black' }}>Description</Text>
+                                <Text 
+                                    style={{ marginTop: 4, color: 'gray', fontWeight: '400', fontSize: 14 }}
+                                    numberOfLines={isExpanded ? 0 : 2}
+                                >
+                                    {data?.data?.recipe?.recipeDescription}
+                                </Text>
+                                <TouchableOpacity onPress={handlePress} style={{alignSelf:'flex-end'}}>
+                                    <Text style={{ color: MAIN_COLOR_GREEN, fontWeight:'500', marginTop: 4 }}>
+                                    {isExpanded ? 'Less' : 'More'}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                                
+                        </View>
+
+                    </View>
+
+                    <Modal visible={visibleModalComment} onRequestClose={() => handleOpenCloseCommentModal()} animationType='slide'>
+                        <View style={{flex:1}}>
+                            <View style={{ paddingHorizontal:20, paddingVertical:16,justifyContent:'center',alignItems:'flex-end'}}>
+                                <TouchableOpacity onPress={handleOpenCloseCommentModal} style={{width:30,height:30, alignItems:'center', justifyContent:'center',
+                                    borderRadius:BORDER_RADIUS_2, backgroundColor:GREEN,
+                                }}>
+                                    <AntDesign name="close" size={24} color={WHITE} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{minHeight:height*0.75, paddingHorizontal:16}}>
+                            <FlatList
+                                data={commentData}
+                                keyExtractor={(_, index) => index.toString()}
+                                renderItem={RenderCommentItem}
+                            />
+                            </View>
+                            <View style={{ justifyContent:'flex-start', flex:1, borderWidth:2}}>
+                                
+                            </View>
                             
                         </View>
-                        
-                        <View style={{backgroundColor:LIGHT_GRAY, height:1, width:"100%", alignSelf:"center", marginTop:8}}/>
+                    </Modal>
 
-                        <View style={{flexDirection:"row", justifyContent:"space-around",paddingHorizontal:5, paddingVertical:10}}>
-                            <View style={{backgroundColor:LIGHT_GRAY_2,alignItems:"center", justifyContent:"center", width:width/7, paddingVertical:8,
-                        borderRadius:15}}>
-                                <AntDesign name="clockcircleo" size={24} color="black" />
-                                <Text style={{marginTop:8, fontSize:12, fontWeight:"700"}}>{data?.data?.recipe?.cooking_time}</Text>
-                            </View>
-                            <View style={{backgroundColor:LIGHT_GRAY_2,alignItems:"center", justifyContent:"center", width:width/7, paddingVertical:8,
-                        borderRadius:15}}>
-                                <MaterialIcons name="fastfood" size={24} color="black" />
-                                <Text style={{marginTop:8, fontSize:12, fontWeight:"700"}}>{data?.data?.recipe?.calory} cal</Text>
-                            </View>
-                            <View style={{backgroundColor:LIGHT_GRAY_2,alignItems:"center", justifyContent:"center", width:width/7, paddingVertical:8,
-                        borderRadius:15}}>
-                                <MaterialIcons name="workspaces-outline" size={24} color="black" />
-                                <Text style={{marginTop:8, fontSize:12, fontWeight:"700"}}>{data?.data?.recipe?.level}</Text>
-                            </View>
-                        </View>
+                  
 
-                    </View>
-
-                    <View style={{width:"100%", marginTop:20, backgroundColor:LIGHT_GRAY_2, borderRadius:15}}>
-                        {/* SELECT SECTİON */}
-                        <View style={{flexDirection:"row", justifyContent:"space-around", paddingVertical:15}}>
-                            <TouchableOpacity onPress={() => setIndex(0)} style={{alignItems:"center"}}>
-                                <Text style={{fontSize:16, fontWeight:index == 0 ? "500": "300"}}>{t("ingredients")}</Text>
-                                <View style={{width:width*1.7/10, height:2, backgroundColor: index == 0 ? LIGHT_RED : LIGHT_GRAY_2 , marginTop:4}}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setIndex(1)} style={{alignItems:"center"}}>
-                                <Text style={{fontSize:16, fontWeight:index == 1 ? "500": "300"}}>{t("instructions")}</Text>
-                                <View style={{width:width*1.7/10, height:2, backgroundColor: index == 1 ? LIGHT_RED : LIGHT_GRAY_2 , marginTop:4}}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setIndex(2)} style={{alignItems:"center"}}>
-                                <Text style={{fontSize:16, fontWeight:index == 2 ? "500": "300"}}>{t("comments")}</Text>
-                                <View style={{width:width*1.7/10, height:2, backgroundColor: index == 2 ? LIGHT_RED : LIGHT_GRAY_2 , marginTop:4}}/>
-                            </TouchableOpacity>
-                        </View>
-
-                        
-                    </View>
+                   
                 
-                    <View style={{ width: "100%", paddingVertical:15, paddingHorizontal:0}}>
+                    {/* <View style={{ width: "100%", paddingVertical:15, paddingHorizontal:0}}>
                         {index === 0 && <Ingredients item={data?.data?.recipe?.ingredients_with_measurements}
                         ingredients_data={ingredientsData?.data?.data[0].Ingredients_id}
                         measurementData={measurementData?.data?.measurements_data[0].measurement_names}/>}
@@ -507,9 +556,9 @@ export default function RecipeDetailScreen({route}:any){
                         {index === 2 && <Comments />}
                         
 
-                    </View>
+                    </View> */}
                     
-                <BottomSheetModal  ref={bottomSheetRef} index={0} snapPoints={snapPoints}>
+                {/* <BottomSheetModal  ref={bottomSheetRef} index={0} snapPoints={snapPoints}>
                     <Pressable onPress={outsidePressHandler} style={{backgroundColor:WHITE, }}>
 
                         <View style={{height:height*0.05, borderWidth:0, alignItems:'center', justifyContent:'center'}}>
@@ -559,7 +608,7 @@ export default function RecipeDetailScreen({route}:any){
                         </View> 
 
                     </Pressable>
-                </BottomSheetModal>
+                </BottomSheetModal> */}
 
                 <BottomSheetModal ref={bottomSheetDeleteRef} index={0} snapPoints={snapPointsDelete}>
                     <View style={{backgroundColor:WHITE, paddingHorizontal:20}}>
@@ -575,13 +624,7 @@ export default function RecipeDetailScreen({route}:any){
                 </Pressable>
 
                 </ScrollView>
-                <View style={{borderWidth:0, backgroundColor:"white", alignItems:'center', justifyContent:'center', paddingVertical:10}}>
-                    <ButtonComp loading={loading} onPress={() => navigation.push("MissingIngredients", {id:recipe_id})} 
-                    styleContainer={{...authButtonContainer, borderRadius:8}}
-                    styleText={{...authTextButton}}
-                    title='Tarifi Yap'/>
-                    
-                </View>
+                
             </BottomSheetModalProvider>
 
         </GestureHandlerRootView>
@@ -596,17 +639,16 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:WHITE,
-        paddingHorizontal:20,
     },
     shadow:{
-        shadowColor:"#000",
+        shadowColor:LIGHT_RED_2,
         shadowOffset:{
-            width:0,
-            height:2
+            width:4,
+            height:4
         },
-        shadowOpacity:0.25,
+        shadowOpacity:0.7,
         shadowRadius:3.84,
-        elevation:5
+        elevation:9
     }
 
 })

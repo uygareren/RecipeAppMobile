@@ -1,5 +1,5 @@
 import { Dimensions, FlatList, Text, View } from "react-native";
-import { LIGHT_GRAY_2 } from "../../utils/utils";
+import { GRAY_2, SOFT_BLUE } from "../../utils/utils";
 
 
 export function Ingredients({item, ingredients_data, measurementData}:any){
@@ -18,12 +18,16 @@ export function Ingredients({item, ingredients_data, measurementData}:any){
         )[0]);
 
         return(
-            <View style={{paddingVertical:10, paddingHorizontal:10, marginVertical:5, backgroundColor:LIGHT_GRAY_2, borderRadius:12,
-            flexDirection:"row"}}>
-                <Text style={{marginHorizontal:2, fontWeight:"700", fontSize:14}}>{name}</Text>
-                <Text style={{marginHorizontal:2}}>-</Text>
-                <Text style={{marginHorizontal:2}}>{item?.measurement}</Text>
-                <Text style={{marginHorizontal:2}}>{measurementData.filter((e:any) => e?._id == item?.measurement_id)[0]?.name}</Text>
+            <View style={{paddingVertical:16, paddingHorizontal:10, marginVertical:8, backgroundColor:SOFT_BLUE, borderRadius:12,
+            flexDirection:"row", justifyContent:"space-between"}}>
+                <View>
+                    <Text style={{fontWeight:"600", fontSize:16}}>{name}</Text>
+                </View>
+                <View style={{flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
+                    <Text style={{fontWeight:"600", fontSize:15}}>{item?.measurement}</Text>
+                    <Text style={{fontWeight:"400", fontSize:14, color:GRAY_2}}> {measurementData.filter((e:any) => e?._id == item?.measurement_id)[0]?.name}</Text>
+                </View>
+               
             </View>
         )
     }

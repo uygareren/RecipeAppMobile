@@ -3,7 +3,7 @@ import { FormControl, useTheme } from "native-base";
 import { useState } from "react";
 import { Dimensions, KeyboardTypeOptions, Pressable, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
 import PhoneInput from "react-native-phone-number-input";
-import { BLACK_COLOR, LIGHT_GRAY_2, TEXT_BLACK } from '../utils/utils';
+import { BLACK_COLOR, LIGHT_GRAY, TEXT_BLACK, WHITE } from '../utils/utils';
 
 
 type TextInputParams = {
@@ -127,11 +127,13 @@ export const PhoneInputComp = ({styleContainer, label,phoneInput, placeHolder, p
                 }}
                 containerStyle={{
                     flexDirection: "row",
-                    paddingHorizontal:10,
-                    backgroundColor: LIGHT_GRAY_2,
+                    backgroundColor: WHITE,
                     width: Dimensions.get('screen').width*0.89,
                     alignSelf: "center",
-                    borderRadius: 19
+                    paddingLeft:10,
+                    borderWidth:2, 
+                    borderRadius:10, 
+                    borderColor:LIGHT_GRAY
                 }}
 
                 textInputStyle={{
@@ -143,7 +145,7 @@ export const PhoneInputComp = ({styleContainer, label,phoneInput, placeHolder, p
                     width:"15%"
                 }}
                 textContainerStyle={{
-                    backgroundColor:LIGHT_GRAY_2,
+                    backgroundColor:WHITE,
                     borderRadius: 10,
                     paddingHorizontal: 10,
                     paddingVertical: 8,
