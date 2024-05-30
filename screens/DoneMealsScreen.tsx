@@ -5,6 +5,7 @@ import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, V
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { TopHeader } from "../components/Header";
+import { Loading } from '../components/Loading';
 import { getInterestedData, getMadeMeals } from "../services/ApiService";
 import { RootStateType } from "../store/store";
 import { BLACK_COLOR, BORDER_RADIUS_1, BORDER_RADIUS_2, CONTAİNER_HORİZONTAL, MAIN_COLOR_2, WHITE } from "../utils/utils";
@@ -24,7 +25,7 @@ export default function DoneMealsScreen(){
         () => getMadeMeals(userInfo?.userId)
     );
 
-    const {data:worldCuisinesData} = useQuery({
+    const {data:worldCuisinesData, isLoading:isWorldCuisinesLoading} = useQuery({
         queryKey : ["get-all-world-cuisines"],
         queryFn: getInterestedData
     });
@@ -35,7 +36,6 @@ export default function DoneMealsScreen(){
 
     }
 
-    console.log("data", data?.data[0]?.recipes);
 
     const RenderItem = ({ navigation, item }: { navigation: any; item: RecipeItem | any }) => {
 
@@ -77,6 +77,11 @@ export default function DoneMealsScreen(){
         );
     };
 
+    if(isLoading || isWorldCuisinesLoading){
+        return(
+            <Loading/>
+        )
+    }
 
 
     return(
@@ -89,7 +94,7 @@ export default function DoneMealsScreen(){
             <View style={{marginTop:20, paddingHorizontal:1}}>
                 <FlatList
                     data={data?.data[0]?.recipes}
-                    keyExtractor={(item) => item?.recipeId.toString()}
+                    keyExtractor={(item) => item?.recipeId?.toString()}
                     renderItem={({ item }) => <RenderItem item={item} navigation={navigation} />}
                     showsVerticalScrollIndicator={false}
 

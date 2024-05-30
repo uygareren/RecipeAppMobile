@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Divider } from "../components/Divider";
 import { TopHeader } from "../components/Header";
+import { Loading } from '../components/Loading';
 import { getInterestedData, getLikedRecipes } from "../services/ApiService";
 import { BLACK_COLOR, BORDER_RADIUS_1, BORDER_RADIUS_2, CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_2, WHITE } from "../utils/utils";
 
@@ -21,12 +22,10 @@ export default function FavoritesScreen() {
         () => getLikedRecipes(userInfo.userId)
     );
 
-    const {data:worldCuisinesData} = useQuery({
+    const {data:worldCuisinesData, isLoading:isWorldCuisinesLoading} = useQuery({
         queryKey : ["get-all-world-cuisines"],
         queryFn: getInterestedData
     });
-
-    console.log("world data", worldCuisinesData?.data[0]?.cuisines_name);
 
     function getWorldCuisinesTag(worldCuisinesId:string) {
         const worldCuisinesName = worldCuisinesData?.data[0]?.cuisines_name.filter((item:any) => item?._id == worldCuisinesId)[0]?.type;
@@ -72,6 +71,12 @@ export default function FavoritesScreen() {
             </Pressable>
         );
     };
+
+    if(isLoading || isWorldCuisinesLoading){
+        return(
+                <Loading/>
+        )
+    }
 
     return (
         <ScrollView style={styles.container}>
