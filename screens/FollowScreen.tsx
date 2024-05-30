@@ -1,12 +1,13 @@
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { Dimensions, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Loading } from "../components/Loading";
 import useI18n from "../hooks/useI18n";
 import { getFollowing } from "../services/ApiService";
-import { BLACK_COLOR, LIGHT_GRAY, WHITE } from "../utils/utils";
+import { BLACK_COLOR, BORDER_RADIUS_2, CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_GREEN, WHITE } from "../utils/utils";
 
 
 export default function FollowScreen({route}:any){
@@ -54,7 +55,7 @@ export default function FollowScreen({route}:any){
 
     const FollowedComponent = () => {
         return(
-            <View style={{ marginTop:20, paddingHorizontal:10, paddingVertical:10 }}>
+            <View style={{ marginTop:20,paddingVertical:10 }}>
                 {data == undefined ? null : (
                     <FlatList
                     data={data?.data?.followed}
@@ -68,7 +69,7 @@ export default function FollowScreen({route}:any){
 
     const FollowerComponent = () => {
         return(
-            <View style={{marginTop:20, marginHorizontal:10}}>
+            <View style={{marginTop:20, }}>
                 {data == undefined ? null : (
                     <FlatList
                     data={data?.data?.follower}
@@ -81,27 +82,47 @@ export default function FollowScreen({route}:any){
         )
     } 
 
+    if(isLoading){
+        return(
+            <Loading/>
+        )
+    }
+
     return(
-        <ScrollView style={{flex:1, backgroundColor:WHITE}}>
+        <ScrollView style={{flex:1, backgroundColor:WHITE, paddingHorizontal:CONTAİNER_HORİZONTAL}}>
             <View style={{ marginTop:50}}>
-                <View style={{flexDirection:"row", justifyContent:"space-evenly",}}>
+                        <TouchableOpacity onPress={() => navigation.goBack()} 
+                         style={{
+                            borderRadius: BORDER_RADIUS_2, width: 32, height: 32, alignItems: "center", justifyContent: "center",
+                            backgroundColor: MAIN_COLOR_GREEN
+                        }}>
+                            <FontAwesome5 name="chevron-left" size={22} color={WHITE} />
+                        </TouchableOpacity>
+                <View style={{flexDirection:"row", justifyContent:"space-evenly",marginTop:20}}>
 
                     <TouchableOpacity onPress={() => setVisible(0)} style={{paddingVertical:10, paddingHorizontal:8, 
                     alignItems:"center", justifyContent:"center"}}>
                         <View style={{alignItems:"center", width:width*0.3}}>
-                            <Text style={{fontWeight:"700", fontSize:16}}>{t("following")}</Text>
+                            <Text style={{fontWeight:"500", fontSize:16,}}>{t("following")}</Text>
+                            <View style={{justifyContent:"flex-end", height:10}}>
+
                             {visible == 0 ? (
                                 <View style={{height: 2, backgroundColor:BLACK_COLOR, width:width*0.3, marginTop:5}}/>                        
                             ):null}
+                            </View>
+
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => setVisible(1)} style={{paddingVertical:10, paddingHorizontal:8, 
                     alignItems:"center", justifyContent:"center"}}>
                         <View style={{alignItems:"center", width:width*0.3}}>
-                            <Text style={{fontWeight:"700", fontSize:16}}>{t("follower")}</Text>
+                            <Text style={{fontWeight:"500", fontSize:16}}>{t("follower")}</Text>
+                            <View style={{justifyContent:"flex-end", height:10}}>
                             {visible == 1 ? (
                                 <View style={{height: 2, backgroundColor:BLACK_COLOR, width:width*0.3, marginTop:5}}/>                        
                             ):null}
+                            </View>
+
                         </View>
                     </TouchableOpacity>
 
@@ -127,6 +148,3 @@ export default function FollowScreen({route}:any){
     )
 }
 
-const styles = StyleSheet.create({
-
-})
