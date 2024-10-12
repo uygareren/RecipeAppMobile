@@ -2,7 +2,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useToast } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { AppState, Dimensions, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import { useMutation } from "react-query";
 import { ButtonComp } from "../components/Button";
@@ -12,20 +12,14 @@ import { postCodeConfirmation, postEmailConfirmation } from "../services/ApiServ
 import { authButtonContainer, authTextButton } from "../styles/styles";
 import { BLACK_COLOR, BORDER_RADIUS_2, CONTAİNER_HORİZONTAL, GRAY_2, MAIN_COLOR_2, MAIN_COLOR_GREEN, SOFT_BLUE, WHITE } from "../utils/utils";
 
-export default function CodeConfirmationScreen({route}:any) {
-
+export default function CodeConfirmationScreen({ route }: any) {
     const email = route.params.email;
-
     const { t } = useI18n("LoginScreen");
     const navigation = useNavigation<any>();
-
     const toast = useToast();
-
-    // const [loading, setLoading] = useState(false);
     const [counter, setCounter] = useState(90);
     const counterRef = useRef(counter);
     counterRef.current = counter;
-
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -36,19 +30,34 @@ export default function CodeConfirmationScreen({route}:any) {
         return () => clearInterval(timer);
     }, []);
 
+    useEffect(() => {
+        const appStateListener = AppState.addEventListener("change", handleAppStateChange);
+        return () => appStateListener.remove();
+    }, []);
+
+    const handleAppStateChange = (nextAppState:any) => {
+        if (nextAppState === "active") {
+            const now = Date.now();
+            const elapsed = Math.floor((now - backgroundTimestampRef.current) / 1000);
+            setCounter((prevCounter) => Math.max(prevCounter - elapsed, 0));
+        } else if (nextAppState === "background") {
+            backgroundTimestampRef.current = Date.now();
+        }
+    };
+
+    const backgroundTimestampRef = useRef(Date.now());
+
     const CELL_COUNT = 6;
     const [value, setValue] = useState('');
     const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
     const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue });
 
-
     const emailConfirmationMutation = useMutation({
         mutationKey: ["email-confirmation"],
         mutationFn: postEmailConfirmation,
         onError(error, variables, context) {
-            console.log("error",error);
+            console.log("error", error);
             toast.show(ToastError("Hata"));
-            
         },
         onSuccess(data, variables, context) {
             toast.show(ToastSuccess("Kod Tekrar Gönderildi"));
@@ -56,44 +65,35 @@ export default function CodeConfirmationScreen({route}:any) {
         },
     });
 
-    const {mutate:codeConfirmationMutation, isLoading} = useMutation({
+    const { mutate: codeConfirmationMutation, isLoading } = useMutation({
         mutationKey: ["code-confirmation"],
         mutationFn: postCodeConfirmation,
         onError(error, variables, context) {
-            console.log("error",error);
+            console.log("error", error);
             toast.show(ToastError("Kod Hatalı!"));
-            
         },
         onSuccess(data, variables, context) {
-            navigation.push("ResetPassword", {email:email});
+            navigation.push("ResetPassword", { email: email });
             setCounter(0);
-
         },
     });
 
-    function handleTryAgain(){
-
-        if(email){
-            emailConfirmationMutation.mutate({email:email});
-
-        }else{
-            toast.show(ToastError("Hata!"))
+    function handleTryAgain() {
+        if (email) {
+            emailConfirmationMutation.mutate({ email: email });
+        } else {
+            toast.show(ToastError("Hata!"));
         }
         setCounter(90);
     }
 
-    
-
-    function handleSendCode(){
-        if(value.length != 6){
+    function handleSendCode() {
+        if (value.length != 6) {
             toast.show(ToastError("Kodu Eksiksiz Girin!"));
-        }else{
-            codeConfirmationMutation({email:email, code:value});
+        } else {
+            codeConfirmationMutation({ email: email, code: value });
         }
-       
     }
-
-
 
     return (
         <SafeAreaView style={styles.container}>
@@ -122,7 +122,7 @@ export default function CodeConfirmationScreen({route}:any) {
                         rootStyle={{ width: "100%", alignItems: "center" }}
                         keyboardType="number-pad"
                         textContentType="oneTimeCode"
-                        autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' }) as any}  // Adjusted type
+                        autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' }) as any}
                         testID="my-code-input"
                         renderCell={({ index, symbol, isFocused }) => (
                             <Text
@@ -134,25 +134,27 @@ export default function CodeConfirmationScreen({route}:any) {
                         )}
                     />
                 </View>
-                <View style={{marginTop:15, flexDirection:"row", alignItems:"center", borderWidth:0, justifyContent:"flex-end"}}>
-                        <Text style={{fontSize:13, fontWeight:"500", color:MAIN_COLOR_2}}>Sorun mu yaşıyorsun? </Text>
-                        <TouchableOpacity onPress={handleTryAgain}>
-                            <Text style={{fontSize:13, fontWeight:"700", color:MAIN_COLOR_GREEN}}>Tekrar kod gönder</Text>
-                        </TouchableOpacity>
+                <View style={{ marginTop: 15, flexDirection: "row", alignItems: "center", borderWidth: 0, justifyContent: "flex-end" }}>
+                    <Text style={{ fontSize: 13, fontWeight: "500", color: MAIN_COLOR_2 }}>Sorun mu yaşıyorsun? </Text>
+                    <TouchableOpacity onPress={handleTryAgain}>
+                        <Text style={{ fontSize: 13, fontWeight: "700", color: MAIN_COLOR_GREEN }}>Tekrar kod gönder</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View>
                     <ButtonComp onPress={() => handleSendCode()} loading={isLoading} title={"Kodu Gönder"}
-                        styleContainer={{ ...authButtonContainer, marginTop:30,borderRadius: 10, width: "100%", paddingVertical: 18, backgroundColor: MAIN_COLOR_GREEN }}
+                        styleContainer={{ ...authButtonContainer, marginTop: 30, borderRadius: 10, width: "100%", paddingVertical: 18, backgroundColor: MAIN_COLOR_GREEN }}
                         styleText={{ ...authTextButton, fontWeight: "700", fontSize: 18 }} />
                 </View>
                 <View style={{ marginTop: 25 }}>
                     {counter > 0 ? (
                         <Text style={styles.timerText}>{counter} saniye</Text>
                     ) : (
-                        <TouchableOpacity onPress={handleTryAgain} 
-                        style={{ alignSelf: 'center', borderWidth: 1.5, borderColor:MAIN_COLOR_2, 
-                        paddingVertical:6, paddingHorizontal:16, borderRadius: 5, }}>
+                        <TouchableOpacity onPress={handleTryAgain}
+                            style={{
+                                alignSelf: 'center', borderWidth: 1.5, borderColor: MAIN_COLOR_2,
+                                paddingVertical: 6, paddingHorizontal: 16, borderRadius: 5,
+                            }}>
                             <Text style={styles.tryAgainText}>Tekrar Dene</Text>
                         </TouchableOpacity>
                     )}

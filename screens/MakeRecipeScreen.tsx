@@ -171,7 +171,7 @@ console.log("loading", isRecipeLoading);
                 onPress={handleCancelBottomSheet}
                 style={{ flex: 1, backgroundColor: WHITE, paddingHorizontal: 20 }}>
                     <View style={{ marginTop: 40 }}>
-                        <TopHeader title="Yapılan Tarifler" />
+                        <TopHeader title="Devam Eden Tarifler" />
                     </View>
 
                     <View style={{ marginTop: 20 }}>

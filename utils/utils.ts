@@ -21,6 +21,7 @@ export const MAIN_COLOR_2 = "#f5c62a";
 export const MAIN_COLOR_GREEN = "#0c9a61";
 export const SOFT_BLUE = "#f0f4fa";
 export const GRAY_2 = "#494a4a";
+export const PURPLE = "#9436bf";
 
 export const LIGHT_PINK_2 = "#fa4185";
 export const LIGHT_RED_2 = "#F24822";

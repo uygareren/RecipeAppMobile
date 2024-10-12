@@ -8,7 +8,7 @@ import { Divider } from "../components/Divider";
 import { TopHeader } from "../components/Header";
 import { Loading } from '../components/Loading';
 import { getInterestedData, getLikedRecipes } from "../services/ApiService";
-import { BLACK_COLOR, BORDER_RADIUS_1, BORDER_RADIUS_2, CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_2, WHITE } from "../utils/utils";
+import { BLACK_COLOR, BORDER_RADIUS_1, BORDER_RADIUS_3, CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_2, WHITE } from "../utils/utils";
 
 export default function FavoritesScreen() {
     const API = process.env.API;
@@ -56,7 +56,7 @@ export default function FavoritesScreen() {
                         </View>
                         <View>
                             <View style={{ marginBottom:8, backgroundColor:MAIN_COLOR_2, paddingHorizontal:2, paddingVertical:2,
-                                borderRadius:BORDER_RADIUS_2, alignItems:'center', justifyContent:'center'
+                                borderRadius:BORDER_RADIUS_3, alignItems:'center', justifyContent:'center'
                             }}>
                                 <Text style={{fontSize:9, fontWeight:'700', color:BLACK_COLOR}}>{worldCuisinesName}</Text>
                             </View>

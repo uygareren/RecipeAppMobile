@@ -176,7 +176,7 @@ export default function SearchIngredientsOrUserScreen(){
 
                 <TouchableOpacity onPress={handleSwitch} style={{width:width*0.5, backgroundColor:WHITE, alignItems:'center', justifyContent:'center',
               paddingVertical:7}}>
-                  <Text style={{fontWeight:'700', fontSize:15}}>Tarifler</Text>
+                  <Text style={{fontWeight:"500", fontSize:16}}>Tarifler</Text>
                   <View style={{justifyContent:"center", height:10}}>
 
                   {searchSelectVisible == 0 ? (
@@ -189,7 +189,7 @@ export default function SearchIngredientsOrUserScreen(){
                 
                 <TouchableOpacity onPress={handleSwitch} style={{width:width*0.5, backgroundColor:WHITE,alignItems:'center', justifyContent:'center',
               paddingVertical:7}}>
-                  <Text style={{fontWeight:'700', fontSize:15}}>Kullanıcılar</Text>
+                  <Text style={{fontWeight:"500", fontSize:16}}>Kullanıcılar</Text>
                   <View style={{justifyContent:"center", height:10}}>
 
                   {searchSelectVisible == 1 ? (

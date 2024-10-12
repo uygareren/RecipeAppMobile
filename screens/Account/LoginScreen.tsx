@@ -13,7 +13,7 @@ import { TabAccountScreenProps } from "../../navigations/ProfileNavigation";
 import { login } from "../../services/AuthServices";
 import { userSliceActions } from "../../store/reducer/userSlice";
 import { authButtonContainer, authTextButton } from "../../styles/styles";
-import { BLACK_COLOR, CONTAİNER_HORİZONTAL, keyGenerator, LANG_STORE, LIGHT_GRAY, MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, PINK, WHITE } from "../../utils/utils";
+import { BLACK_COLOR, CONTAİNER_HORİZONTAL, LANG_STORE, LIGHT_GRAY, MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, PINK, WHITE, keyGenerator } from "../../utils/utils";
 
 
 export default function LoginScreen({ route }: TabAccountScreenProps<"Login">) {
@@ -44,7 +44,6 @@ const {mutate:loginMutation, isLoading} = useMutation({
     onSuccess: async (data) => {
         dispatch(userSliceActions.setUser(data?.data?.data));
         await handleNavigate(data?.data?.data?.userId);
-        console.log("data",data);
     },
     onError: async(error: any) => {
         console.log("error", error?.response?.data);

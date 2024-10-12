@@ -1,7 +1,9 @@
+import { FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { useToast } from 'native-base';
 import { useRef, useState } from "react";
-import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import PhoneInput from 'react-native-phone-number-input';
 import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,13 +14,14 @@ import useI18n from "../hooks/useI18n";
 import { updateProfileImage, updateUser } from "../services/ApiService";
 import { userSliceActions } from "../store/reducer/userSlice";
 import { authButtonContainer, authTextButton, ingredientSaveButtonContainer, ingredientSaveButtonText } from '../styles/styles';
-import { BORDER_RADIUS_1, CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_2, MAIN_COLOR_GREEN, WHITE } from "../utils/utils";
+import { BLACK_COLOR, BORDER_RADIUS_1, BORDER_RADIUS_2, CONTAİNER_HORİZONTAL, LIGHT_GRAY, MAIN_COLOR_2, MAIN_COLOR_GREEN, WHITE } from "../utils/utils";
 
 
 
 export default function UpdateProfileScreen(){
 
     const API = process.env.API;
+    const navigation = useNavigation();
 
     const {t} = useI18n("UpdateProfileScreen");
 
@@ -29,16 +32,12 @@ export default function UpdateProfileScreen(){
     const dispatch = useDispatch<any>();
     const user = useSelector((state:any) => state.user);
 
-    console.log("user", user);
-
     // console.log("userinfo", userInfo);
 
     const [loading, setLoading] = useState(false);
 
     const phoneInput = useRef<PhoneInput>(null);
     const [formattedValue, setFormattedValue] = useState("");
-
-    
 
     const [name, setName] = useState(user?.userInfo?.name ?? "");
     const [surname, setSurname] = useState(user?.userInfo?.surname ?? "");
@@ -156,8 +155,17 @@ export default function UpdateProfileScreen(){
 
     return(
         <ScrollView style={styles.container}>
+            <TouchableOpacity onPress={() => navigation.goBack()} 
+                         style={{alignSelf:'flex-start',marginTop:50,
+                            borderRadius: BORDER_RADIUS_2, width: 32, height: 32, alignItems: "center", justifyContent: "center",
+                            backgroundColor: MAIN_COLOR_GREEN
+                        }}>
+                            <FontAwesome5 name="chevron-left" size={22} color={WHITE} />
+                        </TouchableOpacity>
 
-            <View style={{ marginTop:50, alignItems:"center", width:150, height:150, alignSelf:"center",}}>
+            <View style={{ marginTop:20, alignItems:"center", width:150, height:150, alignSelf:"center",}}>
+                
+
                 {image != null ? (
                     <Image source={{uri: `${API}/images/${image}`}} style={{width:150, height:150, borderRadius:15, resizeMode:'cover'}}/>
                 ) : (
@@ -165,8 +173,8 @@ export default function UpdateProfileScreen(){
 
                 )}
                 <ButtonComp title="Update Photo" onPress={updatePhoto} 
-                styleContainer={{...ingredientSaveButtonContainer, borderRadius:BORDER_RADIUS_1, backgroundColor:MAIN_COLOR_GREEN}} 
-                styleText={{...ingredientSaveButtonText, fontWeight:'600', color:WHITE}}/>
+                styleContainer={{...ingredientSaveButtonContainer, borderRadius:BORDER_RADIUS_1, backgroundColor:MAIN_COLOR_2, width:150, alignItems:'center', justifyContent:'center'}} 
+                styleText={{...ingredientSaveButtonText, fontWeight:'600', fontSize:15, color:BLACK_COLOR}}/>
             </View>
 
             <View style={{paddingHorizontal:CONTAİNER_HORİZONTAL, marginTop:70, alignItems:"center",}}>
@@ -198,7 +206,7 @@ export default function UpdateProfileScreen(){
                     styleInput={styles.TextInput}/>
                 
                 <ButtonComp title={t("save")} isActive={isActive} loading={loading} onPress={() => handleSave()} 
-                styleContainer={{...authButtonContainer, borderRadius:10, width:"100%", paddingVertical:18, backgroundColor:MAIN_COLOR_2, 
+                styleContainer={{...authButtonContainer, borderRadius:10, width:"100%", paddingVertical:18, backgroundColor:MAIN_COLOR_GREEN, 
                     marginBottom:25
                 }}
                 styleText={{...authTextButton, fontWeight:"700", fontSize:18}}
@@ -214,6 +222,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:WHITE,
+        paddingHorizontal:CONTAİNER_HORİZONTAL
         
     },
     TextInputComp:{
@@ -228,11 +237,14 @@ const styles = StyleSheet.create({
         borderRadius: 19
 
     },
+    TextInputPassword:{
+        marginVertical:10,
+        marginTop: 20,
+    },
     TextInput:{
         paddingVertical: 10,
         paddingHorizontal: 10,
         width: "83%",
-        backgroundColor: "white",
         borderRadius: 18
     },
 })

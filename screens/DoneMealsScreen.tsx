@@ -8,7 +8,7 @@ import { TopHeader } from "../components/Header";
 import { Loading } from '../components/Loading';
 import { getInterestedData, getMadeMeals } from "../services/ApiService";
 import { RootStateType } from "../store/store";
-import { BLACK_COLOR, BORDER_RADIUS_1, BORDER_RADIUS_2, CONTAİNER_HORİZONTAL, MAIN_COLOR_2, WHITE } from "../utils/utils";
+import { BLACK_COLOR, BORDER_RADIUS_1, BORDER_RADIUS_3, CONTAİNER_HORİZONTAL, MAIN_COLOR_2, WHITE } from "../utils/utils";
 
 
 export default function DoneMealsScreen(){
@@ -30,18 +30,11 @@ export default function DoneMealsScreen(){
         queryFn: getInterestedData
     });
 
-    function getWorldCuisinesTag(worldCuisinesId:string) {
-        const worldCuisinesName = worldCuisinesData?.data[0]?.cuisines_name.filter((item:any) => item?._id == worldCuisinesId)[0]?.type;
-        return worldCuisinesName;
-
-    }
-
 
     const RenderItem = ({ navigation, item }: { navigation: any; item: RecipeItem | any }) => {
 
         console.log("item", item);
 
-        const worldCuisinesName = getWorldCuisinesTag(item?.worldCuisinesTagId);
 
         return (
             <Pressable onPress={() => navigation.push("RecipeDetail", {id:item?._id})} style={{ marginBottom: 20, borderRadius: BORDER_RADIUS_1, overflow: 'hidden' }}>
@@ -57,13 +50,13 @@ export default function DoneMealsScreen(){
                     <View style={styles.textContainer}>
                         <View style={{maxWidth:width*0.6}}>
                             <Text style={styles.title}>{item?.recipeName}</Text>
-                            <Text style={{...styles.subtitle, marginTop:5}}>By Chef {item?.user?.name} {item?.user?.surname}</Text>
+                            <Text style={{...styles.subtitle, marginTop:5}}>By Chef {item?.chefName}</Text>
                         </View>
                         <View>
                             <View style={{ marginBottom:8, backgroundColor:MAIN_COLOR_2, paddingHorizontal:2, paddingVertical:2,
-                                borderRadius:BORDER_RADIUS_2, alignItems:'center', justifyContent:'center'
+                                borderRadius:BORDER_RADIUS_3, alignItems:'center', justifyContent:'center'
                             }}>
-                                <Text style={{fontSize:9, fontWeight:'700', color:BLACK_COLOR}}>{worldCuisinesName}</Text>
+                                <Text style={{fontSize:9, fontWeight:'700', color:BLACK_COLOR}}>{item?.worldCuisineName}</Text>
                             </View>
                             <View style={{flexDirection:'row',justifyContent:'center', alignItems:'center'}}>
                                 <Feather name="clock" size={20} color="white" />
